@@ -76,27 +76,19 @@
       min-width: 0;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 1.5rem 1.25rem 3rem;
+      padding: 0.75rem 1.25rem 2.5rem;
       padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
       padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
-      padding-bottom: max(3rem, env(safe-area-inset-bottom, 0px));
+      padding-bottom: max(2.5rem, env(safe-area-inset-bottom, 0px));
     }
 
     header.hero {
-      padding: 2rem 0 1.5rem;
+      padding: 1rem 0 1.25rem;
       border-bottom: 1px solid var(--surface2);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
-    .hero-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
+    header.hero.hero--minimal { border-bottom: none; margin-bottom: 0.5rem; padding-bottom: 0.75rem; }
 
     .hero h1 {
       font-size: clamp(1.65rem, 4vw, 2.25rem);
@@ -104,7 +96,7 @@
       margin-bottom: 0.35rem;
     }
 
-    .hero-sub { color: var(--muted); font-size: 0.95rem; }
+    .hero-dates { color: var(--muted); font-size: 0.92rem; font-weight: 500; }
 
     .hero-meta {
       display: flex;
@@ -151,31 +143,64 @@
     }
 
     nav.tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.35rem;
+      margin-bottom: 0;
+      padding: 0.4rem;
+      border-radius: calc(var(--radius) + 2px);
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    nav.tabs.site-tabs {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      margin: 0 -0.15rem 1rem;
+      padding-left: max(0.4rem, env(safe-area-inset-left, 0px));
+      padding-right: max(0.4rem, env(safe-area-inset-right, 0px));
+      padding-top: max(0.4rem, env(safe-area-inset-top, 0px));
+      background: rgba(30, 41, 59, 0.94);
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     nav.tabs button {
       font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 500;
-      padding: 0.55rem 0.95rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.65rem 0.5rem;
       border-radius: 10px;
-      border: 1px solid var(--surface2);
-      background: var(--surface);
+      border: none;
+      background: transparent;
       color: var(--muted);
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      min-height: 44px;
+      touch-action: manipulation;
     }
 
-    nav.tabs button:hover { color: var(--text); border-color: var(--accent); }
-    nav.tabs button.active {
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--accent);
-      border-color: var(--accent);
+    nav.tabs button:hover { color: var(--text); }
+    nav.tabs button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
+    nav.tabs button.active {
+      background: rgba(56, 189, 248, 0.18);
+      background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.45);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+    }
+
+    .schedule-top {
+      margin-bottom: 1.25rem;
+    }
+
+    .schedule-top .hero-meta { margin-top: 0; }
 
     section.panel { display: none; animation: fadeIn 0.35s ease; }
     section.panel.active { display: block; }
@@ -286,6 +311,13 @@
     }
 
     .info-card h3 { font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent); }
+
+    .plan-b-embedded > .pm-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.85rem;
+    }
 
     .plan-b-grid {
       display: grid;
@@ -500,6 +532,193 @@
     .cat-식비 { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
     .cat-쇼핑 { background: rgba(74, 222, 128, 0.2); color: #86efac; }
 
+    .budget-fx-summary {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--muted);
+      padding: 0.75rem 0.9rem;
+      margin-bottom: 0.85rem;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+    }
+
+    .budget-fx-summary strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .budget-chart-wrap {
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 12px;
+      padding: 0.85rem 0.75rem 1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .budget-chart-title {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+      font-weight: 600;
+    }
+
+    .budget-chart-inner {
+      position: relative;
+      height: min(260px, 48vw);
+      min-height: 200px;
+      max-height: 280px;
+    }
+
+    .budget-table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -0.2rem;
+      padding-bottom: 0.25rem;
+    }
+
+    table.budget-table .budget-col-drag {
+      width: 2.5rem;
+      text-align: center;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+    }
+
+    .budget-th-sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .budget-drag-handle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.85rem;
+      min-height: 2.25rem;
+      cursor: grab;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1;
+      user-select: none;
+      touch-action: none;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+
+    .budget-drag-handle:hover,
+    .budget-drag-handle:focus-visible {
+      color: var(--accent);
+      border-color: var(--surface2);
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .budget-drag-handle:active {
+      cursor: grabbing;
+    }
+
+    table.budget-table .budget-col-actions {
+      width: 4.25rem;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    table.budget-table .budget-row-del {
+      font-size: 0.72rem;
+      padding: 0.28rem 0.45rem;
+      line-height: 1.2;
+    }
+
+    table.budget-table .budget-memo {
+      width: 100%;
+      min-width: 7rem;
+      max-width: 18rem;
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--text);
+    }
+
+    table.budget-table .budget-memo:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+    }
+
+    .budget-add-row {
+      margin: 0.5rem 0 0.15rem;
+      font-size: 0.8rem;
+    }
+
+    table.budget-table .budget-inp,
+    table.budget-table .budget-cat-select {
+      min-height: 44px;
+      font-size: 16px;
+      padding: 0.4rem 0.45rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--text);
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    table.budget-table .budget-inp.budget-est {
+      width: 100%;
+      max-width: 5.25rem;
+      text-align: right;
+      color: #94a3b8;
+    }
+
+    table.budget-table .budget-inp.budget-est:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+    }
+
+    table.budget-table .budget-cat-select {
+      max-width: 7.5rem;
+      min-width: 5.5rem;
+      cursor: pointer;
+    }
+
+    table.budget-table .budget-act {
+      width: 100%;
+      max-width: 5.25rem;
+      min-height: 44px;
+      font-size: 16px;
+    }
+
+    table.budget-table .budget-krw-cell {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+
+    tr.budget-row-over .budget-act {
+      color: #f87171;
+      border-color: rgba(248, 113, 113, 0.45);
+    }
+
+    tr.budget-row-over .budget-act:focus {
+      border-color: #f87171;
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
+    }
+
+    .budget-compare-warn {
+      color: #f87171 !important;
+      font-weight: 700;
+    }
+
     .budget-subtotal {
       font-size: 0.8rem;
       color: var(--muted);
@@ -534,6 +753,57 @@
     .budget-grand .g-card .est { color: #94a3b8; }
     .budget-grand .g-card .act { color: #4ade80; font-weight: 600; }
 
+    .budget-summary-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.65rem;
+      align-items: stretch;
+      margin-bottom: 1rem;
+      padding: 0.75rem 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .budget-summary-bar .budget-trip-total {
+      flex: 1 1 100%;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      padding-bottom: 0.35rem;
+      margin-bottom: 0.25rem;
+      border-bottom: 1px solid var(--surface2);
+    }
+
+    .budget-summary-bar .budget-summary-day {
+      flex: 1 1 auto;
+      min-width: min(100%, 11rem);
+      font-size: 0.78rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 10px;
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      line-height: 1.4;
+    }
+
+    .budget-summary-bar .budget-summary-day strong {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--warn);
+      margin-bottom: 0.2rem;
+    }
+
+    .budget-summary-bar .budget-summary-day .est-line { color: #94a3b8; }
+    .budget-summary-bar .budget-summary-day .act-line { color: #4ade80; font-weight: 600; }
+
+    table.budget-table td.budget-route-cell {
+      font-weight: 500;
+      max-width: 14rem;
+    }
+
+    table.budget-table td.budget-route-cell .route-emoji { opacity: 0.85; margin-right: 0.2rem; }
+
     .checklist { list-style: none; }
 
     .checklist li {
@@ -561,6 +831,224 @@
       opacity: 0.7;
     }
 
+    .pack-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .pack-progress-wrap {
+      position: sticky;
+      top: calc(env(safe-area-inset-top, 0px) + 0.25rem);
+      z-index: 40;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .pack-progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .pack-progress-label > span:last-child {
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      flex-shrink: 0;
+      padding-top: 0.05rem;
+    }
+
+    .pack-progress-track {
+      height: 10px;
+      border-radius: 999px;
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      overflow: hidden;
+    }
+
+    .pack-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.35s ease;
+    }
+
+    .pack-section {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.15rem 1.15rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .pack-section h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--warn);
+      margin-bottom: 0.65rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--surface2);
+    }
+
+    .pack-subsection h4 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 0.85rem 0 0.5rem;
+    }
+
+    .pack-subsection:first-child h4 {
+      margin-top: 0;
+    }
+
+    .pack-checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .pack-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.7rem 0;
+      min-height: 52px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.45;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.45);
+    }
+
+    .pack-row-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      flex-shrink: 0;
+      padding-top: 0.05rem;
+    }
+
+    .pack-drag-handle {
+      cursor: grab;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1;
+      padding: 0.2rem 0.3rem;
+      user-select: none;
+      touch-action: none;
+      border-radius: 6px;
+    }
+
+    .pack-drag-handle:active {
+      cursor: grabbing;
+      color: var(--accent);
+    }
+
+    .pack-move-btn {
+      font-family: inherit;
+      font-size: 0.62rem;
+      line-height: 1;
+      padding: 0.28rem 0.38rem;
+      min-width: 1.65rem;
+      border-radius: 5px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--muted);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .pack-move-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .pack-checklist li:last-child {
+      border-bottom: none;
+    }
+
+    .pack-checklist input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 1.35rem;
+      height: 1.35rem;
+      min-width: 1.35rem;
+      margin-top: 0.12rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .pack-checklist label {
+      cursor: pointer;
+      flex: 1;
+      padding-top: 0.05rem;
+    }
+
+    .pack-checklist input:checked + label {
+      color: var(--text);
+      text-decoration: line-through;
+      opacity: 0.72;
+    }
+
+    .pack-group-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--warn);
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--surface2);
+    }
+
+    .pack-day-block {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--surface2);
+      border-radius: 12px;
+      padding: 0.95rem 1rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .pack-day-block .pack-day-heading {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 0.65rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.55);
+    }
+
+    .pack-day-block .pack-subsection h4 {
+      margin-top: 0.65rem;
+    }
+
+    .pack-day-block .pack-subsection:first-child h4 {
+      margin-top: 0;
+    }
+
+    .pack-progress-note {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .pack-muted {
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+    }
+
     .links a {
       color: var(--accent);
       text-decoration: none;
@@ -568,15 +1056,6 @@
     }
 
     .links a:hover { border-bottom-style: solid; }
-
-    footer {
-      margin-top: 2.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--surface2);
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-align: center;
-    }
 
     .map-card {
       background: var(--surface);
@@ -1252,30 +1731,18 @@
 
     /* —— 핸드폰·태블릿 세로·터치 우선 (가로 1024px 이하) —— */
     @media (max-width: 1024px) {
-      nav.tabs {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 0.45rem;
-        padding: 0.5rem 0 0.85rem;
-        margin: -0.25rem -0.35rem 1.25rem;
-        padding-left: max(0.35rem, env(safe-area-inset-left, 0px));
-        padding-right: max(0.35rem, env(safe-area-inset-right, 0px));
-        background: linear-gradient(to bottom, var(--bg) 70%, rgba(15, 23, 42, 0.96) 100%);
-        border-bottom: 1px solid var(--surface2);
+      nav.tabs.site-tabs {
+        margin: 0 -0.5rem 0.85rem;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
       }
 
-      nav.tabs::-webkit-scrollbar { display: none; }
-
       nav.tabs button {
-        flex: 0 0 auto;
-        min-height: 44px;
-        padding: 0.55rem 1rem;
-        touch-action: manipulation;
+        font-size: 0.86rem;
+        padding: 0.6rem 0.35rem;
       }
 
       .day-pills {
@@ -1321,8 +1788,13 @@
       }
 
       table.budget-table {
-        min-width: 560px;
+        min-width: 860px;
         font-size: 0.8rem;
+      }
+
+      table.budget-table .budget-memo {
+        min-height: 40px;
+        font-size: 16px;
       }
 
       table.budget-table .budget-act {
@@ -1386,7 +1858,7 @@
       }
 
       .wrap {
-        padding-top: 1.1rem;
+        padding-top: 0.5rem;
       }
     }
   </style>
@@ -1394,56 +1866,34 @@
 <body>
   <div class="bg-pattern" aria-hidden="true"></div>
   <div class="wrap">
-    <header class="hero">
-      <span class="hero-badge">Family Trip Dashboard</span>
-      <h1>우리 가족 대련(大连) 여행</h1>
-      <p class="hero-sub">일정 탭에서 <strong>날짜별로 즉석 일정</strong>을 짭니다. 집은 <strong>관악로1(서울대)</strong> · 대련은 택시 위주.</p>
-      <div class="hero-meta">
-        <span class="meta-pill"><strong>일정</strong> 2026.4.25(토) ~ 4.29(수) · 4박 5일</span>
-        <span class="meta-pill"><strong>가는 편</strong> 4/25 11:24 출발 (인천)</span>
-        <span class="meta-pill"><strong>오는 편</strong> 4/29 19:20 출발 (대련)</span>
-      </div>
-      <div class="flight-bar">
-        <strong>한국 구간</strong> 집(<strong>관악로1 서울대</strong>) ↔ 인천공항(ICN) 자차 · 숙소는 <strong>대련 포시즌스 호텔</strong> 기준 · <strong>대련 현지</strong>는 <strong>택시(滴滴 등)</strong>. 아래 시각은 내비 실시간과 항공편 확인으로 꼭 맞춰 주세요.
-      </div>
-      <div class="countdown" id="countdownBox">
-        <div class="countdown-label">비행기 출발(4/25 11:24)까지</div>
-        <div class="countdown-value" id="countdownText">계산 중…</div>
-      </div>
-    </header>
-
-    <nav class="tabs" role="tablist" aria-label="대시보드 섹션">
+    <nav class="tabs site-tabs" role="tablist" aria-label="여행 메뉴">
       <button type="button" class="active" data-panel="schedule" role="tab" aria-selected="true">일정</button>
       <button type="button" data-panel="ledger" role="tab" aria-selected="false">가계부</button>
-      <button type="button" data-panel="planb" role="tab" aria-selected="false">플랜 B</button>
       <button type="button" data-panel="prep" role="tab" aria-selected="false">준비물</button>
     </nav>
 
+    <header class="hero hero--minimal">
+      <h1>우리 가족 대련(大连) 여행</h1>
+      <p class="hero-dates">2026.4.25(토) ~ 4.29(수) · 4박 5일</p>
+    </header>
+
     <section id="panel-schedule" class="panel active" role="tabpanel" aria-hidden="false">
-      <details class="route-card" open>
-        <summary style="font-size:1.05rem;font-weight:600;color:var(--warn);cursor:pointer">인천 ↔ 집 · 포시즌스 ↔ 공항 (접기/펼치기)</summary>
-        <div style="margin-top:0.75rem">
-          <h3 style="font-size:0.95rem;color:var(--accent);margin:0 0 0.5rem">관악로1(서울대) ↔ 인천공항</h3>
-          <p style="font-size:0.9rem;color:var(--muted)">
-            <strong>출발지</strong> 관악구 관악로1 일대 · <strong>도착</strong> ICN. 자차 통상 <strong>약 1시간 5분~1시간 35분</strong> + 주차·셔틀 <strong>15~25분</strong>.
-            <strong>가는 날 11:24 비행</strong> → 터미널 <strong>08:15~08:30</strong> 목표 시 <strong>집 출발 권장 06:30~06:50</strong>.
-            <strong>귀국</strong> 인천 착륙 후 입국·수하물 → 주차장 출발 <strong>22:30~23:20</strong> 전후 가정 시 관악로1 도착 <strong>23:45~익일 00:40</strong> 전후(야간 운전 주의).
-          </p>
-          <h3 style="font-size:0.95rem;color:var(--accent);margin:1rem 0 0.5rem">포시즌스 ↔ 주자이자이 공항</h3>
-          <p style="font-size:0.9rem;color:var(--muted)">
-            택시·자차 <strong>약 25~50분</strong>. <strong>4/29 19:20 출발</strong> 기준 공항 도착 <strong>16:30~17:30</strong> 목표 → 호텔 출발 <strong>16:00~16:45</strong> 권장.
-          </p>
+      <div class="schedule-top">
+        <div class="hero-meta">
+          <span class="meta-pill"><strong>가는 편</strong> 4/25 11:24 출발 (인천)</span>
+          <span class="meta-pill"><strong>오는 편</strong> 4/29 19:20 출발 (대련)</span>
         </div>
-      </details>
+        <div class="flight-bar">
+          <strong>한국 구간</strong> 집(<strong>관악로1 서울대</strong>) ↔ 인천공항(ICN) 자차 · 숙소는 <strong>대련 포시즌스 호텔</strong> 기준 · <strong>대련 현지</strong>는 <strong>택시(滴滴 등)</strong>. 아래 시각은 내비 실시간과 항공편 확인으로 꼭 맞춰 주세요.
+        </div>
+        <div class="countdown" id="countdownBox">
+          <div class="countdown-label">비행기 출발(4/25 11:24)까지</div>
+          <div class="countdown-value" id="countdownText">계산 중…</div>
+        </div>
+      </div>
 
       <div class="planner-head">
-        <h2 class="planner-title">그날그날 일정 만들기</h2>
-        <p class="planner-note">
-          <strong>관광 · 음식 · 쇼핑 · 집·숙소</strong> 테마에서 <strong>일정에 추가</strong>한 뒤, <strong>위쪽 일정 지도</strong>에서 그날 순서와 머무름을 조정합니다.
-          각 카드의 <strong>별명</strong>은 지도 팝업에 반영되며 이 브라우저에만 저장됩니다.
-          <strong>아래 지도</strong>는 전체 추천 장소를 참고용으로 모아 둡니다.
-          처음 저장 시 <strong>추천 일정</strong>이 채워집니다. 초기화는 <code style="font-size:0.82rem">localStorage.removeItem(&quot;dalian_planner_v10&quot;)</code> 후 새로고침.
-        </p>
+        <h2 class="planner-title">날짜별 일정</h2>
       </div>
 
       <div class="day-pills" id="plannerDayPills" role="tablist" aria-label="여행 일 선택"></div>
@@ -1463,27 +1913,52 @@
         </div>
 
         <div class="planner-map-section">
-          <h3 class="pm-title">전체 추천 장소 (참고)</h3>
-          <p class="map-note-compact">테마 색으로 모든 추천 지점을 한눈에 봅니다. 좌표는 <strong>GCJ-02</strong> 기준입니다.</p>
+          <h3 class="pm-title">전체 추천 장소</h3>
           <div id="mapAllPoi" role="application" aria-label="전체 추천 장소"></div>
           <div class="map-legend" id="mapLegendAll"></div>
         </div>
       </div>
 
       <div class="theme-board" id="themeBoard"></div>
+
+      <div class="plan-b-embedded route-card">
+        <h3 class="pm-title">플랜 B</h3>
+        <div class="plan-b-grid">
+          <div class="plan-b-card">
+            <h4>성아 해양세계(圣亚海洋世界)</h4>
+            <p>실내 수족관 위주라 날씨에 덜 민감. 호랑이탄 대신 가볍게 볼거리만 채우기 좋아요. 이동·귀가는 택시.</p>
+          </div>
+          <div class="plan-b-card">
+            <h4>대련 자연박물관 일대</h4>
+            <p>박물관 위주로 실내 체류 시간을 늘리고, 주변은 택시로만 이동. 걷는 양을 줄이는 날에 적합.</p>
+          </div>
+          <div class="plan-b-card">
+            <h4>동항(东港) · 방홍 광장</h4>
+            <p>해안 산책은 <strong>짧게</strong>만 하고 바람 강하면 생략. 근처 카페에서 휴식.</p>
+          </div>
+          <div class="plan-b-card">
+            <h4>왈다 광장 / 대형몰(万达 등)</h4>
+            <p>식당가·키즈·영화관이 한 건물에 모인 경우가 많아 <strong>아이 식사 + 실내</strong> 한 번에 처리하기 쉬워요.</p>
+          </div>
+          <div class="plan-b-card">
+            <h4>호텔 데이</h4>
+            <p>수영장·조식만 즐기고 오후는 낮잠. 무리한 관광 대신 회복용.</p>
+          </div>
+          <div class="plan-b-card">
+            <h4>가족 식사(대체 메뉴)</h4>
+            <p><strong>KFC·피자헛·맥도날드</strong> 등 익숙한 패스트푸드, <strong>시저더(喜家德)</strong> 만두, 일식 덮밥 체인 등 자극 적은 선택. 훠궈는 순한 국물·아이 면 요청.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="panel-ledger" class="panel" role="tabpanel" aria-hidden="true">
       <div class="info-card">
-        <h3>예상 가계부</h3>
-        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.75rem;">
-          현재 <strong>일정 탭</strong>에 저장된 순서를 기준으로 예상 비용을 넣어 두었습니다.
-          <span style="color:#94a3b8;">회색</span>은 추정(예상), <span style="color:#4ade80;font-weight:600;">초록 입력칸</span>은 확정(실제) 금액입니다. 위안·원을 각각 적어 비교할 수 있습니다.
-        </p>
+        <h3>가계부</h3>
         <div class="budget-legend">
-          <span class="est">예상(¥ / ₩)</span>
-          <span class="act">확정(¥ / ₩)</span>
-          <span class="muted" style="font-weight:500;">테마: 관광 · 교통 · 식비 · 쇼핑</span>
+          <span class="est">예상(¥) 직접 수정 · ₩ 자동</span>
+          <span class="act">실제 지출(¥ / ₩)</span>
+          <span class="muted" style="font-weight:500;">분류 선택 · 일정 연동 재생성 가능</span>
         </div>
         <div class="budget-toolbar">
           <div class="field">
@@ -1495,78 +1970,110 @@
             <button type="button" class="btn" id="budgetExportBtn">JSON보내기</button>
           </div>
         </div>
+        <div id="budgetFxSummary" class="budget-fx-summary" aria-live="polite"></div>
+        <div class="budget-chart-wrap">
+          <p class="budget-chart-title">일자별 예상 vs 실제 (위안 · 막대 그래프)</p>
+          <div class="budget-chart-inner">
+            <canvas id="budgetChartCanvas" aria-label="일자별 예상과 실제 지출 막대 그래프"></canvas>
+          </div>
+        </div>
+        <div id="budgetSummaryBar" class="budget-summary-bar" aria-live="polite"></div>
         <div id="budgetRoot"></div>
         <div class="budget-grand" id="budgetGrand"></div>
-        <p style="font-size:0.82rem;color:var(--muted);margin-top:1rem;">
-          쇼핑은 감이 잡히기 어려워 예상 칸을 비워 두었습니다. 확정 금액만 나중에 적어도 됩니다. 데이터는 이 브라우저(로컬)에만 저장됩니다.
-        </p>
-      </div>
-    </section>
-
-    <section id="panel-planb" class="panel" role="tabpanel" aria-hidden="true">
-      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">
-        정해진 일정이 빡빡하거나 날씨·컨디션이 안 맞을 때 쓰는 <strong>대체 플랜</strong>입니다. 공통으로 <strong>택시로 이동</strong>하고, <strong>실내·짧은 동선</strong>을 우선했습니다.
-      </p>
-      <div class="plan-b-grid">
-        <div class="plan-b-card">
-          <h4>성아 해양세계(圣亚海洋世界)</h4>
-          <p>실내 수족관 위주라 날씨에 덜 민감. 호랑이탄 대신 가볍게 볼거리만 채우기 좋아요. 이동·귀가는 택시.</p>
-        </div>
-        <div class="plan-b-card">
-          <h4>대련 자연박물관 일대</h4>
-          <p>박물관 위주로 실내 체류 시간을 늘리고, 주변은 택시로만 이동. 걷는 양을 줄이는 날에 적합.</p>
-        </div>
-        <div class="plan-b-card">
-          <h4>동항(东港) · 방홍 광장</h4>
-          <p>해안 산책은 <strong>짧게</strong>만 하고 바람 강하면 생략. 근처 카페에서 휴식.</p>
-        </div>
-        <div class="plan-b-card">
-          <h4>왈다 광장 / 대형몰(万达 등)</h4>
-          <p>식당가·키즈·영화관이 한 건물에 모인 경우가 많아 <strong>아이 식사 + 실내</strong> 한 번에 처리하기 쉬워요.</p>
-        </div>
-        <div class="plan-b-card">
-          <h4>호텔 데이</h4>
-          <p>수영장·조식만 즐기고 오후는 낮잠. 무리한 관광 대신 회복용.</p>
-        </div>
-        <div class="plan-b-card">
-          <h4>가족 식사(대체 메뉴)</h4>
-          <p><strong>KFC·피자헛·맥도날드</strong> 등 익숙한 패스트푸드, <strong>시저더(喜家德)</strong> 만두, 일식 덮밥 체인 등 자극 적은 선택. 훠궈는 순한 국물·아이 면 요청.</p>
-        </div>
       </div>
     </section>
 
     <section id="panel-prep" class="panel" role="tabpanel" aria-hidden="true">
-      <div class="two-col">
-        <div class="info-card">
-          <h3>공통 · 여권·통신</h3>
-          <ul class="checklist" data-storage="common">
-            <li><input type="checkbox" id="c1" /><label for="c1">여권·신분증(아이 동반 시 증빙 서류)</label></li>
-            <li><input type="checkbox" id="c2" /><label for="c2">eSIM/로밍 또는 현지 데이터 준비</label></li>
-            <li><input type="checkbox" id="c3" /><label for="c3">중국 결제(알리페이 등) 가능 여부 확인</label></li>
-            <li><input type="checkbox" id="c4" /><label for="c4">호텔 예약 확인서·주소 스크린샷(택시용)</label></li>
-            <li><input type="checkbox" id="c5" /><label for="c5">滴滴(디디) 등 택시 앱 설치·결제 확인</label></li>
-          </ul>
+      <div class="pack-wrap">
+        <div class="pack-progress-wrap" role="status" aria-live="polite">
+          <div class="pack-progress-label">
+            <div>
+              한국 준비 진행률
+              <span class="pack-progress-note">그룹 A(한국에서 챙길 것) 체크만 반영됩니다.</span>
+            </div>
+            <span id="prepProgressText">0%</span>
+          </div>
+          <div class="pack-progress-track" aria-hidden="true">
+            <div id="prepProgressBar" class="pack-progress-fill"></div>
+          </div>
         </div>
-        <div class="info-card">
-          <h3>아이 동반</h3>
-          <ul class="checklist" data-storage="kids">
-            <li><input type="checkbox" id="k1" /><label for="k1">유모차 또는 휴대용 의자</label></li>
-            <li><input type="checkbox" id="k2" /><label for="k2">간식·물통·손세정제</label></li>
-            <li><input type="checkbox" id="k3" /><label for="k3">기저귀·여벌 옷·얇은 겉옷(바람)</label></li>
-            <li><input type="checkbox" id="k4" /><label for="k4">즐겨 보는 영상·책(이동용)</label></li>
-            <li><input type="checkbox" id="k5" /><label for="k5">상비약(해열·소화 등 가정용)</label></li>
-          </ul>
+
+        <div class="pack-section pack-group-a">
+          <h3 class="pack-group-title">그룹 A: 한국에서 챙길 것</h3>
+
+          <div class="pack-subsection"><h4>디지털 / 결제</h4>
+          <ul class="pack-checklist" data-prep-sort-group="prep-a-digital">
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-alipay" /><label for="prep-app-alipay">알리페이(실명 인증 및 카드 등록 확인)</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-didi" /><label for="prep-app-didi">디디추싱(연동 확인)</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-comms" /><label for="prep-app-comms">VPN 포함 eSIM 또는 로밍 신청</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-translate" /><label for="prep-app-translate">파파고/구글번역 오프라인 팩 다운로드</label></li>
+          </ul></div>
+
+          <div class="pack-subsection"><h4>비상약</h4>
+          <ul class="pack-checklist" data-prep-sort-group="prep-a-med">
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-fever-acet" /><label for="prep-med-fever-acet">해열제: 아세트아미노펜 계열</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-fever-ibu" /><label for="prep-med-fever-ibu">해열제: 이부프로펜 계열</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-digest-stop" /><label for="prep-med-digest-stop">어린이 지사제</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-digest-baekcho" /><label for="prep-med-digest-baekcho">백초 시럽</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-digest-probio" /><label for="prep-med-digest-probio">유산균</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-cold-syrup" /><label for="prep-med-cold-syrup">코감기 시럽</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-cough-patch" /><label for="prep-med-cough-patch">기침 패치</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-thermo" /><label for="prep-med-thermo">체온계</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-bepanthen" /><label for="prep-med-bepanthen">비판텐 연고</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-lidomex" /><label for="prep-med-lidomex">리도멕스</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-bandage" /><label for="prep-med-bandage">밴드 및 소독 솜</label></li>
+          </ul></div>
+
+          <div class="pack-subsection"><h4>아이 간식 / 식량</h4>
+          <ul class="pack-checklist" data-prep-sort-group="prep-a-food">
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-rice" /><label for="prep-food-rice">햇반(넉넉히)</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-block-soup" /><label for="prep-food-block-soup">실온 보관 블럭국(미역국, 사골국 등)</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-kim" /><label for="prep-food-kim">소포장 김</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-anchovy" /><label for="prep-food-anchovy">멸치볶음</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-jangjorim" /><label for="prep-food-jangjorim">장조림 캔/팩</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-puree" /><label for="prep-food-puree">아기 퓨레</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-vit-candy" /><label for="prep-food-vit-candy">비타민 사탕</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-barley-tea" /><label for="prep-food-barley-tea">보리차 티백</label></li>
+          </ul></div>
+
+          <div class="pack-subsection"><h4>의류 / 위생</h4>
+          <ul class="pack-checklist" data-prep-sort-group="prep-a-cloth">
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-wind-padding" /><label for="prep-cloth-wind-padding">바람막이 및 경량 패딩(온 가족)</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-stroller-cover" /><label for="prep-cloth-stroller-cover">유모차 방풍 커버</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-sanitizer" /><label for="prep-cloth-sanitizer">휴대용 손세정제</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-wipes" /><label for="prep-cloth-wipes">대용량 물티슈 및 휴대용 물티슈</label></li>
+          </ul></div>
+
+          <div class="pack-subsection"><h4>호텔 사전 요청</h4>
+          <ul class="pack-checklist" data-prep-sort-group="prep-a-hotel">
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-stroller" /><label for="prep-hotel-stroller">유모차 대여 예약 확인</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-crib" /><label for="prep-hotel-crib">아기 침대</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-bedguard" /><label for="prep-hotel-bedguard">침대 가드</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-bathtub" /><label for="prep-hotel-bathtub">아기 욕조</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-diaper-bin" /><label for="prep-hotel-diaper-bin">기저귀 처리통</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-bottle-steril" /><label for="prep-hotel-bottle-steril">젖병 소독기(또는 구연산)</label></li>
+          </ul></div>
+        </div>
+
+        <div class="pack-section pack-group-b">
+          <h3 class="pack-group-title">그룹 B: 현지에서 매일 챙길 것</h3>
+          <div class="pack-subsection"><h4>매일 아침 필수</h4>
+          <ul class="pack-checklist" data-prep-sort-group="prep-b-daily">
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-passport" /><label for="prep-b-daily-passport">가족 전원 실물 여권(필수!)</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-battery" /><label for="prep-b-daily-battery">보조 배터리</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-clothes" /><label for="prep-b-daily-clothes">아이들 여벌 옷</label></li>
+            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-baby-kit" /><label for="prep-b-daily-baby-kit">기저귀/분유/개인 컵</label></li>
+          </ul></div>
+          <p class="pack-muted" style="margin:0.5rem 0 0.85rem">아래는 일정 탭의 해당 날짜 방문지에 맞춰 표시됩니다.</p>
+          <div id="prepItineraryMount"></div>
         </div>
       </div>
-      <p style="font-size:0.85rem;color:var(--muted);margin-top:0.5rem;">체크 상태는 이 브라우저에만 저장됩니다.</p>
     </section>
-
-    <footer>
-      우리 가족 전용 페이지 · <code style="background:var(--surface);padding:0.1rem 0.35rem;border-radius:4px;">index.html</code>을 브라우저로 열면 됩니다.
-    </footer>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js" crossorigin=""></script>
   <script>
     (function () {
       var TRIP_DAYS = [
@@ -1846,7 +2353,7 @@
           '</strong> · 호텔(마지막) <strong>' +
           escapeHtml(tm.hotelIn || "—") +
           "</strong></p>" +
-          '<span class="dov-sec-label">동선 (저장된 순서)</span>' +
+          '<span class="dov-sec-label">동선</span>' +
           '<p class="dov-route">' +
           escapeHtml(route) +
           "</p>" +
@@ -1966,7 +2473,8 @@
               R("dalian-museum", 70),
               R("xiding-xh", 90),
               R("mall-food-xh", 55),
-              R("wanda-xh", 70)
+              R("wanda-xh", 70),
+              R("haidilao-zs", 100)
             ],
             bufferMin: 45,
             dayStartTime: "09:00"
@@ -2021,6 +2529,18 @@
         return changed;
       }
 
+      /** 2일차(2026-04-26)에 하이디라오가 없으면 일정 끝에 추가 (기존 저장 일정 마이그레이션) */
+      function ensureDay2Haidilao(all) {
+        var k = "2026-04-26";
+        if (!all || !all[k] || !Array.isArray(all[k].ordered)) return false;
+        var ord = all[k].ordered;
+        for (var i = 0; i < ord.length; i++) {
+          if (ord[i].placeId === "haidilao-zs") return false;
+        }
+        ord.push({ rowId: uid(), placeId: "haidilao-zs", durationMin: 100 });
+        return true;
+      }
+
       function loadPlanner() {
         try {
           var raw = localStorage.getItem(PLANNER_KEY);
@@ -2057,6 +2577,11 @@
             try {
               localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
             } catch (e3) {}
+          }
+          if (ensureDay2Haidilao(all)) {
+            try {
+              localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
+            } catch (eH) {}
           }
           return all;
         } catch (e) {
@@ -2590,6 +3115,265 @@
         return used;
       }
 
+      var PREP_ROW_HANDLE_HTML =
+        '<div class="pack-row-controls" aria-hidden="true">' +
+        '<span class="pack-drag-handle" title="끌어서 순서 변경">≡</span>' +
+        '<button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button>' +
+        '<button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button>' +
+        "</div>";
+
+      var PREP_ORDER_STORAGE = "dalian_prep_item_order_v1";
+      var prepSortableInstances = [];
+
+      function loadPrepOrderMap() {
+        try {
+          var raw = localStorage.getItem(PREP_ORDER_STORAGE);
+          if (!raw) return {};
+          var o = JSON.parse(raw);
+          return o && typeof o === "object" ? o : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function savePrepOrderMap(data) {
+        try {
+          localStorage.setItem(PREP_ORDER_STORAGE, JSON.stringify(data));
+        } catch (e) {}
+      }
+
+      function applyPrepOrderToUl(ul) {
+        var key = ul.getAttribute("data-prep-sort-group");
+        if (!key) return;
+        var order = loadPrepOrderMap()[key];
+        if (!Array.isArray(order) || !order.length) return;
+        var lis = [].slice.call(ul.querySelectorAll(":scope > li"));
+        var byId = {};
+        lis.forEach(function (li) {
+          var inp = li.querySelector("input[type=\"checkbox\"][id]");
+          if (inp) byId[inp.id] = li;
+        });
+        var frag = document.createDocumentFragment();
+        var seen = {};
+        order.forEach(function (id) {
+          if (byId[id]) {
+            frag.appendChild(byId[id]);
+            seen[id] = true;
+          }
+        });
+        lis.forEach(function (li) {
+          var inp = li.querySelector("input[type=\"checkbox\"][id]");
+          if (inp && !seen[inp.id]) frag.appendChild(li);
+        });
+        while (ul.firstChild) ul.removeChild(ul.firstChild);
+        ul.appendChild(frag);
+      }
+
+      function savePrepOrderFromUl(ul) {
+        var key = ul.getAttribute("data-prep-sort-group");
+        if (!key) return;
+        var ids = [].slice
+          .call(ul.querySelectorAll(":scope > li input[type=\"checkbox\"][id]"))
+          .map(function (inp) {
+            return inp.id;
+          });
+        var data = loadPrepOrderMap();
+        data[key] = ids;
+        savePrepOrderMap(data);
+      }
+
+      function movePrepListItem(ul, li, delta) {
+        var idx = [].indexOf.call(ul.children, li);
+        var nidx = idx + delta;
+        if (nidx < 0 || nidx >= ul.children.length) return;
+        var ref = ul.children[nidx];
+        if (delta < 0) ul.insertBefore(li, ref);
+        else ul.insertBefore(li, ref.nextSibling);
+        savePrepOrderFromUl(ul);
+      }
+
+      function destroyPrepSortables() {
+        prepSortableInstances.forEach(function (s) {
+          try {
+            s.destroy();
+          } catch (e) {}
+        });
+        prepSortableInstances = [];
+      }
+
+      function initPrepSortables() {
+        destroyPrepSortables();
+        var panel = document.getElementById("panel-prep");
+        if (!panel || typeof Sortable === "undefined") return;
+        panel.querySelectorAll("ul.pack-checklist[data-prep-sort-group]").forEach(function (ul) {
+          applyPrepOrderToUl(ul);
+          var inst = Sortable.create(ul, {
+            handle: ".pack-drag-handle",
+            animation: 180,
+            delay: 90,
+            delayOnTouchOnly: true,
+            touchStartThreshold: 5,
+            filter: "input,label,button,.pack-move-btn",
+            preventOnFilter: false,
+            onEnd: function () {
+              savePrepOrderFromUl(ul);
+            }
+          });
+          prepSortableInstances.push(inst);
+        });
+      }
+
+      var PREP_ZOO_IDS = ["forest-zoo"];
+      var PREP_SEA_IDS = ["sunasia", "laohutan", "xinghai-sq", "xinghai-beach"];
+      var PREP_SHOPPING_IDS = [
+        "pavilion",
+        "qingniwa",
+        "wanda-xh",
+        "walmart",
+        "rt-mart",
+        "metro-mart",
+        "olympia-66",
+        "friendship-shop",
+        "times-outlet",
+        "hokangs-shopping",
+        "hotel-dinner-shopping",
+        "xian-road"
+      ];
+
+      function renderPrepItinerarySection() {
+        var mount = document.getElementById("prepItineraryMount");
+        if (!mount) return;
+        rebuildPoiIndex();
+        var allPlan = loadPlanner();
+        var parts = [];
+        TRIP_DAYS.forEach(function (day) {
+          var st = allPlan[day.key];
+          var ordered = st && st.ordered ? st.ordered : [];
+          var idsOnDay = {};
+          ordered.forEach(function (row) {
+            if (row.placeId) idsOnDay[row.placeId] = true;
+          });
+          var hasZoo = PREP_ZOO_IDS.some(function (id) {
+            return idsOnDay[id];
+          });
+          var hasShop = PREP_SHOPPING_IDS.some(function (id) {
+            return idsOnDay[id];
+          });
+          var hasSea = PREP_SEA_IDS.some(function (id) {
+            return idsOnDay[id];
+          });
+          var dk = day.key;
+          var subs = [];
+          if (hasZoo) {
+            subs.push(
+              '<div class="pack-subsection"><h4>동물원 가는 날</h4><ul class="pack-checklist" data-prep-sort-group="prep-b-' +
+                dk +
+                '-zoo">' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-zoo-cover" /><label for="prep-b-' +
+                dk +
+                '-zoo-cover">유모차 방풍 커버</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-zoo-drink" /><label for="prep-b-' +
+                dk +
+                '-zoo-drink">아이들 수분 보충 음료</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-zoo-panda" /><label for="prep-b-' +
+                dk +
+                '-zoo-panda">판다관 마감시간 확인</label></li>' +
+                "</ul></div>"
+            );
+          }
+          if (hasShop) {
+            subs.push(
+              '<div class="pack-subsection"><h4>쇼핑/시내 나가는 날</h4><ul class="pack-checklist" data-prep-sort-group="prep-b-' +
+                dk +
+                '-shop">' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-shop-bag" /><label for="prep-b-' +
+                dk +
+                '-shop-bag">접이식 쇼퍼백</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-shop-shoes" /><label for="prep-b-' +
+                dk +
+                '-shop-shoes">편한 운동화</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-shop-alipay" /><label for="prep-b-' +
+                dk +
+                '-shop-alipay">알리페이 잔액 확인</label></li>' +
+                "</ul></div>"
+            );
+          }
+          if (hasSea) {
+            subs.push(
+              '<div class="pack-subsection"><h4>수족관/성해광장 가는 날</h4><ul class="pack-checklist" data-prep-sort-group="prep-b-' +
+                dk +
+                '-sea">' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-sea-qr" /><label for="prep-b-' +
+                dk +
+                '-sea-qr">사전 구매 QR 티켓</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-sea-blanket" /><label for="prep-b-' +
+                dk +
+                '-sea-blanket">바닷바람 대비 무릎 담요</label></li>' +
+                "</ul></div>"
+            );
+          }
+          var nar = DAY_NARRATIVE[dk] || "";
+          var headingExtra = nar
+            ? ' <span style="font-weight:500;color:var(--muted);font-size:0.82rem;">— ' +
+              escapeHtml(nar) +
+              "</span>"
+            : "";
+          if (!subs.length) {
+            parts.push(
+              '<div class="pack-day-block">' +
+                '<div class="pack-day-heading">' +
+                escapeHtml(day.label) +
+                headingExtra +
+                '</div><p class="pack-muted" style="margin:0">이 날 일정에는 동물원·쇼핑/시내·수족관/성해광장 연동 항목이 없습니다.</p></div>'
+            );
+          } else {
+            parts.push(
+              '<div class="pack-day-block">' +
+                '<div class="pack-day-heading">' +
+                escapeHtml(day.label) +
+                headingExtra +
+                "</div>" +
+                subs.join("") +
+                "</div>"
+            );
+          }
+        });
+        mount.innerHTML = parts.join("");
+        initPrepSortables();
+      }
+
       function renderThemeBoard() {
         var el = document.getElementById("themeBoard");
         if (!el) return;
@@ -2721,7 +3505,8 @@
       }
 
       /**
-       * 요약 카드용: 관광 시작 = (호캉스 POI 제외) 첫 관광 슬롯 / 호텔 = fs-hotel 마지막 슬롯.
+       * 요약 카드용: 관광 시작 = (호캉스 POI 제외) 첫 관광 슬롯.
+       * 호텔 = 마지막 일정이 공항이면 직전 fs-hotel 슬롯 시작, 아니면 마지막 장소 종료+택시로 포시즌스 도착 추정.
        */
       function computeDayPillTimes(dayKey) {
         rebuildPoiIndex();
@@ -2739,13 +3524,30 @@
           tourStartMin = times[i];
           break;
         }
-        var hotelMins = [];
-        for (var j = 0; j < st.ordered.length; j++) {
-          if (st.ordered[j].placeId === "fs-hotel") {
-            hotelMins.push(times[j]);
+        var n = st.ordered.length;
+        var lastRow = st.ordered[n - 1];
+        var hotelInMin = null;
+        if (lastRow.placeId === "airport-dlc") {
+          for (var j = n - 1; j >= 0; j--) {
+            if (st.ordered[j].placeId === "fs-hotel") {
+              hotelInMin = times[j];
+              break;
+            }
+          }
+        } else {
+          var lastPl = POI_BY_ID[lastRow.placeId];
+          var hotelPl = POI_BY_ID["fs-hotel"];
+          if (lastPl && hotelPl) {
+            if (lastRow.placeId === "fs-hotel") {
+              hotelInMin = times[n - 1];
+            } else {
+              var t0 = times[n - 1];
+              var dur = lastRow.durationMin || 0;
+              var tx = taxiMinutesBetween(lastPl, hotelPl);
+              hotelInMin = t0 + dur + (tx != null ? tx : 0);
+            }
           }
         }
-        var hotelInMin = hotelMins.length ? hotelMins[hotelMins.length - 1] : null;
         return {
           tourStart: tourStartMin != null ? formatMinToClockHM(tourStartMin) : null,
           hotelIn: hotelInMin != null ? formatMinToClockHM(hotelInMin) : null
@@ -2823,6 +3625,9 @@
         renderDaySettingsBar();
         initMapsAllAndDay();
         renderThemeBoard();
+        renderPrepItinerarySection();
+        loadChecks();
+        updatePrepProgress();
       }
 
       function invalidateMapIfNeeded() {
@@ -2853,6 +3658,9 @@
         renderDayPills();
         renderDaySettingsBar();
         renderThemeBoard();
+        renderPrepItinerarySection();
+        loadChecks();
+        updatePrepProgress();
       }
 
       var tripStart = new Date(2026, 3, 25, 11, 24, 0, 0);
@@ -2878,7 +3686,6 @@
       var panels = {
         schedule: document.getElementById("panel-schedule"),
         ledger: document.getElementById("panel-ledger"),
-        planb: document.getElementById("panel-planb"),
         prep: document.getElementById("panel-prep")
       };
 
@@ -2896,56 +3703,93 @@
             p.setAttribute("aria-hidden", on ? "false" : "true");
           });
           if (id === "schedule") invalidateMapIfNeeded();
-          if (id === "ledger") renderBudget();
+          if (id === "ledger") {
+            renderBudget();
+            setTimeout(function () {
+              if (budgetChartInstance) budgetChartInstance.resize();
+            }, 150);
+          }
+          if (id === "prep") {
+            renderPrepItinerarySection();
+            loadChecks();
+            updatePrepProgress();
+          }
         });
       });
 
-      var CHECK_STORAGE = "dalian_family_checklist_v2";
+      var CHECK_STORAGE = "dalian_family_checklist_v4";
       function loadChecks() {
         try {
           var raw = localStorage.getItem(CHECK_STORAGE);
           if (!raw) return;
           var data = JSON.parse(raw);
-          document.querySelectorAll("#panel-prep .checklist input[type=\"checkbox\"]").forEach(function (inp) {
+          if (!data || typeof data !== "object") return;
+          document.querySelectorAll("#panel-prep input[type=\"checkbox\"]").forEach(function (inp) {
             if (data[inp.id]) inp.checked = true;
           });
         } catch (e) {}
       }
       function saveChecks() {
         var data = {};
-        document.querySelectorAll("#panel-prep .checklist input[type=\"checkbox\"]").forEach(function (inp) {
+        document.querySelectorAll("#panel-prep input[type=\"checkbox\"]").forEach(function (inp) {
           if (inp.checked) data[inp.id] = true;
         });
         try {
           localStorage.setItem(CHECK_STORAGE, JSON.stringify(data));
         } catch (e) {}
       }
-      loadChecks();
-      document.querySelectorAll("#panel-prep .checklist input[type=\"checkbox\"]").forEach(function (inp) {
-        inp.addEventListener("change", saveChecks);
-      });
+      function updatePrepProgress() {
+        var all = document.querySelectorAll("#panel-prep .pack-group-a input[type=\"checkbox\"]");
+        var n = all.length;
+        var c = 0;
+        for (var i = 0; i < n; i++) {
+          if (all[i].checked) c++;
+        }
+        var pct = n ? Math.round((c / n) * 100) : 0;
+        var bar = document.getElementById("prepProgressBar");
+        var tx = document.getElementById("prepProgressText");
+        if (bar) bar.style.width = pct + "%";
+        if (tx) tx.textContent = pct + "%";
+      }
+      var prepPanelEl = document.getElementById("panel-prep");
+      if (prepPanelEl) {
+        prepPanelEl.addEventListener("change", function (ev) {
+          var t = ev.target;
+          if (t && t.type === "checkbox") {
+            saveChecks();
+            updatePrepProgress();
+          }
+        });
+        prepPanelEl.addEventListener("click", function (ev) {
+          var btn = ev.target && ev.target.closest ? ev.target.closest(".pack-move-btn") : null;
+          if (!btn) return;
+          ev.preventDefault();
+          var ul = btn.closest("ul.pack-checklist");
+          var li = btn.closest("li");
+          if (!ul || !li || !ul.contains(li)) return;
+          var dir = parseInt(btn.getAttribute("data-dir"), 10) || 0;
+          if (!dir) return;
+          movePrepListItem(ul, li, dir);
+        });
+      }
 
-      var BUDGET_KEY = "dalian_budget_itinerary_v1";
+      var BUDGET_KEY = "dalian_budget_itinerary_v3";
+      var BUDGET_KEY_LEGACY = "dalian_budget_itinerary_v2";
       var BUDGET_DEFAULT_FX = 192;
+      var BUDGET_CATS = ["교통", "식비", "관광", "쇼핑"];
+      var MEAL_DEFAULT_CNY = 600;
 
-      var TAXI_DAY_CNY = {
-        "2026-04-25": 105,
-        "2026-04-26": 155,
-        "2026-04-27": 135,
-        "2026-04-28": 95,
-        "2026-04-29": 125
-      };
-
+      /** 입장·체험(위안) — 일정 명소 기준 */
       var ENTRANCE_CNY = {
-        laohutan: 240,
-        sunasia: 220,
-        "forest-zoo": 180,
+        "forest-zoo": 300,
+        sunasia: 340,
+        laohutan: 300,
+        "banghai-walk": 60,
         "dalian-museum": 0,
         "labor-park": 0,
         donggang: 0,
         "xinghai-sq": 0,
         "xinghai-beach": 0,
-        "banghai-walk": 0,
         "zhongshan-sq": 0,
         "russian-st": 0,
         qingniwa: 0,
@@ -2955,29 +3799,40 @@
         walmart: 0,
         "pinhailou-taxi-drive": 0,
         hokangs: 0,
-        "hotel-dinner-tourism": 0
+        "hotel-dinner-tourism": 0,
+        "airport-dlc": 0,
+        "fs-hotel": 0
       };
 
+      /** 식사(위안) — 씨딩·시쟈더·핀하이 등 */
       var MEAL_CNY = {
-        "xiding-dg": 380,
-        "xiding-xh": 380,
-        pinhailou: 460,
-        "haidilao-zs": 400,
-        xijiade: 130,
-        "mall-food-xh": 180,
-        "peacewalk-mall-food": 150,
-        "japanese-light-xh": 90,
-        "bbq-seafood": 280,
-        "local-breakfast-cn": 55,
-        "hotel-meal-fs": 0,
-        "hokangs-food": 0,
-        "hotel-dinner-shopping": 0,
-        "hotel-dinner-base": 0
+        "xiding-dg": 600,
+        "xiding-xh": 600,
+        xijiade: 300,
+        pinhailou: 900,
+        "haidilao-zs": 600,
+        "mall-food-xh": MEAL_DEFAULT_CNY,
+        "peacewalk-mall-food": MEAL_DEFAULT_CNY,
+        "japanese-light-xh": MEAL_DEFAULT_CNY,
+        "bbq-seafood": MEAL_DEFAULT_CNY,
+        "local-breakfast-cn": MEAL_DEFAULT_CNY,
+        "hotel-meal-fs": MEAL_DEFAULT_CNY,
+        "hokangs-food": MEAL_DEFAULT_CNY,
+        "hotel-dinner-shopping": MEAL_DEFAULT_CNY,
+        "hotel-dinner-base": MEAL_DEFAULT_CNY
       };
 
       function formatBudgetNum(n) {
         if (n == null || n !== n) return "—";
         return Math.round(n).toLocaleString("ko-KR");
+      }
+
+      /** 택시 비용(위안): 구간 소요(분)에 따라 약 30~100 */
+      function estimateTaxiCnyFromMinutes(mins) {
+        if (mins == null || mins !== mins) return 50;
+        var t = Math.max(8, mins);
+        var cny = Math.round(30 + ((t - 8) / 42) * 70);
+        return Math.min(100, Math.max(30, cny));
       }
 
       function budgetThemeFromPoi(pl) {
@@ -2988,55 +3843,67 @@
         return "교통";
       }
 
-      function estimateRowCny(pl, cat) {
-        if (!pl) return 0;
-        if (cat === "쇼핑") return null;
-        if (cat === "교통") return 0;
-        if (cat === "관광") {
-          if (ENTRANCE_CNY[pl.id] != null) return ENTRANCE_CNY[pl.id];
-          return 0;
-        }
-        if (cat === "식비") {
-          if (MEAL_CNY[pl.id] != null) return MEAL_CNY[pl.id];
-          return 180;
-        }
-        return 0;
-      }
-
       function buildBudgetRowsFromPlanner() {
         rebuildPoiIndex();
         var plan = loadPlanner();
         var rows = [];
         TRIP_DAYS.forEach(function (day) {
           var dk = day.key;
-          var st = plan[dk] || { ordered: [] };
-          var ord = st.ordered || [];
-          rows.push({
-            id: uid(),
-            dayKey: dk,
-            placeId: null,
-            cat: "교통",
-            memo: "택시·차량·지하철(일일 추정)",
-            estCny: TAXI_DAY_CNY[dk] != null ? TAXI_DAY_CNY[dk] : 120,
-            actCny: null,
-            actKrw: null
-          });
-          ord.forEach(function (slot) {
+          var ord = (plan[dk] && plan[dk].ordered) || [];
+          for (var i = 0; i < ord.length; i++) {
+            var slot = ord[i];
             var pl = POI_BY_ID[slot.placeId];
-            if (!pl) return;
+            if (!pl) continue;
+
+            var prevPl = null;
+            if (i > 0) prevPl = POI_BY_ID[ord[i - 1].placeId];
+            else if (pl.id !== "airport-dlc") prevPl = POI_BY_ID["fs-hotel"];
+
+            if (prevPl && pl.id !== prevPl.id) {
+              var km = haversineKm(prevPl.lat, prevPl.lng, pl.lat, pl.lng);
+              if (km >= 0.18) {
+                var tm = taxiMinutesBetween(prevPl, pl);
+                var cnyLeg = estimateTaxiCnyFromMinutes(tm);
+                var legKey = dk + "|taxi|" + prevPl.id + "→" + pl.id + "|i" + i;
+                rows.push({
+                  id: uid(),
+                  dayKey: dk,
+                  cat: "교통",
+                  routeLabel: poiDisplayName(prevPl) + " → " + poiDisplayName(pl),
+                  legKey: legKey,
+                  estCny: cnyLeg,
+                  actCny: null,
+                  actKrw: null
+                });
+              }
+            }
+
             var cat = budgetThemeFromPoi(pl);
-            var est = estimateRowCny(pl, cat);
+            var est = null;
+            if (cat === "관광") {
+              est = ENTRANCE_CNY[pl.id] != null ? ENTRANCE_CNY[pl.id] : 0;
+            } else if (cat === "식비") {
+              est = MEAL_CNY[pl.id] != null ? MEAL_CNY[pl.id] : MEAL_DEFAULT_CNY;
+            } else if (cat === "쇼핑") {
+              est = null;
+            } else {
+              cat = "교통";
+              est = 0;
+            }
+
+            var actKey = dk + "|act|" + pl.id + "|i" + i;
             rows.push({
               id: uid(),
               dayKey: dk,
-              placeId: pl.id,
               cat: cat,
-              memo: "",
+              placeId: pl.id,
+              activityLabel: poiDisplayName(pl),
+              actKey: actKey,
               estCny: est,
               actCny: null,
               actKrw: null
             });
-          });
+          }
         });
         return rows;
       }
@@ -3044,21 +3911,24 @@
       function mergeActsOntoNewRows(oldRows, newRows) {
         var map = {};
         (oldRows || []).forEach(function (r) {
-          var k = r.dayKey + "\t" + (r.placeId || "taxi") + "\t" + r.cat;
-          map[k] = { actCny: r.actCny, actKrw: r.actKrw };
+          var k = r.legKey || r.actKey || r.dayKey + "\t" + (r.placeId || "") + "\t" + (r.routeLabel || r.activityLabel || r.memo || "") + "\t" + r.cat;
+          map[k] = { actCny: r.actCny, actKrw: r.actKrw, estCny: r.estCny, cat: r.cat };
         });
         newRows.forEach(function (r) {
-          var k = r.dayKey + "\t" + (r.placeId || "taxi") + "\t" + r.cat;
-          if (map[k]) {
-            r.actCny = map[k].actCny;
-            r.actKrw = map[k].actKrw;
-          }
+          var k = r.legKey || r.actKey || r.dayKey + "\t" + (r.placeId || "") + "\t" + (r.routeLabel || r.activityLabel || "") + "\t" + r.cat;
+          var o = map[k];
+          if (!o) return;
+          if (o.actCny !== undefined) r.actCny = o.actCny;
+          if (o.actKrw !== undefined) r.actKrw = o.actKrw;
+          if (o.estCny !== undefined) r.estCny = o.estCny;
+          if (o.cat && BUDGET_CATS.indexOf(o.cat) >= 0) r.cat = o.cat;
         });
       }
 
       function loadBudgetState() {
         try {
           var raw = localStorage.getItem(BUDGET_KEY);
+          if (!raw) raw = localStorage.getItem(BUDGET_KEY_LEGACY);
           if (!raw) return null;
           var o = JSON.parse(raw);
           if (!o || typeof o !== "object" || !Array.isArray(o.rows)) return null;
@@ -3074,17 +3944,171 @@
         } catch (e) {}
       }
 
+      var budgetSortableInstances = [];
+
+      function destroyBudgetSortables() {
+        budgetSortableInstances.forEach(function (s) {
+          try {
+            s.destroy();
+          } catch (e) {}
+        });
+        budgetSortableInstances = [];
+      }
+
+      function orderDayRowsSorted(dayRows, orderedIds) {
+        if (!orderedIds || !orderedIds.length) return dayRows.slice();
+        var map = {};
+        dayRows.forEach(function (r) {
+          map[r.id] = r;
+        });
+        var out = [];
+        orderedIds.forEach(function (id) {
+          if (map[id]) {
+            out.push(map[id]);
+            delete map[id];
+          }
+        });
+        dayRows.forEach(function (r) {
+          if (map[r.id]) out.push(map[r]);
+        });
+        return out;
+      }
+
+      function ensureBudgetDayOrderKeys(st) {
+        st.budgetDayOrder = st.budgetDayOrder && typeof st.budgetDayOrder === "object" ? st.budgetDayOrder : {};
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var idsNow = st.rows
+            .filter(function (r) {
+              return r.dayKey === dk;
+            })
+            .map(function (r) {
+              return r.id;
+            });
+          var cur = Array.isArray(st.budgetDayOrder[dk]) ? st.budgetDayOrder[dk].slice() : [];
+          cur = cur.filter(function (id) {
+            return idsNow.indexOf(id) >= 0;
+          });
+          idsNow.forEach(function (id) {
+            if (cur.indexOf(id) < 0) cur.push(id);
+          });
+          st.budgetDayOrder[dk] = cur;
+        });
+      }
+
+      function rowsSortedByBudgetDayOrder(st) {
+        if (!st.budgetDayOrder || typeof st.budgetDayOrder !== "object") st.budgetDayOrder = {};
+        var out = [];
+        var knownKeys = {};
+        TRIP_DAYS.forEach(function (d) {
+          knownKeys[d.key] = true;
+        });
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var chunk = st.rows.filter(function (r) {
+            return r.dayKey === dk;
+          });
+          var order = st.budgetDayOrder[dk];
+          orderDayRowsSorted(chunk, order).forEach(function (r) {
+            out.push(r);
+          });
+        });
+        st.rows.forEach(function (r) {
+          if (!knownKeys[r.dayKey]) out.push(r);
+        });
+        return out;
+      }
+
       function ensureBudgetSeeded() {
         var st = loadBudgetState();
-        if (st && st.rows && st.rows.length) return st;
-        var fx = BUDGET_DEFAULT_FX;
+        if (st && st.rows && st.rows.length) {
+          if (!Array.isArray(st.suppressedKeys)) st.suppressedKeys = [];
+          if (!st.budgetDayOrder || typeof st.budgetDayOrder !== "object") st.budgetDayOrder = {};
+          ensureBudgetDayOrderKeys(st);
+          st.rows = rowsSortedByBudgetDayOrder(st);
+          saveBudgetState(st);
+          return st;
+        }
+        var fx = (st && st.fx) || BUDGET_DEFAULT_FX;
         var rows = buildBudgetRowsFromPlanner();
-        st = { fx: fx, rows: rows };
+        st = { version: 3, fx: Math.round(fx), rows: rows, suppressedKeys: [], budgetDayOrder: {} };
+        ensureBudgetDayOrderKeys(st);
+        st.rows = rowsSortedByBudgetDayOrder(st);
         saveBudgetState(st);
         return st;
       }
 
+      /** 일정에만 있고 가계부에 없는 행(예: 신규 명소)을 날짜·순서에 맞게 끼워 넣음. 사용자가 삭제한 행은 suppressedKeys로 재등장하지 않음. */
+      function insertMissingPlannerRows(st) {
+        if (!st || !Array.isArray(st.rows)) return;
+        rebuildPoiIndex();
+        var planned = buildBudgetRowsFromPlanner();
+        var supSet = {};
+        (st.suppressedKeys || []).forEach(function (k) {
+          supSet[k] = true;
+        });
+        var byDay = {};
+        TRIP_DAYS.forEach(function (d) {
+          byDay[d.key] = [];
+        });
+        st.rows.forEach(function (r) {
+          if (byDay[r.dayKey]) byDay[r.dayKey].push(r);
+        });
+        var result = [];
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var pDay = planned.filter(function (p) {
+            return p.dayKey === dk;
+          });
+          var eDay = byDay[dk].slice();
+          var used = {};
+          var mergedDay = [];
+          pDay.forEach(function (pr) {
+            var k = pr.legKey || pr.actKey;
+            if (!k) return;
+            var found = eDay.find(function (er) {
+              return (er.legKey || er.actKey) === k;
+            });
+            if (found) {
+              mergedDay.push(found);
+              used[found.id] = true;
+            } else if (!supSet[k]) {
+              mergedDay.push(pr);
+            }
+          });
+          eDay.forEach(function (er) {
+            if (!used[er.id]) mergedDay.push(er);
+          });
+          mergedDay.forEach(function (r) {
+            result.push(r);
+          });
+        });
+        st.rows = result;
+        ensureBudgetDayOrderKeys(st);
+        st.rows = rowsSortedByBudgetDayOrder(st);
+        saveBudgetState(st);
+      }
+
+      function buildCatSelectHtml(cat) {
+        var c0 = BUDGET_CATS.indexOf(cat) >= 0 ? cat : "교통";
+        var html = "";
+        for (var i = 0; i < BUDGET_CATS.length; i++) {
+          var c = BUDGET_CATS[i];
+          html +=
+            '<option value="' +
+            escapeHtml(c) +
+            '"' +
+            (c === c0 ? " selected" : "") +
+            ">" +
+            escapeHtml(c) +
+            "</option>";
+        }
+        return html;
+      }
+
       function rowLabel(st) {
+        if (st.routeLabel) return st.routeLabel;
+        if (st.activityLabel) return st.activityLabel;
         if (st.placeId) {
           var pl = POI_BY_ID[st.placeId];
           return pl ? poiDisplayName(pl) : st.placeId;
@@ -3099,28 +4123,13 @@
         return n;
       }
 
-      function renderBudget() {
-        var root = document.getElementById("budgetRoot");
-        var grand = document.getElementById("budgetGrand");
-        var fxInp = document.getElementById("budgetFx");
-        if (!root || !grand || !fxInp) return;
-
-        rebuildPoiIndex();
-        var st = ensureBudgetSeeded();
-        var fx = parseFloat(String(fxInp.value).trim());
-        if (!(fx > 0)) fx = st.fx || BUDGET_DEFAULT_FX;
-        fxInp.value = String(Math.round(fx));
-        st.fx = Math.round(fx);
-        saveBudgetState(st);
-
-        var rows = st.rows;
+      function computeBudgetAggregates(rows, fx) {
         var sums = {
           관광: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 },
           교통: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 },
           식비: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 },
           쇼핑: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 }
         };
-
         function addSum(cat, estCny, estKrw, actCny, actKrw) {
           if (!sums[cat]) return;
           if (estCny != null && estCny === estCny) sums[cat].estCny += estCny;
@@ -3128,6 +4137,265 @@
           if (actCny != null && actCny === actCny) sums[cat].actCny += actCny;
           if (actKrw != null && actKrw === actKrw) sums[cat].actKrw += actKrw;
         }
+        var byDay = {};
+        TRIP_DAYS.forEach(function (d) {
+          byDay[d.key] = { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0, label: d.label };
+        });
+        (rows || []).forEach(function (r) {
+          var estCny = r.estCny;
+          var estKrw = estCny != null && estCny === estCny ? Math.round(estCny * fx) : null;
+          addSum(r.cat, estCny, estKrw, r.actCny, r.actKrw);
+          var bd = byDay[r.dayKey];
+          if (bd) {
+            if (estCny != null && estCny === estCny) bd.estCny += estCny;
+            if (estKrw != null && estKrw === estKrw) bd.estKrw += estKrw;
+            if (r.actCny != null && r.actCny === r.actCny) bd.actCny += r.actCny;
+            if (r.actKrw != null && r.actKrw === r.actKrw) bd.actKrw += r.actKrw;
+          }
+        });
+        var tripEstCny = 0;
+        var tripEstKrw = 0;
+        var tripActCny = 0;
+        var tripActKrw = 0;
+        TRIP_DAYS.forEach(function (d) {
+          var b = byDay[d.key];
+          tripEstCny += b.estCny;
+          tripEstKrw += b.estKrw;
+          tripActCny += b.actCny;
+          tripActKrw += b.actKrw;
+        });
+        return { sums: sums, byDay: byDay, tripEstCny: tripEstCny, tripEstKrw: tripEstKrw, tripActCny: tripActCny, tripActKrw: tripActKrw };
+      }
+
+      function paintBudgetFxSummary(agg, fx) {
+        var el = document.getElementById("budgetFxSummary");
+        if (!el) return;
+        var tripOver = agg.tripActCny > agg.tripEstCny;
+        el.innerHTML =
+          "적용 환율 <strong>1¥ = " +
+          escapeHtml(String(fx)) +
+          "원</strong> · 전체 예상 합계 <strong>¥ " +
+          formatBudgetNum(agg.tripEstCny) +
+          " · ₩ " +
+          formatBudgetNum(agg.tripEstKrw) +
+          "</strong> · 전체 실제 합계 <strong class=\"" +
+          (tripOver ? "budget-compare-warn" : "") +
+          '">¥ ' +
+          formatBudgetNum(agg.tripActCny) +
+          " · ₩ " +
+          formatBudgetNum(agg.tripActKrw) +
+          "</strong>" +
+          (tripOver ? " <span class=\"budget-compare-warn\">(실제가 예상 초과)</span>" : "");
+      }
+
+      function paintBudgetSummaryAndGrand(agg, rows) {
+        var sumBar = document.getElementById("budgetSummaryBar");
+        var grand = document.getElementById("budgetGrand");
+        var tripOver = agg.tripActCny > agg.tripEstCny;
+        if (sumBar) {
+          var parts = [];
+          parts.push(
+            '<div class="budget-trip-total">전체 · 예상 <span class="est-line">¥ ' +
+              formatBudgetNum(agg.tripEstCny) +
+              " · ₩ " +
+              formatBudgetNum(agg.tripEstKrw) +
+              '</span> · 실제 <span class="act-line' +
+              (tripOver ? " budget-compare-warn" : "") +
+              '">¥ ' +
+              formatBudgetNum(agg.tripActCny) +
+              " · ₩ " +
+              formatBudgetNum(agg.tripActKrw) +
+              "</span></div>"
+          );
+          TRIP_DAYS.forEach(function (d) {
+            if (!rows.some(function (x) { return x.dayKey === d.key; })) return;
+            var b = agg.byDay[d.key];
+            var dayOver = b.actCny > b.estCny;
+            parts.push(
+              '<div class="budget-summary-day"><strong>' +
+                escapeHtml(d.label) +
+                '</strong><span class="est-line">예상 ¥ ' +
+                formatBudgetNum(b.estCny) +
+                " · ₩ " +
+                formatBudgetNum(b.estKrw) +
+                '</span><span class="act-line' +
+                (dayOver ? " budget-compare-warn" : "") +
+                '">실제 ¥ ' +
+                formatBudgetNum(b.actCny) +
+                " · ₩ " +
+                formatBudgetNum(b.actKrw) +
+                "</span></div>"
+            );
+          });
+          sumBar.innerHTML = parts.join("");
+        }
+        if (grand) {
+          grand.innerHTML = "";
+          ["관광", "교통", "식비", "쇼핑"].forEach(function (c) {
+            var s = agg.sums[c];
+            var catOver = s.actCny > s.estCny;
+            var card = document.createElement("div");
+            card.className = "g-card";
+            card.innerHTML =
+              "<h5>" +
+              escapeHtml(c) +
+              "</h5>" +
+              '<div class="est">예상 ¥ ' +
+              formatBudgetNum(s.estCny) +
+              " · ₩ " +
+              formatBudgetNum(s.estKrw) +
+              '</div><div class="act' +
+              (catOver ? " budget-compare-warn" : "") +
+              '" style="margin-top:0.25rem;">실제 ¥ ' +
+              formatBudgetNum(s.actCny) +
+              " · ₩ " +
+              formatBudgetNum(s.actKrw) +
+              "</div>";
+            grand.appendChild(card);
+          });
+        }
+      }
+
+      function paintDaySubtotalsFromAgg(agg) {
+        document.querySelectorAll(".js-budget-day-sub").forEach(function (el) {
+          var dk = el.getAttribute("data-day-key");
+          if (!dk || !agg.byDay[dk]) return;
+          var b = agg.byDay[dk];
+          var dayOver = b.actCny > b.estCny;
+          el.innerHTML =
+            "<strong>이날 합계</strong> · 예상 <span class=\"amt-est\">¥ " +
+            formatBudgetNum(b.estCny) +
+            " · ₩ " +
+            formatBudgetNum(b.estKrw) +
+            '</span> · 실제 <span class="' +
+            (dayOver ? "budget-compare-warn" : "") +
+            '" style="font-weight:600;">¥ ' +
+            formatBudgetNum(b.actCny) +
+            " · ₩ " +
+            formatBudgetNum(b.actKrw) +
+            "</span>";
+        });
+      }
+
+      var budgetChartInstance = null;
+
+      function updateBudgetChart() {
+        var canvas = document.getElementById("budgetChartCanvas");
+        if (!canvas || typeof Chart === "undefined") return;
+        var st = loadBudgetState();
+        if (!st || !st.rows) return;
+        var fx = st.fx || BUDGET_DEFAULT_FX;
+        var agg = computeBudgetAggregates(st.rows, fx);
+        var labels = TRIP_DAYS.map(function (d, idx) {
+          return idx + 1 + "일차";
+        });
+        var estData = TRIP_DAYS.map(function (d) {
+          return Math.round(agg.byDay[d.key].estCny * 10) / 10;
+        });
+        var actData = TRIP_DAYS.map(function (d) {
+          return Math.round(agg.byDay[d.key].actCny * 10) / 10;
+        });
+        var commonOpts = {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: {
+              labels: {
+                color: "#cbd5e1",
+                font: { family: '"Noto Sans KR", system-ui, sans-serif', size: 12 }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: "#94a3b8" },
+              grid: { color: "rgba(51, 65, 85, 0.35)" }
+            },
+            y: {
+              ticks: { color: "#94a3b8" },
+              grid: { color: "rgba(51, 65, 85, 0.35)" },
+              beginAtZero: true
+            }
+          }
+        };
+        if (budgetChartInstance) {
+          budgetChartInstance.data.labels = labels;
+          budgetChartInstance.data.datasets[0].data = estData;
+          budgetChartInstance.data.datasets[1].data = actData;
+          budgetChartInstance.update();
+          return;
+        }
+        budgetChartInstance = new Chart(canvas, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "예상 (¥)",
+                data: estData,
+                backgroundColor: "rgba(56, 189, 248, 0.75)",
+                borderColor: "rgba(56, 189, 248, 1)",
+                borderWidth: 1
+              },
+              {
+                label: "실제 (¥)",
+                data: actData,
+                backgroundColor: "rgba(74, 222, 128, 0.75)",
+                borderColor: "rgba(74, 222, 128, 1)",
+                borderWidth: 1
+              }
+            ]
+          },
+          options: commonOpts
+        });
+      }
+
+      function updateBudgetRowStyles() {
+        var st = loadBudgetState();
+        if (!st) return;
+        st.rows.forEach(function (r) {
+          var tr = document.querySelector('tr[data-budget-row="' + r.id + '"]');
+          if (!tr) return;
+          var est = r.estCny;
+          var act = r.actCny;
+          var over = act != null && act === act && est != null && est === est && act > est;
+          tr.classList.toggle("budget-row-over", over);
+        });
+      }
+
+      function updateBudgetTotalsOnly() {
+        var st = loadBudgetState();
+        if (!st || !st.rows) return;
+        var fx = st.fx || BUDGET_DEFAULT_FX;
+        var agg = computeBudgetAggregates(st.rows, fx);
+        paintBudgetFxSummary(agg, fx);
+        paintBudgetSummaryAndGrand(agg, st.rows);
+        paintDaySubtotalsFromAgg(agg);
+        updateBudgetChart();
+        updateBudgetRowStyles();
+      }
+
+      function renderBudget() {
+        var root = document.getElementById("budgetRoot");
+        var grand = document.getElementById("budgetGrand");
+        var fxInp = document.getElementById("budgetFx");
+        if (!root || !grand || !fxInp) return;
+
+        destroyBudgetSortables();
+        rebuildPoiIndex();
+        var st = ensureBudgetSeeded();
+        insertMissingPlannerRows(st);
+        var fx = parseFloat(String(fxInp.value).trim());
+        if (!(fx > 0)) fx = st.fx || BUDGET_DEFAULT_FX;
+        fxInp.value = String(Math.round(fx));
+        st.fx = Math.round(fx);
+        saveBudgetState(st);
+
+        var rows = st.rows;
+        var agg = computeBudgetAggregates(rows, st.fx);
+        paintBudgetFxSummary(agg, st.fx);
+        paintBudgetSummaryAndGrand(agg, rows);
 
         root.innerHTML = "";
 
@@ -3149,117 +4417,248 @@
           h.textContent = day.label + " · " + (DAY_NARRATIVE[dk] || "");
           block.appendChild(h);
 
+          var scroll = document.createElement("div");
+          scroll.className = "budget-table-scroll";
+
           var table = document.createElement("table");
           table.className = "budget-table";
           table.setAttribute("aria-label", day.label + " 예산");
           table.innerHTML =
             "<thead><tr>" +
-            "<th>장소·항목</th>" +
-            "<th>테마</th>" +
+            '<th class="budget-col-drag" scope="col"><span class="budget-th-sr">순서</span></th>' +
+            "<th>동선·활동</th>" +
+            "<th>분류</th>" +
             '<th class="num">예상 ¥</th>' +
             '<th class="num">예상 ₩</th>' +
-            '<th class="num">확정 ¥</th>' +
-            '<th class="num">확정 ₩</th>' +
+            '<th class="num">실제 ¥</th>' +
+            '<th class="num">실제 ₩</th>' +
+            '<th class="budget-col-actions">관리</th>' +
             "</tr></thead><tbody></tbody>";
           var tb = table.querySelector("tbody");
 
           dayRows.forEach(function (r) {
             var estCny = r.estCny;
             var estKrw = estCny != null && estCny === estCny ? Math.round(estCny * st.fx) : null;
-            addSum(r.cat, estCny, estKrw, r.actCny, r.actKrw);
             if (estCny != null && estCny === estCny) dEstCny += estCny;
             if (estKrw != null && estKrw === estKrw) dEstKrw += estKrw;
             if (r.actCny != null && r.actCny === r.actCny) dActCny += r.actCny;
             if (r.actKrw != null && r.actKrw === r.actKrw) dActKrw += r.actKrw;
 
+            var label = rowLabel(r);
+            if (r.routeLabel && r.cat === "교통") label = "🚕 " + r.routeLabel;
+            var labelCell =
+              r.custom === true
+                ? '<input type="text" class="budget-inp budget-memo" data-id="' +
+                  escapeHtml(r.id) +
+                  '" value="' +
+                  escapeHtml(r.memo != null ? r.memo : "새 항목") +
+                  '" />'
+                : '<span class="budget-route-label">' + escapeHtml(label) + "</span>";
+            var rowOver =
+              r.actCny != null &&
+              r.actCny === r.actCny &&
+              estCny != null &&
+              estCny === estCny &&
+              r.actCny > estCny;
             var tr = document.createElement("tr");
-            var estCnyCell = estCny == null ? '<span class="amt-est">미정</span>' : '<span class="amt-est">' + formatBudgetNum(estCny) + "</span>";
-            var estKrwCell = estKrw == null ? '<span class="amt-est">—</span>' : '<span class="amt-est">' + formatBudgetNum(estKrw) + "</span>";
+            tr.setAttribute("data-budget-row", r.id);
+            if (rowOver) tr.classList.add("budget-row-over");
             tr.innerHTML =
-              "<td>" +
-              escapeHtml(rowLabel(r)) +
-              '</td><td><span class="cat-pill cat-' +
-              escapeHtml(r.cat) +
+              '<td class="budget-col-drag"><span class="budget-drag-handle" title="끌어서 순서 변경" aria-label="줄 순서 변경">≡</span></td>' +
+              '<td class="budget-route-cell">' +
+              labelCell +
+              '</td><td><select class="budget-cat budget-cat-select" data-id="' +
+              escapeHtml(r.id) +
               '">' +
-              escapeHtml(r.cat) +
-              "</span></td>" +
-              '<td class="num">' +
-              estCnyCell +
-              "</td>" +
-              '<td class="num">' +
-              estKrwCell +
-              "</td>" +
-              '<td class="num"><input type="number" class="budget-act" data-field="actCny" data-id="' +
+              buildCatSelectHtml(r.cat) +
+              '</select></td><td class="num"><input type="number" class="budget-inp budget-est" data-id="' +
+              escapeHtml(r.id) +
+              '" step="1" min="0" placeholder="—" value="' +
+              (r.estCny != null && r.estCny === r.estCny ? r.estCny : "") +
+              '" /></td><td class="num"><span class="budget-krw-cell" data-budget-id="' +
+              escapeHtml(r.id) +
+              '">' +
+              (estKrw == null ? "—" : formatBudgetNum(estKrw)) +
+              '</span></td><td class="num"><input type="number" class="budget-inp budget-act" data-field="actCny" data-id="' +
               escapeHtml(r.id) +
               '" step="1" min="0" placeholder="—" value="' +
               (r.actCny != null && r.actCny === r.actCny ? r.actCny : "") +
-              '" /></td>' +
-              '<td class="num"><input type="number" class="budget-act" data-field="actKrw" data-id="' +
+              '" /></td><td class="num"><input type="number" class="budget-inp budget-act" data-field="actKrw" data-id="' +
               escapeHtml(r.id) +
               '" step="100" min="0" placeholder="—" value="' +
               (r.actKrw != null && r.actKrw === r.actKrw ? r.actKrw : "") +
-              '" /></td>';
+              '" /></td><td class="budget-col-actions"><button type="button" class="btn budget-row-del" data-id="' +
+              escapeHtml(r.id) +
+              '">삭제</button></td>';
             tb.appendChild(tr);
           });
 
-          block.appendChild(table);
+          scroll.appendChild(table);
+          block.appendChild(scroll);
+          var addRowBtn = document.createElement("button");
+          addRowBtn.type = "button";
+          addRowBtn.className = "btn budget-add-row";
+          addRowBtn.setAttribute("data-day-key", dk);
+          addRowBtn.textContent = "항목 추가";
+          block.appendChild(addRowBtn);
           var sub = document.createElement("div");
-          sub.className = "budget-subtotal";
+          sub.className = "budget-subtotal js-budget-day-sub";
+          sub.setAttribute("data-day-key", dk);
+          var dayOverSub = dActCny > dEstCny;
           sub.innerHTML =
             "<strong>이날 합계</strong> · 예상 <span class=\"amt-est\">¥ " +
             formatBudgetNum(dEstCny) +
             " · ₩ " +
             formatBudgetNum(dEstKrw) +
-            '</span> · 확정 <span style="color:#4ade80;font-weight:600;">¥ ' +
+            '</span> · 실제 <span class="' +
+            (dayOverSub ? "budget-compare-warn" : "") +
+            '" style="font-weight:600;">¥ ' +
             formatBudgetNum(dActCny) +
             " · ₩ " +
             formatBudgetNum(dActKrw) +
             "</span>";
           block.appendChild(sub);
           root.appendChild(block);
+
+          if (typeof Sortable !== "undefined") {
+            (function (sortTb, sortDayKey) {
+              var inst = Sortable.create(sortTb, {
+                handle: ".budget-drag-handle",
+                animation: 180,
+                delay: 75,
+                delayOnTouchOnly: true,
+                touchStartThreshold: 4,
+                filter: "input,select,option,button,textarea",
+                preventOnFilter: false,
+                onEnd: function () {
+                  var st2 = loadBudgetState();
+                  if (!st2) return;
+                  var ids = [].slice.call(sortTb.querySelectorAll("tr[data-budget-row]")).map(function (tr) {
+                    return tr.getAttribute("data-budget-row");
+                  });
+                  st2.budgetDayOrder = st2.budgetDayOrder && typeof st2.budgetDayOrder === "object" ? st2.budgetDayOrder : {};
+                  st2.budgetDayOrder[sortDayKey] = ids;
+                  st2.rows = rowsSortedByBudgetDayOrder(st2);
+                  saveBudgetState(st2);
+                }
+              });
+              budgetSortableInstances.push(inst);
+            })(tb, dk);
+          }
         });
 
-        grand.innerHTML = "";
-        ["관광", "교통", "식비", "쇼핑"].forEach(function (c) {
-          var s = sums[c];
-          var card = document.createElement("div");
-          card.className = "g-card";
-          card.innerHTML =
-            "<h5>" +
-            escapeHtml(c) +
-            "</h5>" +
-            '<div class="est">예상 ¥ ' +
-            formatBudgetNum(s.estCny) +
-            " · ₩ " +
-            formatBudgetNum(s.estKrw) +
-            '</div><div class="act" style="margin-top:0.25rem;">확정 ¥ ' +
-            formatBudgetNum(s.actCny) +
-            " · ₩ " +
-            formatBudgetNum(s.actKrw) +
-            "</div>";
-          grand.appendChild(card);
-        });
+        updateBudgetChart();
+        updateBudgetRowStyles();
       }
 
-      function onBudgetActBlur(ev) {
-        var t = ev.target;
-        if (!t || !t.classList || !t.classList.contains("budget-act")) return;
+      function persistBudgetField(t) {
         var id = t.getAttribute("data-id");
-        var field = t.getAttribute("data-field");
-        if (!id || !field) return;
+        if (!id) return;
         var st = loadBudgetState() || ensureBudgetSeeded();
         var row = st.rows.find(function (x) {
           return x.id === id;
         });
         if (!row) return;
-        row[field] = parseActNum(t.value);
+        if (t.classList.contains("budget-cat")) {
+          var cv = t.value;
+          row.cat = BUDGET_CATS.indexOf(cv) >= 0 ? cv : "교통";
+        } else if (t.classList.contains("budget-memo")) {
+          row.memo = t.value;
+        } else if (t.classList.contains("budget-est")) {
+          row.estCny = parseActNum(t.value);
+        } else if (t.classList.contains("budget-act")) {
+          var f = t.getAttribute("data-field");
+          if (f) row[f] = parseActNum(t.value);
+        }
+        saveBudgetState(st);
+        var fx = st.fx || BUDGET_DEFAULT_FX;
+        var span = document.querySelector('.budget-krw-cell[data-budget-id="' + id + '"]');
+        if (span) {
+          var ev = row.estCny;
+          span.textContent = ev != null && ev === ev ? formatBudgetNum(Math.round(ev * fx)) : "—";
+        }
+        updateBudgetTotalsOnly();
+      }
+
+      function onBudgetRootInput(ev) {
+        var t = ev.target;
+        if (
+          t &&
+          (t.classList.contains("budget-est") ||
+            t.classList.contains("budget-act") ||
+            t.classList.contains("budget-memo"))
+        )
+          persistBudgetField(t);
+      }
+
+      function deleteBudgetRow(rowId) {
+        var st = loadBudgetState();
+        if (!st || !st.rows) return;
+        var row = st.rows.find(function (x) {
+          return x.id === rowId;
+        });
+        if (!row) return;
+        var k = row.legKey || row.actKey;
+        if (k) {
+          st.suppressedKeys = st.suppressedKeys || [];
+          if (st.suppressedKeys.indexOf(k) < 0) st.suppressedKeys.push(k);
+        }
+        st.rows = st.rows.filter(function (x) {
+          return x.id !== rowId;
+        });
+        ensureBudgetDayOrderKeys(st);
+        st.rows = rowsSortedByBudgetDayOrder(st);
         saveBudgetState(st);
         renderBudget();
       }
 
+      function addCustomBudgetRow(dayKey) {
+        var st = loadBudgetState() || ensureBudgetSeeded();
+        st.rows = st.rows || [];
+        st.suppressedKeys = st.suppressedKeys || [];
+        st.budgetDayOrder = st.budgetDayOrder && typeof st.budgetDayOrder === "object" ? st.budgetDayOrder : {};
+        var newId = uid();
+        st.rows.push({
+          id: newId,
+          dayKey: dayKey,
+          cat: "식비",
+          memo: "새 항목",
+          custom: true,
+          estCny: null,
+          actCny: null,
+          actKrw: null
+        });
+        var ord = Array.isArray(st.budgetDayOrder[dayKey]) ? st.budgetDayOrder[dayKey].slice() : [];
+        ord.push(newId);
+        st.budgetDayOrder[dayKey] = ord;
+        ensureBudgetDayOrderKeys(st);
+        st.rows = rowsSortedByBudgetDayOrder(st);
+        saveBudgetState(st);
+        renderBudget();
+      }
+
+      function onBudgetRootChange(ev) {
+        var t = ev.target;
+        if (t && t.classList.contains("budget-cat")) persistBudgetField(t);
+      }
+
       var budgetRootEl = document.getElementById("budgetRoot");
       if (budgetRootEl) {
-        budgetRootEl.addEventListener("blur", onBudgetActBlur, true);
+        budgetRootEl.addEventListener("input", onBudgetRootInput, true);
+        budgetRootEl.addEventListener("change", onBudgetRootChange, true);
+        budgetRootEl.addEventListener("click", function (ev) {
+          var del = ev.target && ev.target.closest ? ev.target.closest(".budget-row-del") : null;
+          if (del) {
+            var rid = del.getAttribute("data-id");
+            if (rid && confirm("이 가계부 행을 삭제할까요?")) deleteBudgetRow(rid);
+            return;
+          }
+          var addB = ev.target && ev.target.closest ? ev.target.closest(".budget-add-row") : null;
+          if (addB) {
+            var dk = addB.getAttribute("data-day-key");
+            if (dk) addCustomBudgetRow(dk);
+          }
+        });
       }
 
       var budgetFxEl = document.getElementById("budgetFx");
@@ -3276,11 +4675,23 @@
 
       document.getElementById("budgetRegenBtn") &&
         document.getElementById("budgetRegenBtn").addEventListener("click", function () {
-          if (!confirm("일정 기준으로 예상 행을 다시 만듭니다. 확정(초록) 금액은 같은 날·같은 장소·같은 테마끼리 맞춰 옮깁니다. 계속할까요?")) return;
+          if (!confirm("일정 탭에 저장된 동선을 읽어 가계부 행(교통·식비·관광·쇼핑)을 다시 만듭니다. 실제 지출은 같은 이동 구간(legKey)·같은 방문지 순서(actKey)에 맞춰 옮깁니다. 직접 추가한 항목은 유지됩니다. 계속할까요?")) return;
           var old = loadBudgetState() || { fx: BUDGET_DEFAULT_FX, rows: [] };
           var fresh = buildBudgetRowsFromPlanner();
           mergeActsOntoNewRows(old.rows, fresh);
-          saveBudgetState({ fx: old.fx || BUDGET_DEFAULT_FX, rows: fresh });
+          var customs = (old.rows || []).filter(function (r) {
+            return r.custom === true;
+          });
+          var stRegen = {
+            version: 3,
+            fx: old.fx || BUDGET_DEFAULT_FX,
+            rows: fresh.concat(customs),
+            suppressedKeys: [],
+            budgetDayOrder: {}
+          };
+          ensureBudgetDayOrderKeys(stRegen);
+          stRegen.rows = rowsSortedByBudgetDayOrder(stRegen);
+          saveBudgetState(stRegen);
           var fxInp = document.getElementById("budgetFx");
           if (fxInp) fxInp.value = String(old.fx || BUDGET_DEFAULT_FX);
           renderBudget();
@@ -3303,6 +4714,9 @@
         if (fxInp && st.fx) fxInp.value = String(st.fx);
       })();
 
+      renderPrepItinerarySection();
+      loadChecks();
+      updatePrepProgress();
       renderBudget();
     })();
   </script>
