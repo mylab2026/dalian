@@ -1,0 +1,3310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>우리 가족 대련 여행 · 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent2: #f472b6;
+      --success: #4ade80;
+      --warn: #fbbf24;
+      --radius: 14px;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      color-scheme: dark;
+    }
+
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: "Noto Sans KR", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
+      line-height: 1.55;
+      -webkit-tap-highlight-color: rgba(56, 189, 248, 0.15);
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    img, svg, video, canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .bg-pattern {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(244, 114, 182, 0.08), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-width: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+      padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+      padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+      padding-bottom: max(3rem, env(safe-area-inset-bottom, 0px));
+    }
+
+    header.hero {
+      padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--surface2);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.65rem, 4vw, 2.25rem);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .hero-sub { color: var(--muted); font-size: 0.95rem; }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .meta-pill {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+    }
+
+    .meta-pill strong { color: var(--accent); font-weight: 600; }
+
+    .flight-bar {
+      margin-top: 1rem;
+      padding: 1rem 1.15rem;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+    }
+
+    .flight-bar strong { color: var(--accent); }
+
+    .countdown {
+      margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: linear-gradient(135deg, var(--surface), #1e3a5f);
+      border-radius: var(--radius);
+      border: 1px solid var(--surface2);
+      box-shadow: var(--shadow);
+    }
+
+    .countdown-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem; }
+    .countdown-value {
+      font-size: 1.45rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    nav.tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    nav.tabs button {
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 0.55rem 0.95rem;
+      border-radius: 10px;
+      border: 1px solid var(--surface2);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    nav.tabs button:hover { color: var(--text); border-color: var(--accent); }
+    nav.tabs button.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    section.panel { display: none; animation: fadeIn 0.35s ease; }
+    section.panel.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .route-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .route-card h2 {
+      font-size: 1.05rem;
+      color: var(--warn);
+      margin-bottom: 0.75rem;
+    }
+
+    .route-card p, .route-card ul { font-size: 0.9rem; color: var(--muted); }
+    .route-card ul { margin: 0.5rem 0 0 1.1rem; }
+    .route-card li { margin: 0.35rem 0; }
+
+    .day-grid { display: grid; gap: 1rem; }
+
+    .day-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+      box-shadow: var(--shadow);
+    }
+
+    .day-card header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--surface2);
+    }
+
+    .day-date { font-size: 0.85rem; color: var(--accent2); font-weight: 600; }
+    .day-title { font-size: 1.12rem; font-weight: 700; }
+
+    .timeline { list-style: none; }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 5.2rem 1fr;
+      gap: 0.75rem 1rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    }
+
+    .timeline li:last-child { border-bottom: none; }
+
+    .time {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .item-title { font-weight: 600; margin-bottom: 0.2rem; }
+    .item-desc { font-size: 0.87rem; color: var(--muted); }
+
+    .tag-kids {
+      display: inline-block;
+      margin-top: 0.35rem;
+      margin-right: 0.35rem;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--success);
+    }
+
+    .tag-taxi {
+      display: inline-block;
+      margin-top: 0.35rem;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    @media (max-width: 720px) {
+      .two-col { grid-template-columns: 1fr; }
+      .timeline li { grid-template-columns: 1fr; gap: 0.25rem; }
+      .time { font-weight: 600; color: var(--accent); }
+    }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-card h3 { font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent); }
+
+    .plan-b-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .plan-b-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1.15rem;
+    }
+
+    .plan-b-card h4 { font-size: 0.98rem; margin-bottom: 0.5rem; color: var(--accent2); }
+    .plan-b-card p { font-size: 0.88rem; color: var(--muted); }
+
+    .ledger-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      align-items: end;
+    }
+
+    @media (max-width: 640px) {
+      .ledger-form { grid-template-columns: 1fr; }
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      font-family: inherit;
+      font-size: 0.92rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--text);
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      color: #0f172a;
+    }
+
+    .btn:hover { filter: brightness(1.08); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--surface2);
+    }
+
+    .ledger-table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+
+    table.ledger {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    table.ledger th, table.ledger td {
+      padding: 0.5rem 0.6rem;
+      text-align: left;
+      border-bottom: 1px solid var(--surface2);
+    }
+
+    table.ledger th { color: var(--muted); font-weight: 500; }
+
+    table.ledger .num { font-variant-numeric: tabular-nums; text-align: right; }
+
+    .ledger-actions button {
+      font-family: inherit;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--accent2);
+      cursor: pointer;
+    }
+
+    .totals {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .total-pill {
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+    }
+
+    .total-pill strong { display: block; color: var(--muted); font-weight: 500; margin-bottom: 0.2rem; }
+    .total-pill span { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+
+    .budget-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .budget-toolbar .field { margin: 0; min-width: 8rem; }
+
+    .budget-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .budget-legend span.est { color: #94a3b8; }
+    .budget-legend span.act { color: #4ade80; font-weight: 600; }
+
+    .budget-day-block {
+      margin-bottom: 1.35rem;
+      padding: 1rem 1.1rem;
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 12px;
+    }
+
+    .budget-day-block h4 {
+      font-size: 0.95rem;
+      color: var(--warn);
+      margin-bottom: 0.65rem;
+      font-weight: 600;
+    }
+
+    table.budget-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    table.budget-table th,
+    table.budget-table td {
+      padding: 0.45rem 0.35rem;
+      border-bottom: 1px solid var(--surface2);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    table.budget-table th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    table.budget-table td.num,
+    table.budget-table th.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    table.budget-table .amt-est {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    table.budget-table .budget-act {
+      width: 4.5rem;
+      max-width: 100%;
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 0.3rem 0.35rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: #4ade80;
+      text-align: right;
+    }
+
+    table.budget-table .budget-act:focus {
+      outline: none;
+      border-color: #4ade80;
+      box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.35);
+    }
+
+    table.budget-table .cat-pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 0.12rem 0.45rem;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .cat-관광 { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+    .cat-교통 { background: rgba(167, 139, 250, 0.2); color: #c4b5fd; }
+    .cat-식비 { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
+    .cat-쇼핑 { background: rgba(74, 222, 128, 0.2); color: #86efac; }
+
+    .budget-subtotal {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.45rem;
+      text-align: right;
+    }
+
+    .budget-subtotal strong { color: var(--text); }
+
+    .budget-grand {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .budget-grand .g-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.82rem;
+    }
+
+    .budget-grand .g-card h5 {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .budget-grand .g-card .est { color: #94a3b8; }
+    .budget-grand .g-card .act { color: #4ade80; font-weight: 600; }
+
+    .checklist { list-style: none; }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.4rem 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .checklist input {
+      margin-top: 0.25rem;
+      accent-color: var(--accent);
+      width: 1.05rem;
+      height: 1.05rem;
+      cursor: pointer;
+    }
+
+    .checklist label { cursor: pointer; flex: 1; }
+
+    .checklist input:checked + label {
+      color: var(--text);
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.5);
+    }
+
+    .links a:hover { border-bottom-style: solid; }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--surface2);
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .map-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem 1.15rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .map-card h2 {
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+      color: var(--accent);
+    }
+
+    .map-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 0.85rem;
+      line-height: 1.45;
+    }
+
+    #tripMap {
+      width: 100%;
+      height: min(52vh, 440px);
+      min-height: 280px;
+      border-radius: 10px;
+      border: 1px solid var(--surface2);
+      z-index: 0;
+    }
+
+    .map-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0.85rem 0 0.65rem;
+    }
+
+    .map-toolbar span.hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      width: 100%;
+      margin-bottom: 0.15rem;
+    }
+
+    .map-chip {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .map-chip:hover { color: var(--text); border-color: var(--accent); }
+    .map-chip.active {
+      background: rgba(56, 189, 248, 0.18);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-top: 0.65rem;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--surface2);
+    }
+
+    .map-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .lg-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .trip-marker-wrap { background: transparent !important; border: none !important; }
+    .trip-marker {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #0f172a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #38bdf8;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    .trip-marker.trip-marker-day {
+      width: auto;
+      min-width: 36px;
+      min-height: 36px;
+      height: auto;
+      padding: 3px 5px;
+      border-radius: 10px;
+      flex-direction: column;
+      gap: 0;
+      line-height: 1.05;
+    }
+
+    .trip-marker-day .tm-seq {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .trip-marker-day .tm-theme {
+      font-size: 11px;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .tag-unused {
+      display: inline-block;
+      margin-top: 0.35rem;
+      font-size: 0.65rem;
+      padding: 0.12rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(100, 116, 139, 0.2);
+      color: var(--muted);
+      border: 1px dashed var(--surface2);
+    }
+
+    .poi-card.poi-unused { border-style: dashed; border-color: rgba(100, 116, 139, 0.45); }
+
+    .cat-blocks { display: flex; flex-direction: column; gap: 1rem; }
+
+    .cat-block {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+
+    .cat-block h3 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cat-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+      color: #0f172a;
+    }
+
+    .cat-관광지 .cat-badge { background: #38bdf8; }
+    .cat-식당 .cat-badge { background: #fb923c; color: #0f172a; }
+    .cat-호텔 .cat-badge { background: #a78bfa; }
+    .cat-쇼핑 .cat-badge { background: #4ade80; color: #0f172a; }
+    .cat-교통 .cat-badge { background: #64748b; color: #f1f5f9; }
+
+    .place-list { list-style: none; }
+    .place-list li {
+      padding: 0.55rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.55);
+      font-size: 0.88rem;
+    }
+    .place-list li:last-child { border-bottom: none; }
+
+    .place-name { font-weight: 600; margin-bottom: 0.15rem; }
+    .place-name .zh { font-size: 0.82rem; color: var(--muted); font-weight: 500; margin-left: 0.35rem; }
+    .place-note { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; }
+    .place-actions { margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+    .link-maps {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.45);
+    }
+    .link-maps:hover { border-bottom-style: solid; }
+
+    .btn-map-focus {
+      font-family: inherit;
+      font-size: 0.76rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn-map-focus:hover { border-color: var(--accent); color: var(--accent); }
+
+    .planner-head { margin-bottom: 1rem; }
+    .planner-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .planner-note { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+
+    .day-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .day-pill {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--surface2);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .day-pill.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .theme-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .theme-board { grid-template-columns: 1fr; }
+    }
+
+    .theme-col {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 0.85rem 0.9rem;
+      max-height: 420px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-col h3 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 0.65rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--surface2);
+    }
+
+    .theme-col.tourism h3 { color: #38bdf8; }
+    .theme-col.food h3 { color: #fb923c; }
+    .theme-col.shopping h3 { color: #4ade80; }
+    .sb-next-travel {
+      margin-top: 0.35rem;
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+
+    .map-tile-pick {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.85rem;
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .map-tile-pick label { color: var(--text); font-weight: 500; }
+
+    .map-tile-pick select {
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .theme-scroll {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .poi-card {
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+      padding: 0.55rem 0.65rem;
+      font-size: 0.82rem;
+    }
+
+    .poi-card .nm { font-weight: 600; margin-bottom: 0.15rem; }
+    .poi-card .zh { font-size: 0.75rem; color: var(--muted); }
+    .poi-card .nt { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; line-height: 1.35; }
+
+    .poi-nick-wrap { margin-top: 0.45rem; }
+    .poi-nick-wrap label {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .poi-nick-inp {
+      width: 100%;
+      font-family: inherit;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--text);
+    }
+    .poi-nick-inp:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .poi-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.45rem;
+    }
+
+    .poi-btns button {
+      font-family: inherit;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .poi-btns button.primary { border-color: var(--accent); color: var(--accent); }
+    .poi-btns button:hover { filter: brightness(1.08); }
+
+    .schedule-board {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .schedule-board h2 { font-size: 1.05rem; margin-bottom: 0.75rem; color: var(--warn); }
+
+    .sb-section { margin-bottom: 1rem; }
+    .sb-section h4 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sb-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      gap: 0.5rem 0.65rem;
+      align-items: start;
+      padding: 0.55rem 0.65rem;
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 8px;
+      margin-bottom: 0.45rem;
+      font-size: 0.86rem;
+      cursor: default;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .sb-row-body { min-width: 0; }
+
+    .drag-handle {
+      cursor: grab;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1;
+      padding: 0.15rem;
+      user-select: none;
+    }
+
+    .drag-handle:active { cursor: grabbing; }
+
+    .itinerary-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-height: 2rem;
+    }
+
+    .map-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 1024px) {
+      .map-split { grid-template-columns: 1fr; }
+    }
+
+    .map-block h3 {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+    }
+
+    .map-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .planner-map-section {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem 1.15rem;
+      box-shadow: var(--shadow);
+    }
+
+    .planner-map-section h3.pm-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .day-overview-grid {
+      display: grid;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .day-overview-card {
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      border-left: 3px solid var(--accent);
+    }
+
+    .day-overview-card:nth-child(1) { border-left-color: #38bdf8; }
+    .day-overview-card:nth-child(2) { border-left-color: #a78bfa; }
+    .day-overview-card:nth-child(3) { border-left-color: #f472b6; }
+    .day-overview-card:nth-child(4) { border-left-color: #4ade80; }
+    .day-overview-card:nth-child(5) { border-left-color: #fbbf24; }
+
+    .day-overview-card .dov-narrative {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+      margin: 0 0 0.55rem;
+    }
+
+    .day-overview-card .dov-times {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin: 0 0 0.85rem;
+      line-height: 1.45;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .day-overview-card .dov-times strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .day-overview-card .dov-sec-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.15rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .day-overview-card .dov-route {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      line-height: 1.5;
+    }
+
+    .day-settings-bar--map {
+      margin-top: 0.65rem;
+    }
+
+    .map-note-compact {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 0.65rem;
+      line-height: 1.45;
+    }
+
+    .day-settings-bar {
+      margin-bottom: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      background: #0f172a;
+      border: 1px solid var(--surface2);
+      border-radius: 8px;
+      font-size: 0.84rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem 1rem;
+    }
+
+    .day-settings-bar .ds-label { color: var(--muted); font-size: 0.78rem; }
+    .day-settings-bar input[type="time"],
+    .day-settings-bar input[type="number"] {
+      font-family: inherit;
+      font-size: 0.85rem;
+      padding: 0.3rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .day-settings-bar .bar-24h {
+      flex: 1;
+      min-width: 100px;
+      max-width: 200px;
+      height: 8px;
+    }
+
+    #mapDayPlan {
+      width: 100%;
+      height: min(52vh, 480px);
+      min-height: 280px;
+      border-radius: 10px;
+      border: 1px solid var(--surface2);
+      z-index: 0;
+    }
+
+    #mapAllPoi {
+      width: 100%;
+      height: min(38vh, 360px);
+      min-height: 220px;
+      border-radius: 10px;
+      border: 1px solid var(--surface2);
+      z-index: 0;
+    }
+
+    .segment-lbl-wrap {
+      background: transparent;
+      border: none;
+    }
+
+    .segment-travel-lbl {
+      position: relative;
+      left: -50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      color: #e2e8f0;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 1.25;
+      max-width: 160px;
+      text-align: center;
+      white-space: normal;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-mini {
+      font-size: 0.72rem !important;
+      padding: 0.28rem 0.5rem !important;
+      border-radius: 6px !important;
+    }
+
+    .theme-col.base h3 { color: #e879f9; }
+
+    @media (max-width: 640px) {
+      .sb-row { grid-template-columns: 1fr; }
+    }
+
+    .sb-row .meta { color: var(--muted); font-size: 0.8rem; }
+    .sb-row .taxi-note { color: var(--accent); font-size: 0.8rem; white-space: nowrap; }
+
+    .dur-wrap { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; color: var(--muted); }
+    .dur-wrap input {
+      width: 4rem;
+      font-family: inherit;
+      padding: 0.25rem 0.35rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .sb-row .row-actions { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+    .sb-row .row-actions button {
+      font-family: inherit;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--surface2);
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .time-budget {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--surface2);
+      border-radius: 10px;
+      font-size: 0.86rem;
+    }
+
+    .bar-24h {
+      height: 10px;
+      border-radius: 5px;
+      background: var(--surface2);
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+
+    .bar-24h span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #a78bfa);
+      border-radius: 5px;
+      transition: width 0.25s ease;
+    }
+
+    .buffer-field {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .buffer-field input { width: 4rem; }
+
+    details.route-card summary { list-style: none; }
+    details.route-card summary::-webkit-details-marker { display: none; }
+
+    /* —— 핸드폰·태블릿 세로·터치 우선 (가로 1024px 이하) —— */
+    @media (max-width: 1024px) {
+      nav.tabs {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 0.45rem;
+        padding: 0.5rem 0 0.85rem;
+        margin: -0.25rem -0.35rem 1.25rem;
+        padding-left: max(0.35rem, env(safe-area-inset-left, 0px));
+        padding-right: max(0.35rem, env(safe-area-inset-right, 0px));
+        background: linear-gradient(to bottom, var(--bg) 70%, rgba(15, 23, 42, 0.96) 100%);
+        border-bottom: 1px solid var(--surface2);
+      }
+
+      nav.tabs::-webkit-scrollbar { display: none; }
+
+      nav.tabs button {
+        flex: 0 0 auto;
+        min-height: 44px;
+        padding: 0.55rem 1rem;
+        touch-action: manipulation;
+      }
+
+      .day-pills {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 0.5rem;
+        padding-bottom: 0.35rem;
+        margin-left: -0.15rem;
+        margin-right: -0.15rem;
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
+      }
+
+      .day-pills::-webkit-scrollbar { display: none; }
+
+      .day-pill {
+        flex: 0 0 auto;
+        min-height: 44px;
+        padding: 0.5rem 1rem;
+        touch-action: manipulation;
+      }
+
+      .btn {
+        min-height: 44px;
+        padding: 0.65rem 1.1rem;
+        touch-action: manipulation;
+      }
+
+      .btn-map-focus,
+      .poi-btns button,
+      .sb-row .row-actions button {
+        min-height: 40px;
+        padding: 0.35rem 0.55rem;
+        font-size: 0.78rem;
+      }
+
+      .budget-day-block {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+      }
+
+      table.budget-table {
+        min-width: 560px;
+        font-size: 0.8rem;
+      }
+
+      table.budget-table .budget-act {
+        min-height: 40px;
+        width: 5rem;
+        font-size: 16px;
+      }
+
+      .budget-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .budget-toolbar .ledger-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .budget-toolbar .ledger-actions .btn {
+        width: 100%;
+      }
+
+      .budget-grand {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+      }
+
+      #mapDayPlan {
+        height: min(48vh, 420px);
+        min-height: 260px;
+      }
+
+      #mapAllPoi {
+        height: min(40vh, 340px);
+        min-height: 200px;
+      }
+
+      .theme-col {
+        max-height: min(52vh, 480px);
+      }
+
+      .field input,
+      .field select,
+      .day-settings-bar input[type="time"],
+      .day-settings-bar input[type="number"],
+      .dur-wrap input,
+      .poi-nick-inp,
+      .buffer-field input {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .budget-grand {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 1.45rem;
+      }
+
+      .wrap {
+        padding-top: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="hero">
+      <span class="hero-badge">Family Trip Dashboard</span>
+      <h1>우리 가족 대련(大连) 여행</h1>
+      <p class="hero-sub">일정 탭에서 <strong>날짜별로 즉석 일정</strong>을 짭니다. 집은 <strong>관악로1(서울대)</strong> · 대련은 택시 위주.</p>
+      <div class="hero-meta">
+        <span class="meta-pill"><strong>일정</strong> 2026.4.25(토) ~ 4.29(수) · 4박 5일</span>
+        <span class="meta-pill"><strong>가는 편</strong> 4/25 11:24 출발 (인천)</span>
+        <span class="meta-pill"><strong>오는 편</strong> 4/29 19:20 출발 (대련)</span>
+      </div>
+      <div class="flight-bar">
+        <strong>한국 구간</strong> 집(<strong>관악로1 서울대</strong>) ↔ 인천공항(ICN) 자차 · 숙소는 <strong>대련 포시즌스 호텔</strong> 기준 · <strong>대련 현지</strong>는 <strong>택시(滴滴 등)</strong>. 아래 시각은 내비 실시간과 항공편 확인으로 꼭 맞춰 주세요.
+      </div>
+      <div class="countdown" id="countdownBox">
+        <div class="countdown-label">비행기 출발(4/25 11:24)까지</div>
+        <div class="countdown-value" id="countdownText">계산 중…</div>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="대시보드 섹션">
+      <button type="button" class="active" data-panel="schedule" role="tab" aria-selected="true">일정</button>
+      <button type="button" data-panel="ledger" role="tab" aria-selected="false">가계부</button>
+      <button type="button" data-panel="planb" role="tab" aria-selected="false">플랜 B</button>
+      <button type="button" data-panel="prep" role="tab" aria-selected="false">준비물</button>
+    </nav>
+
+    <section id="panel-schedule" class="panel active" role="tabpanel" aria-hidden="false">
+      <details class="route-card" open>
+        <summary style="font-size:1.05rem;font-weight:600;color:var(--warn);cursor:pointer">인천 ↔ 집 · 포시즌스 ↔ 공항 (접기/펼치기)</summary>
+        <div style="margin-top:0.75rem">
+          <h3 style="font-size:0.95rem;color:var(--accent);margin:0 0 0.5rem">관악로1(서울대) ↔ 인천공항</h3>
+          <p style="font-size:0.9rem;color:var(--muted)">
+            <strong>출발지</strong> 관악구 관악로1 일대 · <strong>도착</strong> ICN. 자차 통상 <strong>약 1시간 5분~1시간 35분</strong> + 주차·셔틀 <strong>15~25분</strong>.
+            <strong>가는 날 11:24 비행</strong> → 터미널 <strong>08:15~08:30</strong> 목표 시 <strong>집 출발 권장 06:30~06:50</strong>.
+            <strong>귀국</strong> 인천 착륙 후 입국·수하물 → 주차장 출발 <strong>22:30~23:20</strong> 전후 가정 시 관악로1 도착 <strong>23:45~익일 00:40</strong> 전후(야간 운전 주의).
+          </p>
+          <h3 style="font-size:0.95rem;color:var(--accent);margin:1rem 0 0.5rem">포시즌스 ↔ 주자이자이 공항</h3>
+          <p style="font-size:0.9rem;color:var(--muted)">
+            택시·자차 <strong>약 25~50분</strong>. <strong>4/29 19:20 출발</strong> 기준 공항 도착 <strong>16:30~17:30</strong> 목표 → 호텔 출발 <strong>16:00~16:45</strong> 권장.
+          </p>
+        </div>
+      </details>
+
+      <div class="planner-head">
+        <h2 class="planner-title">그날그날 일정 만들기</h2>
+        <p class="planner-note">
+          <strong>관광 · 음식 · 쇼핑 · 집·숙소</strong> 테마에서 <strong>일정에 추가</strong>한 뒤, <strong>위쪽 일정 지도</strong>에서 그날 순서와 머무름을 조정합니다.
+          각 카드의 <strong>별명</strong>은 지도 팝업에 반영되며 이 브라우저에만 저장됩니다.
+          <strong>아래 지도</strong>는 전체 추천 장소를 참고용으로 모아 둡니다.
+          처음 저장 시 <strong>추천 일정</strong>이 채워집니다. 초기화는 <code style="font-size:0.82rem">localStorage.removeItem(&quot;dalian_planner_v10&quot;)</code> 후 새로고침.
+        </p>
+      </div>
+
+      <div class="day-pills" id="plannerDayPills" role="tablist" aria-label="여행 일 선택"></div>
+
+      <div class="map-stack" id="plannerMaps">
+        <div class="planner-map-section">
+          <h3 class="pm-title">날짜별 주요 일정</h3>
+          <div id="dayOverviewPanel" class="day-overview-grid" aria-label="날짜별 요약"></div>
+
+          <div class="map-tile-pick">
+            <label for="mapTileSelect">배경 지도</label>
+            <select id="mapTileSelect" aria-label="배경 지도 스타일"></select>
+          </div>
+          <div id="daySettingsBar" class="day-settings-bar day-settings-bar--map" aria-label="하루 시작·버퍼"></div>
+          <div id="mapDayPlan" role="application" aria-label="선택한 날 일정 지도"></div>
+          <div class="map-legend" id="mapLegendDay"></div>
+        </div>
+
+        <div class="planner-map-section">
+          <h3 class="pm-title">전체 추천 장소 (참고)</h3>
+          <p class="map-note-compact">테마 색으로 모든 추천 지점을 한눈에 봅니다. 좌표는 <strong>GCJ-02</strong> 기준입니다.</p>
+          <div id="mapAllPoi" role="application" aria-label="전체 추천 장소"></div>
+          <div class="map-legend" id="mapLegendAll"></div>
+        </div>
+      </div>
+
+      <div class="theme-board" id="themeBoard"></div>
+    </section>
+
+    <section id="panel-ledger" class="panel" role="tabpanel" aria-hidden="true">
+      <div class="info-card">
+        <h3>예상 가계부</h3>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:0.75rem;">
+          현재 <strong>일정 탭</strong>에 저장된 순서를 기준으로 예상 비용을 넣어 두었습니다.
+          <span style="color:#94a3b8;">회색</span>은 추정(예상), <span style="color:#4ade80;font-weight:600;">초록 입력칸</span>은 확정(실제) 금액입니다. 위안·원을 각각 적어 비교할 수 있습니다.
+        </p>
+        <div class="budget-legend">
+          <span class="est">예상(¥ / ₩)</span>
+          <span class="act">확정(¥ / ₩)</span>
+          <span class="muted" style="font-weight:500;">테마: 관광 · 교통 · 식비 · 쇼핑</span>
+        </div>
+        <div class="budget-toolbar">
+          <div class="field">
+            <label for="budgetFx">환율 (1위안 = ?원)</label>
+            <input type="number" id="budgetFx" min="1" step="1" value="192" />
+          </div>
+          <div class="ledger-actions" style="margin:0;">
+            <button type="button" class="btn" id="budgetRegenBtn">일정 기준 예상 재생성</button>
+            <button type="button" class="btn" id="budgetExportBtn">JSON보내기</button>
+          </div>
+        </div>
+        <div id="budgetRoot"></div>
+        <div class="budget-grand" id="budgetGrand"></div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:1rem;">
+          쇼핑은 감이 잡히기 어려워 예상 칸을 비워 두었습니다. 확정 금액만 나중에 적어도 됩니다. 데이터는 이 브라우저(로컬)에만 저장됩니다.
+        </p>
+      </div>
+    </section>
+
+    <section id="panel-planb" class="panel" role="tabpanel" aria-hidden="true">
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">
+        정해진 일정이 빡빡하거나 날씨·컨디션이 안 맞을 때 쓰는 <strong>대체 플랜</strong>입니다. 공통으로 <strong>택시로 이동</strong>하고, <strong>실내·짧은 동선</strong>을 우선했습니다.
+      </p>
+      <div class="plan-b-grid">
+        <div class="plan-b-card">
+          <h4>성아 해양세계(圣亚海洋世界)</h4>
+          <p>실내 수족관 위주라 날씨에 덜 민감. 호랑이탄 대신 가볍게 볼거리만 채우기 좋아요. 이동·귀가는 택시.</p>
+        </div>
+        <div class="plan-b-card">
+          <h4>대련 자연박물관 일대</h4>
+          <p>박물관 위주로 실내 체류 시간을 늘리고, 주변은 택시로만 이동. 걷는 양을 줄이는 날에 적합.</p>
+        </div>
+        <div class="plan-b-card">
+          <h4>동항(东港) · 방홍 광장</h4>
+          <p>해안 산책은 <strong>짧게</strong>만 하고 바람 강하면 생략. 근처 카페에서 휴식.</p>
+        </div>
+        <div class="plan-b-card">
+          <h4>왈다 광장 / 대형몰(万达 등)</h4>
+          <p>식당가·키즈·영화관이 한 건물에 모인 경우가 많아 <strong>아이 식사 + 실내</strong> 한 번에 처리하기 쉬워요.</p>
+        </div>
+        <div class="plan-b-card">
+          <h4>호텔 데이</h4>
+          <p>수영장·조식만 즐기고 오후는 낮잠. 무리한 관광 대신 회복용.</p>
+        </div>
+        <div class="plan-b-card">
+          <h4>가족 식사(대체 메뉴)</h4>
+          <p><strong>KFC·피자헛·맥도날드</strong> 등 익숙한 패스트푸드, <strong>시저더(喜家德)</strong> 만두, 일식 덮밥 체인 등 자극 적은 선택. 훠궈는 순한 국물·아이 면 요청.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-prep" class="panel" role="tabpanel" aria-hidden="true">
+      <div class="two-col">
+        <div class="info-card">
+          <h3>공통 · 여권·통신</h3>
+          <ul class="checklist" data-storage="common">
+            <li><input type="checkbox" id="c1" /><label for="c1">여권·신분증(아이 동반 시 증빙 서류)</label></li>
+            <li><input type="checkbox" id="c2" /><label for="c2">eSIM/로밍 또는 현지 데이터 준비</label></li>
+            <li><input type="checkbox" id="c3" /><label for="c3">중국 결제(알리페이 등) 가능 여부 확인</label></li>
+            <li><input type="checkbox" id="c4" /><label for="c4">호텔 예약 확인서·주소 스크린샷(택시용)</label></li>
+            <li><input type="checkbox" id="c5" /><label for="c5">滴滴(디디) 등 택시 앱 설치·결제 확인</label></li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h3>아이 동반</h3>
+          <ul class="checklist" data-storage="kids">
+            <li><input type="checkbox" id="k1" /><label for="k1">유모차 또는 휴대용 의자</label></li>
+            <li><input type="checkbox" id="k2" /><label for="k2">간식·물통·손세정제</label></li>
+            <li><input type="checkbox" id="k3" /><label for="k3">기저귀·여벌 옷·얇은 겉옷(바람)</label></li>
+            <li><input type="checkbox" id="k4" /><label for="k4">즐겨 보는 영상·책(이동용)</label></li>
+            <li><input type="checkbox" id="k5" /><label for="k5">상비약(해열·소화 등 가정용)</label></li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:0.5rem;">체크 상태는 이 브라우저에만 저장됩니다.</p>
+    </section>
+
+    <footer>
+      우리 가족 전용 페이지 · <code style="background:var(--surface);padding:0.1rem 0.35rem;border-radius:4px;">index.html</code>을 브라우저로 열면 됩니다.
+    </footer>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    (function () {
+      var TRIP_DAYS = [
+        { key: "2026-04-25", label: "4/25(토) Day1" },
+        { key: "2026-04-26", label: "4/26(일) Day2" },
+        { key: "2026-04-27", label: "4/27(월) Day3" },
+        { key: "2026-04-28", label: "4/28(화) Day4" },
+        { key: "2026-04-29", label: "4/29(수) Day5" }
+      ];
+
+      /** 날짜별 한 줄 컨셉 ([N일차 (M/D, 요일): …] 에 표시) */
+      var DAY_NARRATIVE = {
+        "2026-04-25": "다롄 도착 및 동강 야경",
+        "2026-04-26": "일요일 인파 피하기 (시내 쇼핑몰 & 호캉스)",
+        "2026-04-27": "하이라이트 데이 (동물원 & 핀하이루)",
+        "2026-04-28": "여유로운 수족관 탐험 및 레이저쇼",
+        "2026-04-29": "번화가 장보기 · 호텔 정리 후 공항 출발"
+      };
+
+      function shortMdFromKey(key) {
+        var p = (key || "").split("-");
+        if (p.length < 3) return "";
+        return String(parseInt(p[1], 10)) + "/" + String(parseInt(p[2], 10));
+      }
+
+      function weekdayKoFromKey(key) {
+        var p = (key || "").split("-");
+        if (p.length < 3) return "";
+        var dt = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+        var names = ["일", "월", "화", "수", "목", "금", "토"];
+        return names[dt.getDay()] || "";
+      }
+
+      function bracketDayLine(dayKey, dayIndex1) {
+        var md = shortMdFromKey(dayKey);
+        var wk = weekdayKoFromKey(dayKey);
+        var body = DAY_NARRATIVE[dayKey] || "일정";
+        return "[" + dayIndex1 + "일차 (" + md + ", " + wk + "): " + body + "]";
+      }
+
+      var THEME_LABEL = { base: "집·숙소", tourism: "관광", food: "음식점", shopping: "쇼핑" };
+      var THEME_MARK = { base: "집", tourism: "관", food: "식", shopping: "몰" };
+      var THEME_COLOR = { base: "#e879f9", tourism: "#38bdf8", food: "#fb923c", shopping: "#4ade80" };
+      var POI_NICKNAMES_KEY = "dalian_poi_nicknames_v1";
+      var MAP_TILE_PREF_KEY = "dalian_map_tile";
+      var MAP_TILES = {
+        gaode: {
+          url: "https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+          subdomains: "1234",
+          attribution: '&copy; <a href="https://lbs.amap.com/">高德地图</a>',
+          label: "高德 · 중국 도로(대련 표시에 권장)"
+        },
+        carto: {
+          url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+          subdomains: "abcd",
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+          label: "영문·라틴 위주 (읽기 쉬움)"
+        },
+        esri: {
+          url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+          subdomains: "",
+          attribution: "Tiles &copy; Esri",
+          label: "세계 도로망 (영문 위주)"
+        },
+        osm: {
+          url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          subdomains: "abc",
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          label: "OSM 기본 (지역 언어·한자 혼합)"
+        }
+      };
+
+      var DAY_PLAN_COLORS = ["#38bdf8", "#a78bfa", "#f472b6", "#4ade80", "#fbbf24"];
+
+      /** 대련 POI 위도·경도는 高德/국측(GCJ-02) 기준. 출처: 공개 지도·관광 정보(360/百科 등)로 보정함. */
+      var POI_CATALOG = [
+        { id: "fs-hotel", theme: "base", name: "포시즌스 호텔", nameZh: "大连四季酒店", lat: 38.9258, lng: 121.665, note: "대련 숙소(珠玉街 일대)." },
+        { id: "hokangs-base", theme: "base", name: "호캉스", nameZh: "酒店度假", lat: 38.9258, lng: 121.665, note: "호텔에 머물며 호캉스—수영장·조식·스파 등(집·숙소 일정용)." },
+        { id: "hotel-dinner-base", theme: "base", name: "호텔 저녁 식사", nameZh: "酒店晚餐", lat: 38.9258, lng: 121.665, note: "숙소에서 저녁—호텔 레스토랑·룸서비스(집·숙소 일정용)." },
+        { id: "airport-dlc", theme: "base", name: "대련 주자이자이 공항", nameZh: "大连周水子国际机场", lat: 38.9656, lng: 121.5385, note: "터미널 중심부 근처 좌표." },
+        { id: "xinghai-sq", theme: "tourism", name: "성해광장", nameZh: "星海广场", lat: 38.88111, lng: 121.58278, note: "광장 중심. 북쪽이 도심·남쪽이 바다." },
+        { id: "xinghai-beach", theme: "tourism", name: "성해만 해변·산책로", nameZh: "星海湾浴场", lat: 38.8758, lng: 121.5795, note: "광장 남쪽 해안·목욕장 일대." },
+        { id: "laohutan", theme: "tourism", name: "호랑이탄 해양공원", nameZh: "老虎滩海洋公园", lat: 38.88723, lng: 121.6812, note: "정문·해안공원 일대." },
+        { id: "sunasia", theme: "tourism", name: "성아 해양세계", nameZh: "圣亚海洋世界", lat: 38.87814, lng: 121.57077, note: "성해광장 서쪽·대이二院역 인근." },
+        { id: "donggang", theme: "tourism", name: "동항·방홍(해안)", nameZh: "东港 / 威尼斯水城", lat: 38.9318, lng: 121.6715, note: "동방위니스수성·해안 산책." },
+        { id: "russian-st", theme: "tourism", name: "러시아풍정거리", nameZh: "俄罗斯风情街", lat: 38.9242, lng: 121.6395, note: "단결가(胜利桥) 북 서쪽." },
+        { id: "zhongshan-sq", theme: "tourism", name: "중산광장", nameZh: "中山广场", lat: 38.9207, lng: 121.63886, note: "원형 광장 중심." },
+        { id: "labor-park", theme: "tourism", name: "노동공원", nameZh: "劳动公园", lat: 38.90887, lng: 121.63519, note: "중산·청니 일대 남쪽." },
+        {
+          id: "pinhailou-taxi-drive",
+          theme: "tourism",
+          name: "핀하이루 일대(택시·해안 드라이브)",
+          nameZh: "品海楼沿线(车游)",
+          lat: 38.8782,
+          lng: 121.6835,
+          note: "택시로 어인부두·호랑이탄 남쪽 해안을 따라 이동하며 풍경 감상. 品海楼 식사 전후 동선으로 쓰기 좋음."
+        },
+        { id: "hokangs", theme: "tourism", name: "호캉스", nameZh: "酒店度假", lat: 38.9258, lng: 121.665, note: "호텔에 머물며 호캉스—수영장·조식·스파 등 휴식 위주(포시즌스)." },
+        { id: "hotel-dinner-tourism", theme: "tourism", name: "호텔 저녁 식사", nameZh: "酒店晚餐", lat: 38.9258, lng: 121.665, note: "관광 후 귀호텔해 저녁—이동 없이 마무리하는 날." },
+        { id: "xiding-xh", theme: "food", name: "喜鼎(씨딩) 성해", nameZh: "喜鼎海胆水饺(星海湾壹号店)", lat: 38.8804, lng: 121.58416, note: "성해 C구·광장 인근." },
+        { id: "xiding-dg", theme: "food", name: "喜鼎(씨딩) 동항", nameZh: "喜鼎海胆水饺(东港店)", lat: 38.92615, lng: 121.68804, note: "동항·해지윤로 인근." },
+        { id: "haidilao-zs", theme: "food", name: "해디라오(훠궈)", nameZh: "海底捞火锅(大连商场店)", lat: 38.91711, lng: 121.6351, note: "청삼가·대련상장 5층 근처." },
+        { id: "xijiade", theme: "food", name: "시저더 만두", nameZh: "喜家德水饺", lat: 38.9182, lng: 121.6345, note: "중산·청니 도보권 매장 기준." },
+        { id: "pinhailou", theme: "food", name: "핀하이루(해산물)", nameZh: "品海楼(老虎滩店)", lat: 38.87697, lng: 121.68529, note: "어인부두·호랑이탄 남쪽 해안." },
+        { id: "mall-food-xh", theme: "food", name: "성해 몰 식당가", nameZh: "星海广场 商圈餐饮", lat: 38.8805, lng: 121.5835, note: "광장·성해 주변 상권 식당." },
+        { id: "hokangs-food", theme: "food", name: "호캉스(호텔)", nameZh: "酒店度假", lat: 38.9258, lng: 121.665, note: "호텔에 머물며 호캉스—조식·라운지 등(외식 슬롯과 병행 시)." },
+        { id: "hotel-meal-fs", theme: "food", name: "호텔 저녁·식사", nameZh: "酒店晚餐/用餐", lat: 38.9258, lng: 121.665, note: "포시즌스 등 호텔 내 레스토랑·저녁·조식·룸서비스." },
+        { id: "hokangs-shopping", theme: "shopping", name: "호캉스(호텔·근처)", nameZh: "酒店度假", lat: 38.9258, lng: 121.665, note: "호텔에 머물며 호캉스 + 근처 상권만 짧게(무리한 쇼핑 대신)." },
+        { id: "hotel-dinner-shopping", theme: "shopping", name: "호텔 저녁 식사", nameZh: "酒店晚餐", lat: 38.9258, lng: 121.665, note: "쇼핑·이동 후 호텔에서 저녁(레스토랑·배달·룸서비스)." },
+        { id: "pavilion", theme: "shopping", name: "파빌리온(柏威年)", nameZh: "大连柏威年购物中心", lat: 38.918, lng: 121.6298, note: "중산로129번 일대." },
+        { id: "qingniwa", theme: "shopping", name: "친우·상권", nameZh: "青泥洼桥商圈", lat: 38.9193, lng: 121.642, note: "지하철·번화가 허브." },
+        { id: "wanda-xh", theme: "shopping", name: "평화광장·케이드몰", nameZh: "凯德和平广场", lat: 38.89686, lng: 121.58809, note: "성해·오운화 사이 몰(고신 완다광장과는 별도)." },
+        { id: "walmart", theme: "shopping", name: "월마트(대형마트)", nameZh: "沃尔玛(西安路店等)", lat: 38.9169, lng: 121.5894, note: "서안로 상권 일대 점포 검색." },
+        { id: "rt-mart", theme: "shopping", name: "RT마트 / 대형슈퍼", nameZh: "大润发(西安路店等)", lat: 38.9174, lng: 121.5898, note: "서안로·흥공街 인근 등." },
+        { id: "metro-mart", theme: "shopping", name: "메트로(창고형)", nameZh: "麦德龙(西岗商场店)", lat: 38.93034, lng: 121.60279, note: "해방가·향로초역 인근." },
+        {
+          id: "forest-zoo",
+          theme: "tourism",
+          name: "\ub300\ub828 \uc0bc\ub9bc\ub3d9\ubb3c\uc6d0",
+          nameZh: "\u5927\u8fde\u68ee\u6797\u52a8\u7269\u56ed",
+          lat: 38.8831,
+          lng: 121.6106,
+          note: "\uc601\ucd98\ub85c \uc785\uad6c\u00b7\ucf00\uc774\ube14\uce74 \ub4f1. \ubc18\uc77c \uc77c\uc815 \uad8c\uc7a5."
+        },
+        {
+          id: "banghai-walk",
+          theme: "tourism",
+          name: "\ube48\ud574\ub85c(\ud574\uc548\u00b7\ubaa9\uad50 \uc77c\ub300)",
+          nameZh: "\u6ee8\u6d77\u8def\u6728\u6808\u9053",
+          lat: 38.882,
+          lng: 121.656,
+          note: "\uc131\ud574\u00b7\ud638\ub791\uc774\ud0c4 \uc0ac\uc774 \ud574\uc548 \ub3c4\ub85c \uc77c\ub300."
+        },
+        {
+          id: "dalian-museum",
+          theme: "tourism",
+          name: "\ub300\ub828\ubc15\ubb3c\uad00",
+          nameZh: "\u5927\u8fde\u535a\u7269\u9986",
+          lat: 38.88772,
+          lng: 121.58114,
+          note: "\ud68c\uc804\ub85c10\ubc88\u00b7\uc131\ud574\uad11\uc7a5 \ubd81\uc11c."
+        },
+        {
+          id: "xian-road",
+          theme: "tourism",
+          name: "\uc11c\uc548\ub85c \ubc88\ud654\uac00",
+          nameZh: "\u897f\u5b89\u8def\u5546\u5708",
+          lat: 38.91735,
+          lng: 121.58929,
+          note: "\uc11c\uc548\ub85c\u00b7\ud765\uacf5\uac00 \uc77c\ub300 \ubab0\u00b7\uc2dd\ub2f9."
+        },
+        {
+          id: "bbq-seafood",
+          theme: "food",
+          name: "\ud574\uc0b0\ubb3c \uad6c\uc774\u00b7\ub300\ud328(\uc77c\ub300)",
+          nameZh: "\u6d77\u9c9c\u70e7\u70e4",
+          lat: 38.9142,
+          lng: 121.6362,
+          note: "\uc911\uc0b0\u00b7\uccad\ub2c8 \uc77c\ub300 \ud574\uc0b0\ubb3c \uad6c\uc774. \ud604\uc9c0 \uac80\uc0c9."
+        },
+        {
+          id: "peacewalk-mall-food",
+          theme: "food",
+          name: "\ud3c9\ud654\uad11\uc7a5\u00b7\ucf00\ub4dc \ubab0 \uc2dd\ub2f9\uac00",
+          nameZh: "\u51ef\u5fb7\u548c\u5e73\u5e7f\u573a\u9910\u996e",
+          lat: 38.89686,
+          lng: 121.58809,
+          note: "\ucf00\ub4dc \ud3c9\ud654 \ubab0 \ub0b4 \uc2dd\ub2f9\uac00(wanda-xh\uc640 \ub3d9\uc77c \uc0c1\uad8c)."
+        },
+        {
+          id: "japanese-light-xh",
+          theme: "food",
+          name: "\uc131\ud574 \uc77c\ub300 \uc77c\uc2dd\u00b7\ub371\ubc25(\uac04\ub2e8\uc2dd)",
+          nameZh: "\u661f\u6d77\u65e5\u6599\u7b80\u9910",
+          lat: 38.8796,
+          lng: 121.5838,
+          note: "\uc131\ud574\u00b7\uc131\uc544 \ub3d9\uc120 \uac00\ubcbc\uc6b4 \uc77c\uc2dd."
+        },
+        {
+          id: "local-breakfast-cn",
+          theme: "food",
+          name: "\ud604\uc9c0 \uc544\uce68\u00b7\uc8fd\u00b7\ub9cc\ub450(\uac70\ub9ac \uc77c\ub300)",
+          nameZh: "\u65e9\u70b9 / \u7ca5\u94fa",
+          lat: 38.9196,
+          lng: 121.6415,
+          note: "\uccad\ub2c8\u00b7\uc911\uc0b0 \ub3d9\uc120 \uac00\uae4c\uc6b4 \uc544\uce68."
+        },
+        {
+          id: "olympia-66",
+          theme: "shopping",
+          name: "\uc62c\ub9bc\ud53c\uc544 66(\u6052\u9686)",
+          nameZh: "\u5927\u8fde\u6052\u9686\u5e7f\u573a",
+          lat: 38.9187,
+          lng: 121.6355,
+          note: "\uc624\uc6b4\ud558\uc2a4\u00b7\uc0c1\uc804\ub85c \uc77c\ub300."
+        },
+        {
+          id: "friendship-shop",
+          theme: "shopping",
+          name: "\uc6b0\uc758\uc0c1\uc810(\u53cb\u8c0a\u5546\u57ce)",
+          nameZh: "\u53cb\u8c0a\u5546\u57ce",
+          lat: 38.9175,
+          lng: 121.6378,
+          note: "\uc911\uc0b0\u00b7\uce5c\uc6b0 \ub3d9\uc120\uad8c."
+        },
+        {
+          id: "times-outlet",
+          theme: "shopping",
+          name: "\ubc31\ub144\uc131\u00b7\ud0c0\uc784\uc2a4(\uc77c\ub300)",
+          nameZh: "\u767e\u5e74\u57ce",
+          lat: 38.9188,
+          lng: 121.6442,
+          note: "\uc911\uc0b0\uad11\uc7a5 \ub3d9\uc120 \uac00\uae4c\uc6b4 \ubab0."
+        }
+      ];
+
+      var POI_BY_ID = {};
+
+      function rebuildPoiIndex() {
+        POI_BY_ID = {};
+        POI_CATALOG.forEach(function (p) {
+          POI_BY_ID[p.id] = p;
+        });
+      }
+
+      function escapeHtml(s) {
+        if (s == null || s === "") return "";
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function placeNamesFromOrdered(ordered) {
+        rebuildPoiIndex();
+        var parts = [];
+        (ordered || []).forEach(function (row) {
+          var pl = POI_BY_ID[row.placeId];
+          if (pl) parts.push(poiDisplayName(pl));
+        });
+        return parts;
+      }
+
+      function overviewRouteLineFromOrdered(ordered) {
+        var names = placeNamesFromOrdered(ordered);
+        if (!names.length) {
+          return "아직 일정이 없습니다. 아래 테마에서 장소를 추가해 주세요.";
+        }
+        return names.join(" → ");
+      }
+
+      function renderDayOverview() {
+        var el = document.getElementById("dayOverviewPanel");
+        if (!el) return;
+        var dayIdx = TRIP_DAYS.findIndex(function (x) {
+          return x.key === selectedDayKey;
+        });
+        if (dayIdx < 0) return;
+        var dayIndex1 = dayIdx + 1;
+
+        var all = loadPlanner();
+        var st = all[selectedDayKey];
+        if (!st || !Array.isArray(st.ordered)) st = defaultDayState();
+        var route = overviewRouteLineFromOrdered(st.ordered);
+        var bracket = bracketDayLine(selectedDayKey, dayIndex1);
+        var tm = computeDayPillTimes(selectedDayKey);
+
+        el.innerHTML =
+          '<article class="day-overview-card">' +
+          '<p class="dov-narrative">' +
+          escapeHtml(bracket) +
+          "</p>" +
+          '<p class="dov-times">관광 시작 <strong>' +
+          escapeHtml(tm.tourStart || "—") +
+          '</strong> · 호텔(마지막) <strong>' +
+          escapeHtml(tm.hotelIn || "—") +
+          "</strong></p>" +
+          '<span class="dov-sec-label">동선 (저장된 순서)</span>' +
+          '<p class="dov-route">' +
+          escapeHtml(route) +
+          "</p>" +
+          "</article>";
+      }
+
+      function loadPoiNicknames() {
+        try {
+          var raw = localStorage.getItem(POI_NICKNAMES_KEY);
+          if (!raw) return {};
+          var o = JSON.parse(raw);
+          return o && typeof o === "object" ? o : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function savePoiNicknames(obj) {
+        try {
+          localStorage.setItem(POI_NICKNAMES_KEY, JSON.stringify(obj));
+        } catch (e) {}
+      }
+
+      function poiDisplayName(p) {
+        if (!p) return "";
+        var nick = loadPoiNicknames();
+        if (p.id && nick[p.id] && String(nick[p.id]).trim()) return String(nick[p.id]).trim();
+        return p.name || "";
+      }
+
+      function poiSubLine(p) {
+        if (!p) return "";
+        return p.nameZh ? escapeHtml(p.nameZh) : "";
+      }
+
+      function poiPopupInner(p) {
+        if (!p) return "";
+        var sub = poiSubLine(p);
+        var g = gmapsLink(p.lat, p.lng);
+        var a = amapLink(p.lat, p.lng, poiDisplayName(p));
+        return (
+          "<strong>" +
+          escapeHtml(poiDisplayName(p)) +
+          "</strong>" +
+          (sub ? '<div style="font-size:12px;color:#64748b">' + sub + "</div>" : "") +
+          '<div style="margin-top:6px"><a href="' +
+          g +
+          '" target="_blank" rel="noopener">Google 지도</a> · <a href="' +
+          a +
+          '" target="_blank" rel="noopener">高德地图</a></div>'
+        );
+      }
+
+      rebuildPoiIndex();
+
+      var PLANNER_KEY = "dalian_planner_v10";
+
+      /** 일정이 틀어졌을 때 지도에 회색(플랜 B)으로 표시할 대안 장소 id */
+      var PLAN_B_POIS = [
+        "forest-zoo",
+        "peacewalk-mall-food",
+        "japanese-light-xh",
+        "metro-mart",
+        "bbq-seafood",
+        "sunasia"
+      ];
+      var selectedDayKey = TRIP_DAYS[0].key;
+      var mapAll = null;
+      var mapDay = null;
+
+      function uid() {
+        return "r" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+
+      function defaultDayState() {
+        return { ordered: [], bufferMin: 45, dayStartTime: "09:00" };
+      }
+
+      function migrateOldState(d) {
+        if (Array.isArray(d.ordered)) return d;
+        var ordered = [];
+        (d.before || []).forEach(function (r) {
+          ordered.push({ rowId: r.rowId || uid(), placeId: r.placeId, durationMin: r.durationMin || 60 });
+        });
+        if (d.anchorId) {
+          ordered.push({
+            rowId: uid(),
+            placeId: d.anchorId,
+            durationMin: d.anchorMin != null ? d.anchorMin : 90
+          });
+        }
+        (d.after || []).forEach(function (r) {
+          ordered.push({ rowId: r.rowId || uid(), placeId: r.placeId, durationMin: r.durationMin || 60 });
+        });
+        return {
+          ordered: ordered,
+          bufferMin: d.bufferMin != null ? d.bufferMin : 45,
+          dayStartTime: d.dayStartTime != null ? d.dayStartTime : "09:00"
+        };
+      }
+
+      function buildRecommendedPlanner() {
+        function R(placeId, durationMin) {
+          return { rowId: uid(), placeId: placeId, durationMin: durationMin };
+        }
+        return {
+          "2026-04-25": {
+            ordered: [R("airport-dlc", 85), R("fs-hotel", 100), R("donggang", 80), R("xiding-dg", 95)],
+            bufferMin: 50,
+            dayStartTime: "12:45"
+          },
+          "2026-04-26": {
+            ordered: [
+              R("xinghai-sq", 55),
+              R("xinghai-beach", 80),
+              R("sunasia", 110),
+              R("dalian-museum", 70),
+              R("xiding-xh", 90),
+              R("mall-food-xh", 55),
+              R("wanda-xh", 70)
+            ],
+            bufferMin: 45,
+            dayStartTime: "09:00"
+          },
+          "2026-04-27": {
+            ordered: [R("laohutan", 200), R("pinhailou", 90), R("banghai-walk", 45)],
+            bufferMin: 50,
+            dayStartTime: "09:00"
+          },
+          "2026-04-28": {
+            ordered: [
+              R("zhongshan-sq", 55),
+              R("russian-st", 45),
+              R("qingniwa", 65),
+              R("pavilion", 90),
+              R("xijiade", 50),
+              R("haidilao-zs", 100)
+            ],
+            bufferMin: 45,
+            dayStartTime: "10:00"
+          },
+          "2026-04-29": {
+            ordered: [
+              R("labor-park", 55),
+              R("olympia-66", 50),
+              R("xian-road", 80),
+              R("walmart", 40),
+              R("fs-hotel", 90),
+              R("airport-dlc", 130)
+            ],
+            bufferMin: 55,
+            dayStartTime: "09:00"
+          }
+        };
+      }
+
+      /** Fill days with empty ordered[] from buildRecommendedPlanner (fixes empty localStorage). */
+      function fillEmptyDaysFromRecommendations(all) {
+        if (!all || typeof all !== "object") return false;
+        var rec = buildRecommendedPlanner();
+        var changed = false;
+        TRIP_DAYS.forEach(function (day) {
+          var k = day.key;
+          var st = all[k];
+          var ord = st && st.ordered;
+          var need = !st || !Array.isArray(ord) || ord.length === 0;
+          if (need && rec[k]) {
+            all[k] = rec[k];
+            changed = true;
+          }
+        });
+        return changed;
+      }
+
+      function loadPlanner() {
+        try {
+          var raw = localStorage.getItem(PLANNER_KEY);
+          var all = null;
+          if (!raw) {
+            var prevKeys = [
+              "dalian_planner_v9",
+              "dalian_planner_v8",
+              "dalian_planner_v7",
+              "dalian_planner_v6",
+              "dalian_planner_v4"
+            ];
+            for (var pi = 0; pi < prevKeys.length; pi++) {
+              raw = localStorage.getItem(prevKeys[pi]);
+              if (raw) break;
+            }
+            if (raw) {
+              all = JSON.parse(raw);
+              Object.keys(all).forEach(function (k) {
+                all[k] = migrateOldState(all[k]);
+              });
+              localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
+            } else {
+              all = buildRecommendedPlanner();
+              try {
+                localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
+              } catch (e2) {}
+              return all;
+            }
+          } else {
+            all = JSON.parse(raw);
+          }
+          if (fillEmptyDaysFromRecommendations(all)) {
+            try {
+              localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
+            } catch (e3) {}
+          }
+          return all;
+        } catch (e) {
+          var fallback = buildRecommendedPlanner();
+          try {
+            localStorage.setItem(PLANNER_KEY, JSON.stringify(fallback));
+          } catch (e4) {}
+          return fallback;
+        }
+      }
+
+      function savePlanner(data) {
+        try {
+          localStorage.setItem(PLANNER_KEY, JSON.stringify(data));
+        } catch (e) {}
+      }
+
+      function getDayState() {
+        var all = loadPlanner();
+        if (!all[selectedDayKey]) {
+          all[selectedDayKey] = defaultDayState();
+          savePlanner(all);
+        }
+        var d = all[selectedDayKey];
+        if (d.ordered === undefined && (d.before || d.after || d.anchorId)) {
+          d = migrateOldState(d);
+          all[selectedDayKey] = d;
+          savePlanner(all);
+        }
+        if (!d.ordered) d.ordered = [];
+        if (d.bufferMin === undefined) d.bufferMin = 45;
+        if (d.dayStartTime === undefined || d.dayStartTime === null || d.dayStartTime === "") {
+          d.dayStartTime = "09:00";
+          all[selectedDayKey] = d;
+          savePlanner(all);
+        }
+        if (d.refRowId !== undefined) {
+          delete d.refRowId;
+          all[selectedDayKey] = d;
+          savePlanner(all);
+        }
+        return d;
+      }
+
+      function haversineKm(lat1, lng1, lat2, lng2) {
+        var R = 6371;
+        var dLat = ((lat2 - lat1) * Math.PI) / 180;
+        var dLng = ((lng2 - lng1) * Math.PI) / 180;
+        var a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
+
+      function taxiMinutesBetween(a, b) {
+        if (!a || !b) return null;
+        var km = haversineKm(a.lat, a.lng, b.lat, b.lng);
+        var detour = 1.35;
+        var min = km * detour * 2.8 + 6;
+        return Math.max(8, Math.round(min));
+      }
+
+      /** 택시 10분 이하 구간에서 도보 추정에 사용 */
+      var TAXI_SHORT_LEG_MIN = 10;
+      var WALK_KMH = 4.5;
+      var WALK_ROUTE_DETOUR = 1.35;
+
+      function straightLineKm(a, b) {
+        if (!a || !b) return null;
+        return haversineKm(a.lat, a.lng, b.lat, b.lng);
+      }
+
+      function walkMinutesBetween(a, b) {
+        if (!a || !b) return null;
+        var km = straightLineKm(a, b) * WALK_ROUTE_DETOUR;
+        var min = (km / WALK_KMH) * 60;
+        return Math.max(5, Math.round(min));
+      }
+
+      /** 현재 장소 → 다음 장소 이동만. 택시 위주, 10분 이하일 때 도보 분 추가. */
+      function formatNextTravelText(fromPl, toPl) {
+        if (!fromPl || !toPl) return "";
+        var tx = taxiMinutesBetween(fromPl, toPl);
+        if (tx == null) return "";
+        var s = "택시 약 " + tx + "분";
+        if (tx <= TAXI_SHORT_LEG_MIN) {
+          var wk = walkMinutesBetween(fromPl, toPl);
+          if (wk != null) s += " · 도보 약 " + wk + "분";
+        }
+        return s;
+      }
+
+      /** 겹치는 좌표 마커를 살짝 벌려 선이 서로 엉키지 않게 함 */
+      function computeOffsetPositions(ordered) {
+        var counts = {};
+        ordered.forEach(function (r) {
+          var pl = POI_BY_ID[r.placeId];
+          if (!pl) return;
+          var k = pl.lat.toFixed(5) + "," + pl.lng.toFixed(5);
+          counts[k] = (counts[k] || 0) + 1;
+        });
+        var seen = {};
+        return ordered.map(function (r) {
+          var pl = POI_BY_ID[r.placeId];
+          if (!pl) return null;
+          var k = pl.lat.toFixed(5) + "," + pl.lng.toFixed(5);
+          seen[k] = (seen[k] || 0) + 1;
+          var idx = seen[k] - 1;
+          var total = counts[k];
+          var off = idx - (total - 1) / 2;
+          return {
+            lat: pl.lat + off * 0.00014,
+            lng: pl.lng + off * 0.00009
+          };
+        });
+      }
+
+      function buildDayMarkerPopup(row, pl, estClock, ri, nOrd) {
+        var sub = poiSubLine(pl);
+        var g = gmapsLink(pl.lat, pl.lng);
+        var am = amapLink(pl.lat, pl.lng, poiDisplayName(pl));
+        var canUp = ri > 0;
+        var canDown = ri < nOrd - 1;
+        return (
+          '<div class="map-day-popup">' +
+          "<strong>" +
+          escapeHtml(poiDisplayName(pl)) +
+          "</strong>" +
+          (sub ? '<div style="font-size:12px;color:#64748b">' + sub + "</div>" : "") +
+          (estClock
+            ? '<div style="font-size:11px;color:#7dd3fc;margin-top:4px">약 ' + escapeHtml(estClock) + " 시작 예상</div>"
+            : "") +
+          '<div style="margin:8px 0 4px;font-size:0.8rem"><span class="ds-label">머무름(분)</span> ' +
+          '<input type="number" class="dur-pop-inp" min="10" step="5" data-row-id="' +
+          escapeHtml(row.rowId) +
+          '" value="' +
+          (row.durationMin != null ? row.durationMin : 60) +
+          '" /></div>' +
+          '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">' +
+          (canUp
+            ? '<button type="button" class="btn btn-mini" data-map-act="up" data-row-id="' + escapeHtml(row.rowId) + '">↑ 위로</button>'
+            : "") +
+          (canDown
+            ? '<button type="button" class="btn btn-mini" data-map-act="down" data-row-id="' + escapeHtml(row.rowId) + '">↓ 아래로</button>'
+            : "") +
+          '<button type="button" class="btn btn-mini btn-ghost" data-map-act="rm" data-row-id="' +
+          escapeHtml(row.rowId) +
+          '">삭제</button>' +
+          "</div>" +
+          '<div style="margin-top:8px;font-size:12px"><a href="' +
+          g +
+          '" target="_blank" rel="noopener">Google 지도</a> · <a href="' +
+          am +
+          '" target="_blank" rel="noopener">高德地图</a></div>' +
+          "</div>"
+        );
+      }
+
+      function moveRowById(rowId, delta) {
+        var all = loadPlanner();
+        var s = all[selectedDayKey] || defaultDayState();
+        if (!s.ordered) s.ordered = [];
+        var ix = -1;
+        for (var i = 0; i < s.ordered.length; i++) {
+          if (s.ordered[i].rowId === rowId) {
+            ix = i;
+            break;
+          }
+        }
+        if (ix < 0) return;
+        var ni = ix + delta;
+        if (ni < 0 || ni >= s.ordered.length) return;
+        var tmp = s.ordered[ix];
+        s.ordered[ix] = s.ordered[ni];
+        s.ordered[ni] = tmp;
+        all[selectedDayKey] = s;
+        savePlanner(all);
+        if (mapDay) mapDay.closePopup();
+        refreshPlannerUI();
+      }
+
+      function removeRowById(rowId) {
+        var all = loadPlanner();
+        var s = all[selectedDayKey] || defaultDayState();
+        s.ordered = (s.ordered || []).filter(function (r) {
+          return r.rowId !== rowId;
+        });
+        all[selectedDayKey] = s;
+        savePlanner(all);
+        if (mapDay) mapDay.closePopup();
+        refreshPlannerUI();
+      }
+
+      function setRowDurationFromPopup(rowId, min) {
+        var all = loadPlanner();
+        var s = all[selectedDayKey] || defaultDayState();
+        s.ordered.forEach(function (r) {
+          if (r.rowId === rowId) r.durationMin = min;
+        });
+        all[selectedDayKey] = s;
+        savePlanner(all);
+        refreshPlannerUI();
+      }
+
+      function ensureMapDayPopupHandlers() {
+        if (!mapDay || mapDay._dalianPopupBound) return;
+        mapDay._dalianPopupBound = true;
+        var c = mapDay.getContainer();
+        c.addEventListener("click", function (ev) {
+          var btn = ev.target.closest("[data-map-act]");
+          if (!btn || !c.contains(btn)) return;
+          ev.preventDefault();
+          var act = btn.getAttribute("data-map-act");
+          var rid = btn.getAttribute("data-row-id");
+          if (!rid) return;
+          if (act === "up") moveRowById(rid, -1);
+          else if (act === "down") moveRowById(rid, 1);
+          else if (act === "rm") removeRowById(rid);
+        });
+        c.addEventListener("change", function (ev) {
+          var inp = ev.target.closest(".dur-pop-inp");
+          if (!inp || !c.contains(inp)) return;
+          var rid = inp.getAttribute("data-row-id");
+          if (!rid) return;
+          var v = parseInt(inp.value, 10);
+          if (isNaN(v) || v < 10) v = 10;
+          setRowDurationFromPopup(rid, v);
+        });
+      }
+
+      function gmapsLink(lat, lng) {
+        return "https://www.google.com/maps?q=" + lat + "," + lng;
+      }
+
+      function amapLink(lat, lng, name) {
+        var q = name ? encodeURIComponent(String(name)) : "";
+        return "https://uri.amap.com/marker?position=" + lng + "," + lat + (q ? "&name=" + q : "");
+      }
+
+      function applyBaseMapLayer(map) {
+        if (!map || typeof L === "undefined") return;
+        var pref = localStorage.getItem(MAP_TILE_PREF_KEY) || "gaode";
+        var def = MAP_TILES[pref] || MAP_TILES.gaode;
+        map.eachLayer(function (layer) {
+          if (layer instanceof L.TileLayer) {
+            map.removeLayer(layer);
+          }
+        });
+        var opts = { maxZoom: pref === "gaode" ? 18 : 19, attribution: def.attribution };
+        if (def.subdomains) opts.subdomains = def.subdomains;
+        L.tileLayer(def.url, opts).addTo(map);
+      }
+
+      function initMapTileSelect() {
+        var sel = document.getElementById("mapTileSelect");
+        if (!sel) return;
+        var cur = localStorage.getItem(MAP_TILE_PREF_KEY) || "gaode";
+        sel.innerHTML = Object.keys(MAP_TILES)
+          .map(function (k) {
+            var t = MAP_TILES[k];
+            return '<option value="' + k + '"' + (k === cur ? " selected" : "") + ">" + escapeHtml(t.label) + "</option>";
+          })
+          .join("");
+        sel.onchange = function () {
+          localStorage.setItem(MAP_TILE_PREF_KEY, sel.value);
+          initMapsAllAndDay();
+          invalidateMapIfNeeded();
+        };
+      }
+
+      function makeThemeIcon(theme) {
+        var col = THEME_COLOR[theme] || "#94a3b8";
+        var mk = THEME_MARK[theme] || "·";
+        return L.divIcon({
+          className: "trip-marker-wrap",
+          html: '<div class="trip-marker" style="border-color:' + col + '">' + mk + "</div>",
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+          popupAnchor: [0, -28]
+        });
+      }
+
+      function makeDayIcon(hex, dayLabel, seq, theme) {
+        var thMark = THEME_MARK[theme] || "·";
+        var seqStr = seq != null ? String(seq) : "";
+        return L.divIcon({
+          className: "trip-marker-wrap",
+          html:
+            '<div class="trip-marker trip-marker-day" style="border-color:' +
+            hex +
+            ";background:" +
+            hex +
+            '33;color:#0f172a">' +
+            '<span class="tm-seq">' +
+            escapeHtml(dayLabel) +
+            (seqStr ? "·" + escapeHtml(seqStr) : "") +
+            "</span>" +
+            '<span class="tm-theme">' +
+            escapeHtml(thMark) +
+            "</span></div>",
+          iconSize: [40, 38],
+          iconAnchor: [20, 38],
+          popupAnchor: [0, -34]
+        });
+      }
+
+      function makePlanBIcon() {
+        return L.divIcon({
+          className: "trip-marker-wrap",
+          html:
+            '<div class="trip-marker" style="border-color:#64748b;background:#334155;color:#cbd5e1;font-size:10px;font-weight:700">B</div>',
+          iconSize: [30, 30],
+          iconAnchor: [15, 30],
+          popupAnchor: [0, -26]
+        });
+      }
+
+      function initMapsAllAndDay() {
+        if (typeof L === "undefined") return;
+
+        if (!mapAll) {
+          mapAll = L.map("mapAllPoi", { scrollWheelZoom: true, touchZoom: true }).setView([38.91, 121.62], 12);
+          applyBaseMapLayer(mapAll);
+        } else {
+          mapAll.eachLayer(function (layer) {
+            if (!(layer instanceof L.TileLayer)) mapAll.removeLayer(layer);
+          });
+          applyBaseMapLayer(mapAll);
+        }
+
+        var layersAll = [];
+        rebuildPoiIndex();
+        POI_CATALOG.forEach(function (p) {
+          var m = L.marker([p.lat, p.lng], { icon: makeThemeIcon(p.theme) });
+          m.bindPopup(poiPopupInner(p));
+          m.addTo(mapAll);
+          layersAll.push(m);
+        });
+        if (layersAll.length) {
+          mapAll.fitBounds(L.featureGroup(layersAll).getBounds().pad(0.12));
+        }
+        var la = document.getElementById("mapLegendAll");
+        if (la) {
+          la.innerHTML =
+            '<span><span class="lg-dot" style="background:#e879f9"></span>집·숙소</span>' +
+            '<span><span class="lg-dot" style="background:#38bdf8"></span>관광</span>' +
+            '<span><span class="lg-dot" style="background:#fb923c"></span>음식</span>' +
+            '<span><span class="lg-dot" style="background:#4ade80"></span>쇼핑</span>';
+        }
+
+        if (!mapDay) {
+          mapDay = L.map("mapDayPlan", { scrollWheelZoom: true, touchZoom: true }).setView([38.91, 121.62], 12);
+          applyBaseMapLayer(mapDay);
+        } else {
+          mapDay.eachLayer(function (layer) {
+            if (!(layer instanceof L.TileLayer)) mapDay.removeLayer(layer);
+          });
+          applyBaseMapLayer(mapDay);
+        }
+
+        ensureMapDayPopupHandlers();
+
+        var layersDay = [];
+        var allPlan = loadPlanner();
+        var dayIdx = TRIP_DAYS.findIndex(function (d) {
+          return d.key === selectedDayKey;
+        });
+        if (dayIdx < 0) dayIdx = 0;
+        var col = DAY_PLAN_COLORS[dayIdx] || "#38bdf8";
+        var dayShort = "D" + (dayIdx + 1);
+
+        var st = allPlan[selectedDayKey];
+        if (!st || !st.ordered) st = defaultDayState();
+        var ordered = st.ordered ? st.ordered.slice() : [];
+
+        var usedToday = {};
+        ordered.forEach(function (row) {
+          usedToday[row.placeId] = true;
+        });
+
+        var orderedDraw = ordered.filter(function (row) {
+          return POI_BY_ID[row.placeId];
+        });
+        var positions = computeOffsetPositions(orderedDraw);
+        var rowTimes = ordered.length ? estimateRowStartTimes(st) : [];
+        var timeByRowId = {};
+        ordered.forEach(function (row, i) {
+          if (rowTimes[i] != null) timeByRowId[row.rowId] = rowTimes[i];
+        });
+
+        orderedDraw.forEach(function (row, ri) {
+          var pl = POI_BY_ID[row.placeId];
+          if (!pl) return;
+          var pos = positions[ri];
+          if (!pos) return;
+          var seq = ri + 1;
+          var m = L.marker([pos.lat, pos.lng], { icon: makeDayIcon(col, dayShort, seq, pl.theme) });
+          var tRaw = timeByRowId[row.rowId];
+          var est = tRaw != null ? formatMinToClockHM(tRaw) : "";
+          m.bindPopup(buildDayMarkerPopup(row, pl, est, ri, orderedDraw.length));
+          m.addTo(mapDay);
+          layersDay.push(m);
+        });
+
+        var validPos = positions.filter(Boolean);
+        if (validPos.length >= 2) {
+          var latlngs = validPos.map(function (p) {
+            return [p.lat, p.lng];
+          });
+          var line = L.polyline(latlngs, { color: col, weight: 3, opacity: 0.88 }).addTo(mapDay);
+          layersDay.push(line);
+          if (typeof L.polylineDecorator === "function" && L.Symbol && typeof L.Symbol.arrowHead === "function") {
+            var dec = L.polylineDecorator(line, {
+              patterns: [
+                {
+                  offset: "12%",
+                  repeat: "14%",
+                  symbol: L.Symbol.arrowHead({
+                    pixelSize: 9,
+                    polygon: false,
+                    pathOptions: { stroke: true, color: col, weight: 2, opacity: 0.95 }
+                  })
+                }
+              ]
+            }).addTo(mapDay);
+            layersDay.push(dec);
+          }
+
+          for (var si = 0; si < orderedDraw.length - 1; si++) {
+            var p0 = POI_BY_ID[orderedDraw[si].placeId];
+            var p1 = POI_BY_ID[orderedDraw[si + 1].placeId];
+            var posA = positions[si];
+            var posB = positions[si + 1];
+            if (!p0 || !p1 || !posA || !posB) continue;
+            var legTxt = formatNextTravelText(p0, p1);
+            if (!legTxt) continue;
+            var midLat = (posA.lat + posB.lat) / 2;
+            var midLng = (posA.lng + posB.lng) / 2;
+            var lm = L.marker([midLat, midLng], {
+              icon: L.divIcon({
+                className: "segment-lbl-wrap",
+                html: '<div class="segment-travel-lbl">' + escapeHtml(legTxt) + "</div>",
+                iconSize: [130, 34],
+                iconAnchor: [65, 17]
+              }),
+              interactive: false,
+              keyboard: false
+            });
+            lm.addTo(mapDay);
+            layersDay.push(lm);
+          }
+        }
+
+        PLAN_B_POIS.forEach(function (pid) {
+          if (usedToday[pid]) return;
+          var pl = POI_BY_ID[pid];
+          if (!pl) return;
+          var m = L.marker([pl.lat, pl.lng], { icon: makePlanBIcon() });
+          var g = gmapsLink(pl.lat, pl.lng);
+          var am = amapLink(pl.lat, pl.lng, poiDisplayName(pl));
+          var subB = poiSubLine(pl);
+          m.bindPopup(
+            "<strong>플랜 B (대안)</strong><br/><strong>" +
+              escapeHtml(poiDisplayName(pl)) +
+              "</strong>" +
+              (subB ? '<div style="font-size:12px;color:#64748b">' + subB + "</div>" : "") +
+              '<div style="margin-top:6px"><a href="' +
+              g +
+              '" target="_blank" rel="noopener">Google 지도</a> · <a href="' +
+              am +
+              '" target="_blank" rel="noopener">高德地图</a></div>'
+          );
+          m.addTo(mapDay);
+          layersDay.push(m);
+        });
+
+        if (layersDay.length) {
+          mapDay.fitBounds(L.featureGroup(layersDay).getBounds().pad(0.14));
+        } else {
+          mapDay.setView([38.91, 121.62], 11);
+        }
+
+        var ld = document.getElementById("mapLegendDay");
+        if (ld) {
+          ld.innerHTML =
+            '<span><span class="lg-dot" style="background:' +
+            col +
+            '"></span>선택한 날(' +
+            escapeHtml(TRIP_DAYS[dayIdx].label) +
+            ") 경로</span>" +
+            '<span><span class="lg-dot" style="background:#64748b"></span>플랜 B(대안)</span>' +
+            '<span style="opacity:0.85;font-size:0.78rem">마커 팝업: 순서·머무름·삭제</span>';
+        }
+      }
+
+      function renderDayPills() {
+        var el = document.getElementById("plannerDayPills");
+        if (!el) return;
+        el.innerHTML = "";
+        TRIP_DAYS.forEach(function (d) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "day-pill" + (d.key === selectedDayKey ? " active" : "");
+          b.setAttribute("data-key", d.key);
+          b.setAttribute("aria-label", d.label);
+          b.textContent = d.label;
+          el.appendChild(b);
+        });
+        el.onclick = function (ev) {
+          var btn = ev.target.closest(".day-pill");
+          if (!btn) return;
+          selectedDayKey = btn.getAttribute("data-key");
+          el.querySelectorAll(".day-pill").forEach(function (x) {
+            x.classList.toggle("active", x.getAttribute("data-key") === selectedDayKey);
+          });
+          refreshPlannerUI();
+        };
+      }
+
+      function collectUsedPlaceIdsFromPlanner() {
+        var allPlan = loadPlanner();
+        var used = {};
+        TRIP_DAYS.forEach(function (day) {
+          var st = allPlan[day.key];
+          if (!st || !st.ordered) return;
+          st.ordered.forEach(function (row) {
+            if (row.placeId) used[row.placeId] = true;
+          });
+        });
+        return used;
+      }
+
+      function renderThemeBoard() {
+        var el = document.getElementById("themeBoard");
+        if (!el) return;
+        el.innerHTML = "";
+        var usedIds = collectUsedPlaceIdsFromPlanner();
+        ["base", "tourism", "food", "shopping"].forEach(function (th) {
+          var col = document.createElement("div");
+          col.className = "theme-col " + th;
+          col.innerHTML = "<h3>" + THEME_LABEL[th] + "</h3>";
+          var sc = document.createElement("div");
+          sc.className = "theme-scroll";
+          POI_CATALOG.filter(function (p) {
+            return p.theme === th;
+          }).forEach(function (p) {
+            var never = !usedIds[p.id];
+            var nickRaw = loadPoiNicknames()[p.id] || "";
+            var card = document.createElement("div");
+            card.className = "poi-card" + (never ? " poi-unused" : "");
+            card.innerHTML =
+              '<div class="nm">' +
+              escapeHtml(poiDisplayName(p)) +
+              '</div><div class="zh">' +
+              escapeHtml(p.nameZh || "") +
+              '</div><div class="nt">' +
+              escapeHtml(p.note || "") +
+              "</div>" +
+              '<div class="poi-nick-wrap"><label for="nick-' +
+              escapeHtml(p.id) +
+              '">별명</label><input type="text" class="poi-nick-inp" id="nick-' +
+              escapeHtml(p.id) +
+              '" data-poi-id="' +
+              escapeHtml(p.id) +
+              '" placeholder="비우면 위 이름 그대로" value="' +
+              escapeHtml(nickRaw) +
+              '" autocomplete="off" /></div>' +
+              (never
+                ? '<span class="tag-unused" title="5-day plan: not added to any day yet">전 일정 미선택</span>'
+                : "");
+            var btns = document.createElement("div");
+            btns.className = "poi-btns";
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "primary";
+            b.setAttribute("data-add", p.id);
+            b.textContent = "일정에 추가";
+            btns.appendChild(b);
+            card.appendChild(btns);
+            sc.appendChild(card);
+          });
+          col.appendChild(sc);
+          el.appendChild(col);
+        });
+
+        if (!el._dalianNickOk) {
+          el._dalianNickOk = true;
+          el.addEventListener("change", function (ev) {
+            var inp = ev.target.closest(".poi-nick-inp");
+            if (!inp) return;
+            var id = inp.getAttribute("data-poi-id");
+            if (!id) return;
+            var n = loadPoiNicknames();
+            var v = String(inp.value || "").trim();
+            if (!v) delete n[id];
+            else n[id] = v;
+            savePoiNicknames(n);
+            initMapsAllAndDay();
+            renderThemeBoard();
+          });
+        }
+
+        el.onclick = function (ev) {
+          var btn = ev.target.closest("button[data-add]");
+          if (!btn) return;
+          var pid = btn.getAttribute("data-add");
+          var all = loadPlanner();
+          var st = all[selectedDayKey] || defaultDayState();
+          if (!st.ordered) st.ordered = [];
+          st.ordered.push({ rowId: uid(), placeId: pid, durationMin: 60 });
+          all[selectedDayKey] = st;
+          savePlanner(all);
+          refreshPlannerUI();
+        };
+      }
+
+      function formatHM(totalMin) {
+        var h = Math.floor(totalMin / 60);
+        var m = Math.round(totalMin % 60);
+        return h + "시간 " + m + "분";
+      }
+
+      function parseTimeToMin(s) {
+        if (!s || typeof s !== "string") return 9 * 60;
+        var p = s.split(":");
+        var h = parseInt(p[0], 10);
+        var m = parseInt(p[1], 10);
+        if (isNaN(h)) h = 9;
+        if (isNaN(m)) m = 0;
+        return h * 60 + m;
+      }
+
+      function formatMinToClockHM(min) {
+        min = Math.round(min);
+        while (min < 0) min += 24 * 60;
+        min = min % (24 * 60);
+        var h = Math.floor(min / 60);
+        var mm = min % 60;
+        return (h < 10 ? "0" : "") + h + ":" + (mm < 10 ? "0" : "") + mm;
+      }
+
+      function estimateRowStartTimes(st) {
+        var startMin = parseTimeToMin(st.dayStartTime);
+        var times = [];
+        var t = startMin;
+        for (var i = 0; i < st.ordered.length; i++) {
+          times.push(t);
+          var row = st.ordered[i];
+          var pl = POI_BY_ID[row.placeId];
+          var dur = row.durationMin || 0;
+          t += dur;
+          if (i < st.ordered.length - 1) {
+            var next = POI_BY_ID[st.ordered[i + 1].placeId];
+            if (pl && next) {
+              var tx = taxiMinutesBetween(pl, next);
+              if (tx != null) t += tx;
+            }
+          }
+        }
+        return times;
+      }
+
+      /**
+       * 요약 카드용: 관광 시작 = (호캉스 POI 제외) 첫 관광 슬롯 / 호텔 = fs-hotel 마지막 슬롯.
+       */
+      function computeDayPillTimes(dayKey) {
+        rebuildPoiIndex();
+        var all = loadPlanner();
+        var st = all[dayKey];
+        if (!st || !Array.isArray(st.ordered) || st.ordered.length === 0) {
+          return { tourStart: null, hotelIn: null };
+        }
+        var times = estimateRowStartTimes(st);
+        var tourStartMin = null;
+        for (var i = 0; i < st.ordered.length; i++) {
+          var pl = POI_BY_ID[st.ordered[i].placeId];
+          if (!pl || pl.theme !== "tourism") continue;
+          if (/^hokangs/.test(pl.id || "")) continue;
+          tourStartMin = times[i];
+          break;
+        }
+        var hotelMins = [];
+        for (var j = 0; j < st.ordered.length; j++) {
+          if (st.ordered[j].placeId === "fs-hotel") {
+            hotelMins.push(times[j]);
+          }
+        }
+        var hotelInMin = hotelMins.length ? hotelMins[hotelMins.length - 1] : null;
+        return {
+          tourStart: tourStartMin != null ? formatMinToClockHM(tourStartMin) : null,
+          hotelIn: hotelInMin != null ? formatMinToClockHM(hotelInMin) : null
+        };
+      }
+
+      function sumOrderedDur(ordered) {
+        var t = 0;
+        (ordered || []).forEach(function (r) {
+          t += r.durationMin || 0;
+        });
+        return t;
+      }
+
+      function renderDaySettingsBar() {
+        var el = document.getElementById("daySettingsBar");
+        if (!el) return;
+        rebuildPoiIndex();
+        var st = getDayState();
+        var dayMeta = TRIP_DAYS.filter(function (d) {
+          return d.key === selectedDayKey;
+        })[0];
+        var dayLabel = dayMeta ? dayMeta.label : selectedDayKey;
+        var totalStay = sumOrderedDur(st.ordered);
+        var buffer = parseInt(st.bufferMin, 10);
+        if (isNaN(buffer)) buffer = 45;
+        var budget = totalStay + buffer;
+        var pct = Math.min(100, (budget / (24 * 60)) * 100);
+
+        el.innerHTML =
+          '<span style="color:var(--accent);font-weight:600">' +
+          escapeHtml(dayLabel) +
+          "</span>" +
+          '<label class="ds-label">첫 일정 시작 <input type="time" id="dayStartTimeInput" value="' +
+          escapeHtml(st.dayStartTime || "09:00") +
+          '" /></label>' +
+          '<label class="ds-label">버퍼(분) <input type="number" id="bufferInput" min="0" step="5" value="' +
+          buffer +
+          '" /></label>' +
+          '<span style="font-size:0.8rem;color:var(--muted)">머무름 합 <strong>' +
+          escapeHtml(formatHM(totalStay)) +
+          "</strong> · 합계 <strong>" +
+          escapeHtml(formatHM(budget)) +
+          '</strong> / 24h</span><div class="bar-24h" style="margin:0"><span style="width:' +
+          pct +
+          '%"></span></div>';
+
+        var dti = document.getElementById("dayStartTimeInput");
+        if (dti) {
+          dti.onchange = function () {
+            var all = loadPlanner();
+            var s = all[selectedDayKey] || defaultDayState();
+            s.dayStartTime = dti.value || "09:00";
+            all[selectedDayKey] = s;
+            savePlanner(all);
+            refreshPlannerUI();
+          };
+        }
+        var bi = document.getElementById("bufferInput");
+        if (bi) {
+          bi.onchange = function () {
+            var all = loadPlanner();
+            var s = all[selectedDayKey] || defaultDayState();
+            s.bufferMin = parseInt(bi.value, 10) || 0;
+            all[selectedDayKey] = s;
+            savePlanner(all);
+            refreshPlannerUI();
+          };
+        }
+      }
+
+      function refreshPlannerUI() {
+        renderDayOverview();
+        renderDayPills();
+        renderDaySettingsBar();
+        initMapsAllAndDay();
+        renderThemeBoard();
+      }
+
+      function invalidateMapIfNeeded() {
+        setTimeout(function () {
+          if (mapAll) mapAll.invalidateSize();
+          if (mapDay) mapDay.invalidateSize();
+        }, 200);
+      }
+
+      window.addEventListener("orientationchange", function () {
+        invalidateMapIfNeeded();
+      });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", function () {
+          invalidateMapIfNeeded();
+        });
+      }
+
+      initMapTileSelect();
+
+      if (typeof L !== "undefined") {
+        refreshPlannerUI();
+        window.addEventListener("load", function () {
+          invalidateMapIfNeeded();
+        });
+      } else {
+        renderDayOverview();
+        renderDayPills();
+        renderDaySettingsBar();
+        renderThemeBoard();
+      }
+
+      var tripStart = new Date(2026, 3, 25, 11, 24, 0, 0);
+      var el = document.getElementById("countdownText");
+
+      function updateCountdown() {
+        var now = new Date();
+        var diff = tripStart - now;
+        if (diff <= 0) {
+          el.textContent = "출발 시간이 지났거나 여행 중/종료입니다.";
+          return;
+        }
+        var d = Math.floor(diff / 864e5);
+        var h = Math.floor((diff % 864e5) / 36e5);
+        var m = Math.floor((diff % 36e5) / 6e4);
+        el.textContent = d + "일 " + h + "시간 " + m + "분";
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 6e4);
+
+      var tabs = document.querySelectorAll("nav.tabs button");
+      var panels = {
+        schedule: document.getElementById("panel-schedule"),
+        ledger: document.getElementById("panel-ledger"),
+        planb: document.getElementById("panel-planb"),
+        prep: document.getElementById("panel-prep")
+      };
+
+      tabs.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var id = btn.getAttribute("data-panel");
+          tabs.forEach(function (b) {
+            b.classList.toggle("active", b === btn);
+            b.setAttribute("aria-selected", b === btn ? "true" : "false");
+          });
+          Object.keys(panels).forEach(function (key) {
+            var p = panels[key];
+            var on = key === id;
+            p.classList.toggle("active", on);
+            p.setAttribute("aria-hidden", on ? "false" : "true");
+          });
+          if (id === "schedule") invalidateMapIfNeeded();
+          if (id === "ledger") renderBudget();
+        });
+      });
+
+      var CHECK_STORAGE = "dalian_family_checklist_v2";
+      function loadChecks() {
+        try {
+          var raw = localStorage.getItem(CHECK_STORAGE);
+          if (!raw) return;
+          var data = JSON.parse(raw);
+          document.querySelectorAll("#panel-prep .checklist input[type=\"checkbox\"]").forEach(function (inp) {
+            if (data[inp.id]) inp.checked = true;
+          });
+        } catch (e) {}
+      }
+      function saveChecks() {
+        var data = {};
+        document.querySelectorAll("#panel-prep .checklist input[type=\"checkbox\"]").forEach(function (inp) {
+          if (inp.checked) data[inp.id] = true;
+        });
+        try {
+          localStorage.setItem(CHECK_STORAGE, JSON.stringify(data));
+        } catch (e) {}
+      }
+      loadChecks();
+      document.querySelectorAll("#panel-prep .checklist input[type=\"checkbox\"]").forEach(function (inp) {
+        inp.addEventListener("change", saveChecks);
+      });
+
+      var BUDGET_KEY = "dalian_budget_itinerary_v1";
+      var BUDGET_DEFAULT_FX = 192;
+
+      var TAXI_DAY_CNY = {
+        "2026-04-25": 105,
+        "2026-04-26": 155,
+        "2026-04-27": 135,
+        "2026-04-28": 95,
+        "2026-04-29": 125
+      };
+
+      var ENTRANCE_CNY = {
+        laohutan: 240,
+        sunasia: 220,
+        "forest-zoo": 180,
+        "dalian-museum": 0,
+        "labor-park": 0,
+        donggang: 0,
+        "xinghai-sq": 0,
+        "xinghai-beach": 0,
+        "banghai-walk": 0,
+        "zhongshan-sq": 0,
+        "russian-st": 0,
+        qingniwa: 0,
+        pavilion: 0,
+        "olympia-66": 0,
+        "xian-road": 0,
+        walmart: 0,
+        "pinhailou-taxi-drive": 0,
+        hokangs: 0,
+        "hotel-dinner-tourism": 0
+      };
+
+      var MEAL_CNY = {
+        "xiding-dg": 380,
+        "xiding-xh": 380,
+        pinhailou: 460,
+        "haidilao-zs": 400,
+        xijiade: 130,
+        "mall-food-xh": 180,
+        "peacewalk-mall-food": 150,
+        "japanese-light-xh": 90,
+        "bbq-seafood": 280,
+        "local-breakfast-cn": 55,
+        "hotel-meal-fs": 0,
+        "hokangs-food": 0,
+        "hotel-dinner-shopping": 0,
+        "hotel-dinner-base": 0
+      };
+
+      function formatBudgetNum(n) {
+        if (n == null || n !== n) return "—";
+        return Math.round(n).toLocaleString("ko-KR");
+      }
+
+      function budgetThemeFromPoi(pl) {
+        if (!pl) return "교통";
+        if (pl.theme === "food") return "식비";
+        if (pl.theme === "shopping") return "쇼핑";
+        if (pl.theme === "tourism") return "관광";
+        return "교통";
+      }
+
+      function estimateRowCny(pl, cat) {
+        if (!pl) return 0;
+        if (cat === "쇼핑") return null;
+        if (cat === "교통") return 0;
+        if (cat === "관광") {
+          if (ENTRANCE_CNY[pl.id] != null) return ENTRANCE_CNY[pl.id];
+          return 0;
+        }
+        if (cat === "식비") {
+          if (MEAL_CNY[pl.id] != null) return MEAL_CNY[pl.id];
+          return 180;
+        }
+        return 0;
+      }
+
+      function buildBudgetRowsFromPlanner() {
+        rebuildPoiIndex();
+        var plan = loadPlanner();
+        var rows = [];
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var st = plan[dk] || { ordered: [] };
+          var ord = st.ordered || [];
+          rows.push({
+            id: uid(),
+            dayKey: dk,
+            placeId: null,
+            cat: "교통",
+            memo: "택시·차량·지하철(일일 추정)",
+            estCny: TAXI_DAY_CNY[dk] != null ? TAXI_DAY_CNY[dk] : 120,
+            actCny: null,
+            actKrw: null
+          });
+          ord.forEach(function (slot) {
+            var pl = POI_BY_ID[slot.placeId];
+            if (!pl) return;
+            var cat = budgetThemeFromPoi(pl);
+            var est = estimateRowCny(pl, cat);
+            rows.push({
+              id: uid(),
+              dayKey: dk,
+              placeId: pl.id,
+              cat: cat,
+              memo: "",
+              estCny: est,
+              actCny: null,
+              actKrw: null
+            });
+          });
+        });
+        return rows;
+      }
+
+      function mergeActsOntoNewRows(oldRows, newRows) {
+        var map = {};
+        (oldRows || []).forEach(function (r) {
+          var k = r.dayKey + "\t" + (r.placeId || "taxi") + "\t" + r.cat;
+          map[k] = { actCny: r.actCny, actKrw: r.actKrw };
+        });
+        newRows.forEach(function (r) {
+          var k = r.dayKey + "\t" + (r.placeId || "taxi") + "\t" + r.cat;
+          if (map[k]) {
+            r.actCny = map[k].actCny;
+            r.actKrw = map[k].actKrw;
+          }
+        });
+      }
+
+      function loadBudgetState() {
+        try {
+          var raw = localStorage.getItem(BUDGET_KEY);
+          if (!raw) return null;
+          var o = JSON.parse(raw);
+          if (!o || typeof o !== "object" || !Array.isArray(o.rows)) return null;
+          return o;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function saveBudgetState(o) {
+        try {
+          localStorage.setItem(BUDGET_KEY, JSON.stringify(o));
+        } catch (e) {}
+      }
+
+      function ensureBudgetSeeded() {
+        var st = loadBudgetState();
+        if (st && st.rows && st.rows.length) return st;
+        var fx = BUDGET_DEFAULT_FX;
+        var rows = buildBudgetRowsFromPlanner();
+        st = { fx: fx, rows: rows };
+        saveBudgetState(st);
+        return st;
+      }
+
+      function rowLabel(st) {
+        if (st.placeId) {
+          var pl = POI_BY_ID[st.placeId];
+          return pl ? poiDisplayName(pl) : st.placeId;
+        }
+        return st.memo || "기타";
+      }
+
+      function parseActNum(v) {
+        if (v == null || String(v).trim() === "") return null;
+        var n = parseFloat(String(v).replace(/,/g, ""));
+        if (n !== n || n < 0) return null;
+        return n;
+      }
+
+      function renderBudget() {
+        var root = document.getElementById("budgetRoot");
+        var grand = document.getElementById("budgetGrand");
+        var fxInp = document.getElementById("budgetFx");
+        if (!root || !grand || !fxInp) return;
+
+        rebuildPoiIndex();
+        var st = ensureBudgetSeeded();
+        var fx = parseFloat(String(fxInp.value).trim());
+        if (!(fx > 0)) fx = st.fx || BUDGET_DEFAULT_FX;
+        fxInp.value = String(Math.round(fx));
+        st.fx = Math.round(fx);
+        saveBudgetState(st);
+
+        var rows = st.rows;
+        var sums = {
+          관광: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 },
+          교통: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 },
+          식비: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 },
+          쇼핑: { estCny: 0, estKrw: 0, actCny: 0, actKrw: 0 }
+        };
+
+        function addSum(cat, estCny, estKrw, actCny, actKrw) {
+          if (!sums[cat]) return;
+          if (estCny != null && estCny === estCny) sums[cat].estCny += estCny;
+          if (estKrw != null && estKrw === estKrw) sums[cat].estKrw += estKrw;
+          if (actCny != null && actCny === actCny) sums[cat].actCny += actCny;
+          if (actKrw != null && actKrw === actKrw) sums[cat].actKrw += actKrw;
+        }
+
+        root.innerHTML = "";
+
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var dayRows = rows.filter(function (r) {
+            return r.dayKey === dk;
+          });
+          if (!dayRows.length) return;
+
+          var dEstCny = 0;
+          var dEstKrw = 0;
+          var dActCny = 0;
+          var dActKrw = 0;
+
+          var block = document.createElement("div");
+          block.className = "budget-day-block";
+          var h = document.createElement("h4");
+          h.textContent = day.label + " · " + (DAY_NARRATIVE[dk] || "");
+          block.appendChild(h);
+
+          var table = document.createElement("table");
+          table.className = "budget-table";
+          table.setAttribute("aria-label", day.label + " 예산");
+          table.innerHTML =
+            "<thead><tr>" +
+            "<th>장소·항목</th>" +
+            "<th>테마</th>" +
+            '<th class="num">예상 ¥</th>' +
+            '<th class="num">예상 ₩</th>' +
+            '<th class="num">확정 ¥</th>' +
+            '<th class="num">확정 ₩</th>' +
+            "</tr></thead><tbody></tbody>";
+          var tb = table.querySelector("tbody");
+
+          dayRows.forEach(function (r) {
+            var estCny = r.estCny;
+            var estKrw = estCny != null && estCny === estCny ? Math.round(estCny * st.fx) : null;
+            addSum(r.cat, estCny, estKrw, r.actCny, r.actKrw);
+            if (estCny != null && estCny === estCny) dEstCny += estCny;
+            if (estKrw != null && estKrw === estKrw) dEstKrw += estKrw;
+            if (r.actCny != null && r.actCny === r.actCny) dActCny += r.actCny;
+            if (r.actKrw != null && r.actKrw === r.actKrw) dActKrw += r.actKrw;
+
+            var tr = document.createElement("tr");
+            var estCnyCell = estCny == null ? '<span class="amt-est">미정</span>' : '<span class="amt-est">' + formatBudgetNum(estCny) + "</span>";
+            var estKrwCell = estKrw == null ? '<span class="amt-est">—</span>' : '<span class="amt-est">' + formatBudgetNum(estKrw) + "</span>";
+            tr.innerHTML =
+              "<td>" +
+              escapeHtml(rowLabel(r)) +
+              '</td><td><span class="cat-pill cat-' +
+              escapeHtml(r.cat) +
+              '">' +
+              escapeHtml(r.cat) +
+              "</span></td>" +
+              '<td class="num">' +
+              estCnyCell +
+              "</td>" +
+              '<td class="num">' +
+              estKrwCell +
+              "</td>" +
+              '<td class="num"><input type="number" class="budget-act" data-field="actCny" data-id="' +
+              escapeHtml(r.id) +
+              '" step="1" min="0" placeholder="—" value="' +
+              (r.actCny != null && r.actCny === r.actCny ? r.actCny : "") +
+              '" /></td>' +
+              '<td class="num"><input type="number" class="budget-act" data-field="actKrw" data-id="' +
+              escapeHtml(r.id) +
+              '" step="100" min="0" placeholder="—" value="' +
+              (r.actKrw != null && r.actKrw === r.actKrw ? r.actKrw : "") +
+              '" /></td>';
+            tb.appendChild(tr);
+          });
+
+          block.appendChild(table);
+          var sub = document.createElement("div");
+          sub.className = "budget-subtotal";
+          sub.innerHTML =
+            "<strong>이날 합계</strong> · 예상 <span class=\"amt-est\">¥ " +
+            formatBudgetNum(dEstCny) +
+            " · ₩ " +
+            formatBudgetNum(dEstKrw) +
+            '</span> · 확정 <span style="color:#4ade80;font-weight:600;">¥ ' +
+            formatBudgetNum(dActCny) +
+            " · ₩ " +
+            formatBudgetNum(dActKrw) +
+            "</span>";
+          block.appendChild(sub);
+          root.appendChild(block);
+        });
+
+        grand.innerHTML = "";
+        ["관광", "교통", "식비", "쇼핑"].forEach(function (c) {
+          var s = sums[c];
+          var card = document.createElement("div");
+          card.className = "g-card";
+          card.innerHTML =
+            "<h5>" +
+            escapeHtml(c) +
+            "</h5>" +
+            '<div class="est">예상 ¥ ' +
+            formatBudgetNum(s.estCny) +
+            " · ₩ " +
+            formatBudgetNum(s.estKrw) +
+            '</div><div class="act" style="margin-top:0.25rem;">확정 ¥ ' +
+            formatBudgetNum(s.actCny) +
+            " · ₩ " +
+            formatBudgetNum(s.actKrw) +
+            "</div>";
+          grand.appendChild(card);
+        });
+      }
+
+      function onBudgetActBlur(ev) {
+        var t = ev.target;
+        if (!t || !t.classList || !t.classList.contains("budget-act")) return;
+        var id = t.getAttribute("data-id");
+        var field = t.getAttribute("data-field");
+        if (!id || !field) return;
+        var st = loadBudgetState() || ensureBudgetSeeded();
+        var row = st.rows.find(function (x) {
+          return x.id === id;
+        });
+        if (!row) return;
+        row[field] = parseActNum(t.value);
+        saveBudgetState(st);
+        renderBudget();
+      }
+
+      var budgetRootEl = document.getElementById("budgetRoot");
+      if (budgetRootEl) {
+        budgetRootEl.addEventListener("blur", onBudgetActBlur, true);
+      }
+
+      var budgetFxEl = document.getElementById("budgetFx");
+      if (budgetFxEl) {
+        budgetFxEl.addEventListener("change", function () {
+          var st = loadBudgetState() || ensureBudgetSeeded();
+          var v = parseFloat(String(budgetFxEl.value).trim());
+          st.fx = v > 0 ? Math.round(v) : BUDGET_DEFAULT_FX;
+          budgetFxEl.value = String(st.fx);
+          saveBudgetState(st);
+          renderBudget();
+        });
+      }
+
+      document.getElementById("budgetRegenBtn") &&
+        document.getElementById("budgetRegenBtn").addEventListener("click", function () {
+          if (!confirm("일정 기준으로 예상 행을 다시 만듭니다. 확정(초록) 금액은 같은 날·같은 장소·같은 테마끼리 맞춰 옮깁니다. 계속할까요?")) return;
+          var old = loadBudgetState() || { fx: BUDGET_DEFAULT_FX, rows: [] };
+          var fresh = buildBudgetRowsFromPlanner();
+          mergeActsOntoNewRows(old.rows, fresh);
+          saveBudgetState({ fx: old.fx || BUDGET_DEFAULT_FX, rows: fresh });
+          var fxInp = document.getElementById("budgetFx");
+          if (fxInp) fxInp.value = String(old.fx || BUDGET_DEFAULT_FX);
+          renderBudget();
+        });
+
+      document.getElementById("budgetExportBtn") &&
+        document.getElementById("budgetExportBtn").addEventListener("click", function () {
+          var st = loadBudgetState() || ensureBudgetSeeded();
+          var blob = new Blob([JSON.stringify(st, null, 2)], { type: "application/json;charset=utf-8" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "dalian-budget.json";
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
+
+      (function initBudgetFxFromStorage() {
+        var st = ensureBudgetSeeded();
+        var fxInp = document.getElementById("budgetFx");
+        if (fxInp && st.fx) fxInp.value = String(st.fx);
+      })();
+
+      renderBudget();
+    })();
+  </script>
+</body>
+</html>
