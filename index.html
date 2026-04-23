@@ -319,6 +319,17 @@
       margin-bottom: 0.85rem;
     }
 
+    .plan-b-head-tools {
+      display: flex;
+      justify-content: flex-end;
+      margin: -0.2rem 0 0.65rem;
+    }
+
+    .plan-b-swap-btn {
+      font-size: 0.76rem;
+      padding: 0.35rem 0.55rem;
+    }
+
     .plan-b-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1883,9 +1894,6 @@
     }
 
     .segment-travel-lbl {
-      position: relative;
-      left: -50%;
-      transform: translateX(-50%);
       background: rgba(15, 23, 42, 0.92);
       color: #e2e8f0;
       border: 1px solid rgba(56, 189, 248, 0.5);
@@ -1898,6 +1906,18 @@
       text-align: center;
       white-space: normal;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .segment-arrow-wrap {
+      background: transparent;
+      border: none;
+      overflow: visible;
+    }
+
+    .segment-arrow-with-time {
+      transform: translate(-50%, -50%);
+      display: inline-block;
+      pointer-events: none;
     }
 
     .btn-mini {
@@ -2174,6 +2194,9 @@
 
       <div class="plan-b-embedded route-card">
         <h3 class="pm-title">플랜 B</h3>
+        <div class="plan-b-head-tools">
+          <button type="button" class="btn btn-ghost plan-b-swap-btn" id="swapDay2Day4Btn">Day2 ↔ Day4 일정 바꾸기</button>
+        </div>
         <div id="planBRoot" class="plan-b-days" aria-live="polite"></div>
       </div>
     </section>
@@ -2612,6 +2635,20 @@
         return "r" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
       }
 
+      function swapStringByDayKeys(input, aKey, bKey) {
+        if (typeof input !== "string") return input;
+        var token = "__DAY_SWAP_TOKEN__";
+        return input.split(aKey).join(token).split(bKey).join(aKey).split(token).join(bKey);
+      }
+
+      function swapObjectDayBuckets(obj, aKey, bKey) {
+        if (!obj || typeof obj !== "object") return obj;
+        var aVal = obj[aKey];
+        obj[aKey] = obj[bKey];
+        obj[bKey] = aVal;
+        return obj;
+      }
+
       function defaultDayState() {
         return { ordered: [], bufferMin: 45, dayStartTime: "09:00" };
       }
@@ -2971,6 +3008,71 @@
         refreshPlannerUI();
       }
 
+      function addPoiToPlannerDay(dayKey, placeId) {
+        if (!dayKey || !placeId) return;
+        var all = loadPlanner();
+        var s = all[dayKey] || defaultDayState();
+        s.ordered = Array.isArray(s.ordered) ? s.ordered : [];
+        s.ordered.push({ rowId: uid(), placeId: placeId, durationMin: 60 });
+        all[dayKey] = s;
+        savePlanner(all);
+        refreshPlannerUI();
+      }
+
+      function addPoiToPlanBByDay(dayKey, placeId) {
+        if (!dayKey || !placeId) return;
+        var pl = POI_BY_ID[placeId];
+        if (!pl) return;
+        var st = loadPlanBState();
+        if (!st.byDay[dayKey]) st.byDay[dayKey] = [];
+        st.byDay[dayKey].push({ id: newPlanBItemId(), text: poiDisplayName(pl) + " (지도에서 추가)" });
+        savePlanBState(st);
+        renderPlanB();
+      }
+
+      function promptDayKeyForPlanB() {
+        var msg = [
+          "플랜 B에 추가할 날짜를 선택하세요:",
+          "1) Day1",
+          "2) Day2",
+          "3) Day3",
+          "4) Day4",
+          "5) Day5"
+        ].join("\n");
+        var raw = window.prompt(msg, "1");
+        if (raw == null) return null;
+        var n = parseInt(String(raw).trim(), 10);
+        if (!n || n < 1 || n > 5) return null;
+        return TRIP_DAYS[n - 1].key;
+      }
+
+      function promptMapTargetAndAdd(placeId) {
+        var pl = POI_BY_ID[placeId];
+        if (!pl) return;
+        var msg = [
+          "[전체 추천 지도] '" + poiDisplayName(pl) + "' 추가 대상 선택",
+          "1) Day 1",
+          "2) Day 2",
+          "3) Day 3",
+          "4) Day 4",
+          "5) Day 5",
+          "6) 플랜 B"
+        ].join("\n");
+        var raw = window.prompt(msg, "1");
+        if (raw == null) return;
+        var pick = parseInt(String(raw).trim(), 10);
+        if (!pick || pick < 1 || pick > 6) return;
+        if (pick === 6) {
+          var dayForB = promptDayKeyForPlanB();
+          if (!dayForB) return;
+          addPoiToPlanBByDay(dayForB, placeId);
+          return;
+        }
+        var dayKey = TRIP_DAYS[pick - 1] && TRIP_DAYS[pick - 1].key;
+        if (!dayKey) return;
+        addPoiToPlannerDay(dayKey, placeId);
+      }
+
       function ensureMapDayPopupHandlers() {
         if (!mapDay || mapDay._dalianPopupBound) return;
         mapDay._dalianPopupBound = true;
@@ -3102,6 +3204,11 @@
         POI_CATALOG.forEach(function (p) {
           var m = L.marker([p.lat, p.lng], { icon: makeThemeIcon(p.theme) });
           m.bindPopup(poiPopupInner(p));
+          m.on("click", function () {
+            setTimeout(function () {
+              promptMapTargetAndAdd(p.id);
+            }, 80);
+          });
           m.addTo(mapAll);
           layersAll.push(m);
         });
@@ -3178,23 +3285,6 @@
           });
           var line = L.polyline(latlngs, { color: col, weight: 3, opacity: 0.88 }).addTo(mapDay);
           layersDay.push(line);
-          if (typeof L.polylineDecorator === "function" && L.Symbol && typeof L.Symbol.arrowHead === "function") {
-            var dec = L.polylineDecorator(line, {
-              patterns: [
-                {
-                  offset: "12%",
-                  repeat: "14%",
-                  symbol: L.Symbol.arrowHead({
-                    pixelSize: 9,
-                    polygon: false,
-                    pathOptions: { stroke: true, color: col, weight: 2, opacity: 0.95 }
-                  })
-                }
-              ]
-            }).addTo(mapDay);
-            layersDay.push(dec);
-          }
-
           for (var si = 0; si < orderedDraw.length - 1; si++) {
             var p0 = POI_BY_ID[orderedDraw[si].placeId];
             var p1 = POI_BY_ID[orderedDraw[si + 1].placeId];
@@ -3207,10 +3297,10 @@
             var midLng = (posA.lng + posB.lng) / 2;
             var lm = L.marker([midLat, midLng], {
               icon: L.divIcon({
-                className: "segment-lbl-wrap",
-                html: '<div class="segment-travel-lbl">' + escapeHtml(legTxt) + "</div>",
-                iconSize: [130, 34],
-                iconAnchor: [65, 17]
+                className: "segment-arrow-wrap",
+                html: '<div class="segment-arrow-with-time"><div class="segment-travel-lbl">' + escapeHtml(legTxt) + "</div></div>",
+                iconSize: [1, 1],
+                iconAnchor: [0, 0]
               }),
               interactive: false,
               keyboard: false
@@ -4845,6 +4935,88 @@
         if (bar) bar.style.width = pct + "%";
         if (tx) tx.textContent = pct + "%";
       }
+
+      function swapDay2Day4AllData() {
+        var day2 = "2026-04-26";
+        var day4 = "2026-04-28";
+        if (!window.confirm("Day2와 Day4의 일정/가계부/체크/플랜B 데이터를 서로 바꿀까요?")) return;
+
+        var planner = loadPlanner();
+        swapObjectDayBuckets(planner, day2, day4);
+        savePlanner(planner);
+
+        var planB = loadPlanBState();
+        swapObjectDayBuckets(planB.byDay, day2, day4);
+        savePlanBState(planB);
+
+        var prepExtra = loadPrepItinExtraState();
+        swapObjectDayBuckets(prepExtra.byDay, day2, day4);
+        savePrepItinExtraState(prepExtra);
+
+        try {
+          var rawOrder = localStorage.getItem(PREP_ORDER_STORAGE);
+          if (rawOrder) {
+            var om = JSON.parse(rawOrder);
+            if (om && typeof om === "object") {
+              var nMap = {};
+              Object.keys(om).forEach(function (k) {
+                var nk = swapStringByDayKeys(k, day2, day4);
+                var v = om[k];
+                if (Array.isArray(v)) {
+                  nMap[nk] = v.map(function (id) {
+                    return swapStringByDayKeys(id, day2, day4);
+                  });
+                } else nMap[nk] = v;
+              });
+              savePrepOrderMap(nMap);
+            }
+          }
+        } catch (e) {}
+
+        try {
+          var rawChecks = localStorage.getItem(CHECK_STORAGE);
+          if (rawChecks) {
+            var ck = JSON.parse(rawChecks);
+            if (ck && typeof ck === "object") {
+              var outCk = {};
+              Object.keys(ck).forEach(function (k) {
+                outCk[swapStringByDayKeys(k, day2, day4)] = !!ck[k];
+              });
+              localStorage.setItem(CHECK_STORAGE, JSON.stringify(outCk));
+            }
+          }
+        } catch (e2) {}
+
+        var bst = loadBudgetState();
+        if (bst && Array.isArray(bst.rows)) {
+          bst.rows.forEach(function (r) {
+            if (r.dayKey === day2) r.dayKey = day4;
+            else if (r.dayKey === day4) r.dayKey = day2;
+            if (typeof r.legKey === "string") r.legKey = swapStringByDayKeys(r.legKey, day2, day4);
+            if (typeof r.actKey === "string") r.actKey = swapStringByDayKeys(r.actKey, day2, day4);
+          });
+          if (bst.budgetDayOrder && typeof bst.budgetDayOrder === "object") {
+            swapObjectDayBuckets(bst.budgetDayOrder, day2, day4);
+          }
+          if (Array.isArray(bst.suppressedKeys)) {
+            bst.suppressedKeys = bst.suppressedKeys.map(function (k) {
+              return swapStringByDayKeys(k, day2, day4);
+            });
+          }
+          saveBudgetState(bst);
+        }
+
+        if (selectedDayKey === day2) selectedDayKey = day4;
+        else if (selectedDayKey === day4) selectedDayKey = day2;
+
+        refreshPlannerUI();
+        renderPrepItinerarySection();
+        loadChecks();
+        updatePrepProgress();
+        renderPlanB();
+        renderBudget();
+        window.alert("Day2와 Day4 데이터 교체를 완료했습니다.");
+      }
       var prepPanelEl = document.getElementById("panel-prep");
       if (prepPanelEl) {
         prepPanelEl.addEventListener("change", function (ev) {
@@ -4883,6 +5055,11 @@
       var schedulePanelEl = document.getElementById("panel-schedule");
       if (schedulePanelEl) {
         schedulePanelEl.addEventListener("click", function (ev) {
+          var swapBtn = ev.target && ev.target.closest ? ev.target.closest("#swapDay2Day4Btn") : null;
+          if (swapBtn) {
+            swapDay2Day4AllData();
+            return;
+          }
           var addB = ev.target && ev.target.closest ? ev.target.closest(".plan-b-add") : null;
           if (addB) {
             planBAddItem(addB.getAttribute("data-planb-day"));
