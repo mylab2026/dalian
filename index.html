@@ -335,13 +335,6 @@
     .plan-b-card h4 { font-size: 0.98rem; margin-bottom: 0.5rem; color: var(--accent2); }
     .plan-b-card p { font-size: 0.88rem; color: var(--muted); }
 
-    .plan-b-lead {
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin: 0 0 1rem;
-      line-height: 1.5;
-    }
-
     .plan-b-days {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -355,17 +348,32 @@
       padding: 1rem;
     }
 
-    .plan-b-day-card h4 {
-      font-size: 0.92rem;
-      margin: 0 0 0.5rem;
-      color: var(--accent2);
+    .plan-b-ai-wrap {
+      margin: 0 0 0.65rem;
+      padding: 0.62rem 0.7rem;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 8px;
+      background: rgba(14, 165, 233, 0.08);
     }
 
-    .plan-b-day-nar {
-      font-size: 0.78rem;
+    .plan-b-ai-title {
+      margin: 0 0 0.45rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .plan-b-ai-list {
+      list-style: disc;
+      margin: 0;
+      padding-left: 1rem;
+    }
+
+    .plan-b-ai-list li {
+      font-size: 0.8rem;
       color: var(--muted);
-      margin: 0 0 0.65rem;
-      line-height: 1.4;
+      line-height: 1.45;
+      padding: 0.22rem 0;
     }
 
     .plan-b-item-list {
@@ -398,24 +406,6 @@
 
     .plan-b-toolbar {
       margin-top: 0.5rem;
-    }
-
-    .plan-b-ref {
-      margin-top: 1.1rem;
-      font-size: 0.84rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .plan-b-ref summary {
-      cursor: pointer;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .plan-b-ref ul {
-      margin: 0.5rem 0 0;
-      padding-left: 1.15rem;
     }
 
     .ledger-form {
@@ -2184,21 +2174,7 @@
 
       <div class="plan-b-embedded route-card">
         <h3 class="pm-title">플랜 B</h3>
-        <p class="plan-b-lead">
-          메인 일정이 무겁거나 날씨가 안 좋을 때 쓸 <strong>대체 동선·실내 위주</strong> 메모를 날짜별로 적어 두세요. 항목은 브라우저에 저장됩니다.
-        </p>
         <div id="planBRoot" class="plan-b-days" aria-live="polite"></div>
-        <details class="plan-b-ref">
-          <summary>대체 아이디어 참고(읽기 전용)</summary>
-          <ul>
-            <li><strong>성아 해양세계(圣亚海洋世界)</strong> — 실내 수족관 위주, 날씨에 덜 민감. 이동·귀가는 택시.</li>
-            <li><strong>대련 자연박물관 일대</strong> — 실내 체류 늘리고 택시 위주 이동.</li>
-            <li><strong>동항(东港) · 방홍 광장</strong> — 해안 산책은 짧게, 바람 강하면 생략·카페 휴식.</li>
-            <li><strong>왈다 광장 / 대형몰(万达 등)</strong> — 식당·키즈·영화관 한 건물에 모인 경우가 많음.</li>
-            <li><strong>호텔 데이</strong> — 수영장·조식 후 낮잠, 회복용.</li>
-            <li><strong>가족 식사(대체)</strong> — KFC·피자헛·맥도날드, 시저더(喜家德) 만두, 일식 덮밥 등 자극 적은 선택.</li>
-          </ul>
-        </details>
       </div>
     </section>
 
@@ -3867,6 +3843,28 @@
       }
 
       var PLAN_B_STORAGE = "dalian_plan_b_per_day_v1";
+      var PLAN_B_AI_RECOMMEND = {
+        "2026-04-25": [
+          { text: "[실내] 동강 베니스 수성 내 카페 거리", hint: "동강/호텔 인근, 날씨 영향 적음" },
+          { text: "[산책] 해변 공원 야경 동선 단축안", hint: "피로할 때 40~60분 코스" }
+        ],
+        "2026-04-26": [
+          { text: "[실내] 헝룽광장(66) 키즈카페 및 아케이드", hint: "시내 쇼핑몰 축, 아이 동반 쉬움" },
+          { text: "[대체] 올림픽 광장 지하 마트 투어", hint: "장보기+식사 한 번에 가능" }
+        ],
+        "2026-04-27": [
+          { text: "[실내] 푸자좡 해변 인근 대형 카페", hint: "동물원 후 휴식용" },
+          { text: "[대체] 성해광장 방면 이동 후 실내 박물관 관람", hint: "강풍/우천 시 대체 동선" }
+        ],
+        "2026-04-28": [
+          { text: "[실내] 더 캐슬 호텔 티타임(조망)", hint: "성해광장권 휴식형 코스" },
+          { text: "[대체] 평화광장 쇼핑몰 내 실내 놀이터", hint: "수족관 대기 시간 분산" }
+        ],
+        "2026-04-29": [
+          { text: "[실내] 파빌리온 쇼핑몰 마지막 쇼핑", hint: "공항 이동 전 짧은 쇼핑" },
+          { text: "[대체] 공항 근처 완다광장(마트/식당)", hint: "비행 전 식사+장보기" }
+        ]
+      };
 
       function loadPlanBState() {
         try {
@@ -3916,6 +3914,21 @@
         renderPlanB();
       }
 
+      function renderPlanBAiRecommendHtml(dayKey) {
+        var list = PLAN_B_AI_RECOMMEND[dayKey] || [];
+        if (!list.length) return "";
+        var lis = list
+          .map(function (row) {
+            return "<li>" + escapeHtml(row.text + " - " + row.hint) + "</li>";
+          })
+          .join("");
+        return (
+          '<div class="plan-b-ai-wrap"><p class="plan-b-ai-title">주변 추천 장소(AI 추천)</p><ul class="plan-b-ai-list">' +
+          lis +
+          "</ul></div>"
+        );
+      }
+
       function renderPlanB() {
         var root = document.getElementById("planBRoot");
         if (!root) return;
@@ -3923,7 +3936,6 @@
         var parts = [];
         TRIP_DAYS.forEach(function (day) {
           var dk = day.key;
-          var nar = DAY_NARRATIVE[dk] || "";
           var items = Array.isArray(st.byDay[dk]) ? st.byDay[dk] : [];
           var lis = items
             .map(function (it) {
@@ -3939,13 +3951,12 @@
               );
             })
             .join("");
+          if (!lis) {
+            lis = '<li><span style="opacity:.72">아직 추가한 항목이 없습니다.</span></li>';
+          }
           parts.push(
-            '<div class="plan-b-day-card"><h4>' +
-              escapeHtml(day.label) +
-              "</h4>" +
-              (nar
-                ? '<p class="plan-b-day-nar">' + escapeHtml("메인 일정 한 줄: " + nar) + "</p>"
-                : "") +
+            '<div class="plan-b-day-card">' +
+              renderPlanBAiRecommendHtml(dk) +
               '<ul class="plan-b-item-list">' +
               lis +
               '</ul><div class="plan-b-toolbar"><button type="button" class="btn plan-b-add" data-planb-day="' +
