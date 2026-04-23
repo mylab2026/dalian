@@ -335,6 +335,89 @@
     .plan-b-card h4 { font-size: 0.98rem; margin-bottom: 0.5rem; color: var(--accent2); }
     .plan-b-card p { font-size: 0.88rem; color: var(--muted); }
 
+    .plan-b-lead {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0 0 1rem;
+      line-height: 1.5;
+    }
+
+    .plan-b-days {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .plan-b-day-card {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+
+    .plan-b-day-card h4 {
+      font-size: 0.92rem;
+      margin: 0 0 0.5rem;
+      color: var(--accent2);
+    }
+
+    .plan-b-day-nar {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0 0 0.65rem;
+      line-height: 1.4;
+    }
+
+    .plan-b-item-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .plan-b-item-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      font-size: 0.84rem;
+      color: var(--text);
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+    }
+
+    .plan-b-item-list li span {
+      flex: 1;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .plan-b-item-del {
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+    }
+
+    .plan-b-toolbar {
+      margin-top: 0.5rem;
+    }
+
+    .plan-b-ref {
+      margin-top: 1.1rem;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .plan-b-ref summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .plan-b-ref ul {
+      margin: 0.5rem 0 0;
+      padding-left: 1.15rem;
+    }
+
     .ledger-form {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -931,9 +1014,8 @@
 
     .pack-row-controls {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
+      flex-direction: row;
+      align-items: flex-start;
       flex-shrink: 0;
       padding-top: 0.05rem;
     }
@@ -954,27 +1036,81 @@
       color: var(--accent);
     }
 
-    .pack-move-btn {
-      font-family: inherit;
-      font-size: 0.62rem;
-      line-height: 1;
-      padding: 0.28rem 0.38rem;
-      min-width: 1.65rem;
-      border-radius: 5px;
-      border: 1px solid var(--surface2);
-      background: #0f172a;
-      color: var(--muted);
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-
-    .pack-move-btn:hover {
-      color: var(--text);
-      border-color: var(--accent);
-    }
-
     .pack-checklist li:last-child {
       border-bottom: none;
+    }
+
+    .pack-li-schedule-block {
+      display: block;
+      list-style: none;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.45);
+      min-height: 0;
+    }
+
+    .pack-li-schedule-block .pack-schedule-wrap {
+      width: 100%;
+    }
+
+    .pack-schedule-box {
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      border-radius: 10px;
+      background: rgba(14, 165, 233, 0.1);
+      padding: 0.75rem 0.95rem;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .pack-schedule-box--muted {
+      border-color: var(--surface2);
+      background: rgba(15, 23, 42, 0.65);
+    }
+
+    .pack-schedule-box .pack-schedule-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--accent);
+      margin: 0 0 0.55rem;
+      letter-spacing: -0.02em;
+    }
+
+    .pack-schedule-box ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .pack-schedule-box li {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.32rem 0;
+      border: none;
+      min-height: 0;
+      font-size: 0.84rem;
+    }
+
+    .pack-schedule-box .pack-sch-lbl {
+      color: var(--muted);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .pack-schedule-box .pack-sch-val {
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      white-space: nowrap;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .pack-schedule-note {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.45;
     }
 
     .pack-checklist input[type="checkbox"] {
@@ -994,10 +1130,133 @@
       padding-top: 0.05rem;
     }
 
+    .pack-prep-toolbar {
+      margin: 0.35rem 0 0.85rem;
+    }
+
+    .pack-item-del {
+      flex-shrink: 0;
+      align-self: flex-start;
+      margin-top: 0.05rem;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+    }
+
     .pack-checklist input:checked + label {
       color: var(--text);
       text-decoration: line-through;
       opacity: 0.72;
+    }
+
+    #panel-shopping .shop-checklist li .shop-text-inp {
+      flex: 1;
+      min-width: 0;
+      margin-top: 0.02rem;
+    }
+
+    #panel-shopping .shop-checklist input[type="checkbox"]:checked ~ .shop-text-inp {
+      color: var(--text);
+      text-decoration: line-through;
+      opacity: 0.72;
+    }
+
+    #panel-shopping .shop-text-inp {
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      padding: 0.38rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--text);
+    }
+
+    #panel-shopping .shop-text-inp:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+    }
+
+    #panel-shopping .shop-del-btn {
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.5rem;
+    }
+
+    #panel-shopping .shop-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .shop-root {
+      margin-top: 0.35rem;
+    }
+
+    .shop-cat-card {
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.88));
+      border: 1px solid rgba(56, 189, 248, 0.38);
+      border-radius: var(--radius);
+      padding: 0.95rem 1.05rem 1.05rem;
+      margin-bottom: 1.05rem;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.28);
+    }
+
+    .shop-cat-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem 0.75rem;
+      margin-bottom: 0.55rem;
+      padding-bottom: 0.55rem;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.55);
+    }
+
+    .shop-cat-title {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--warn);
+      letter-spacing: -0.02em;
+      flex: 1;
+      min-width: 0;
+      line-height: 1.35;
+    }
+
+    .shop-cat-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .shop-add-item-in-cat {
+      font-size: 0.76rem;
+      padding: 0.32rem 0.55rem;
+    }
+
+    .shop-drag-wrap {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      padding-top: 0.02rem;
+    }
+
+    @media (max-width: 520px) {
+      .shop-cat-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .shop-cat-actions {
+        width: 100%;
+      }
+
+      .shop-add-item-in-cat {
+        width: 100%;
+      }
     }
 
     .pack-group-title {
@@ -1843,7 +2102,8 @@
       .day-settings-bar input[type="number"],
       .dur-wrap input,
       .poi-nick-inp,
-      .buffer-field input {
+      .buffer-field input,
+      #panel-shopping .shop-text-inp {
         font-size: 16px;
       }
     }
@@ -1870,6 +2130,7 @@
       <button type="button" class="active" data-panel="schedule" role="tab" aria-selected="true">일정</button>
       <button type="button" data-panel="ledger" role="tab" aria-selected="false">가계부</button>
       <button type="button" data-panel="prep" role="tab" aria-selected="false">준비물</button>
+      <button type="button" data-panel="shopping" role="tab" aria-selected="false">쇼핑</button>
     </nav>
 
     <header class="hero hero--minimal">
@@ -1923,32 +2184,21 @@
 
       <div class="plan-b-embedded route-card">
         <h3 class="pm-title">플랜 B</h3>
-        <div class="plan-b-grid">
-          <div class="plan-b-card">
-            <h4>성아 해양세계(圣亚海洋世界)</h4>
-            <p>실내 수족관 위주라 날씨에 덜 민감. 호랑이탄 대신 가볍게 볼거리만 채우기 좋아요. 이동·귀가는 택시.</p>
-          </div>
-          <div class="plan-b-card">
-            <h4>대련 자연박물관 일대</h4>
-            <p>박물관 위주로 실내 체류 시간을 늘리고, 주변은 택시로만 이동. 걷는 양을 줄이는 날에 적합.</p>
-          </div>
-          <div class="plan-b-card">
-            <h4>동항(东港) · 방홍 광장</h4>
-            <p>해안 산책은 <strong>짧게</strong>만 하고 바람 강하면 생략. 근처 카페에서 휴식.</p>
-          </div>
-          <div class="plan-b-card">
-            <h4>왈다 광장 / 대형몰(万达 등)</h4>
-            <p>식당가·키즈·영화관이 한 건물에 모인 경우가 많아 <strong>아이 식사 + 실내</strong> 한 번에 처리하기 쉬워요.</p>
-          </div>
-          <div class="plan-b-card">
-            <h4>호텔 데이</h4>
-            <p>수영장·조식만 즐기고 오후는 낮잠. 무리한 관광 대신 회복용.</p>
-          </div>
-          <div class="plan-b-card">
-            <h4>가족 식사(대체 메뉴)</h4>
-            <p><strong>KFC·피자헛·맥도날드</strong> 등 익숙한 패스트푸드, <strong>시저더(喜家德)</strong> 만두, 일식 덮밥 체인 등 자극 적은 선택. 훠궈는 순한 국물·아이 면 요청.</p>
-          </div>
-        </div>
+        <p class="plan-b-lead">
+          메인 일정이 무겁거나 날씨가 안 좋을 때 쓸 <strong>대체 동선·실내 위주</strong> 메모를 날짜별로 적어 두세요. 항목은 브라우저에 저장됩니다.
+        </p>
+        <div id="planBRoot" class="plan-b-days" aria-live="polite"></div>
+        <details class="plan-b-ref">
+          <summary>대체 아이디어 참고(읽기 전용)</summary>
+          <ul>
+            <li><strong>성아 해양세계(圣亚海洋世界)</strong> — 실내 수족관 위주, 날씨에 덜 민감. 이동·귀가는 택시.</li>
+            <li><strong>대련 자연박물관 일대</strong> — 실내 체류 늘리고 택시 위주 이동.</li>
+            <li><strong>동항(东港) · 방홍 광장</strong> — 해안 산책은 짧게, 바람 강하면 생략·카페 휴식.</li>
+            <li><strong>왈다 광장 / 대형몰(万达 등)</strong> — 식당·키즈·영화관 한 건물에 모인 경우가 많음.</li>
+            <li><strong>호텔 데이</strong> — 수영장·조식 후 낮잠, 회복용.</li>
+            <li><strong>가족 식사(대체)</strong> — KFC·피자헛·맥도날드, 시저더(喜家德) 만두, 일식 덮밥 등 자극 적은 선택.</li>
+          </ul>
+        </details>
       </div>
     </section>
 
@@ -2000,72 +2250,30 @@
 
         <div class="pack-section pack-group-a">
           <h3 class="pack-group-title">그룹 A: 한국에서 챙길 것</h3>
-
-          <div class="pack-subsection"><h4>디지털 / 결제</h4>
-          <ul class="pack-checklist" data-prep-sort-group="prep-a-digital">
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-alipay" /><label for="prep-app-alipay">알리페이(실명 인증 및 카드 등록 확인)</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-didi" /><label for="prep-app-didi">디디추싱(연동 확인)</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-comms" /><label for="prep-app-comms">VPN 포함 eSIM 또는 로밍 신청</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-app-translate" /><label for="prep-app-translate">파파고/구글번역 오프라인 팩 다운로드</label></li>
-          </ul></div>
-
-          <div class="pack-subsection"><h4>비상약</h4>
-          <ul class="pack-checklist" data-prep-sort-group="prep-a-med">
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-fever-acet" /><label for="prep-med-fever-acet">해열제: 아세트아미노펜 계열</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-fever-ibu" /><label for="prep-med-fever-ibu">해열제: 이부프로펜 계열</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-digest-stop" /><label for="prep-med-digest-stop">어린이 지사제</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-digest-baekcho" /><label for="prep-med-digest-baekcho">백초 시럽</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-digest-probio" /><label for="prep-med-digest-probio">유산균</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-cold-syrup" /><label for="prep-med-cold-syrup">코감기 시럽</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-cough-patch" /><label for="prep-med-cough-patch">기침 패치</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-thermo" /><label for="prep-med-thermo">체온계</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-bepanthen" /><label for="prep-med-bepanthen">비판텐 연고</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-lidomex" /><label for="prep-med-lidomex">리도멕스</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-med-bandage" /><label for="prep-med-bandage">밴드 및 소독 솜</label></li>
-          </ul></div>
-
-          <div class="pack-subsection"><h4>아이 간식 / 식량</h4>
-          <ul class="pack-checklist" data-prep-sort-group="prep-a-food">
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-rice" /><label for="prep-food-rice">햇반(넉넉히)</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-block-soup" /><label for="prep-food-block-soup">실온 보관 블럭국(미역국, 사골국 등)</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-kim" /><label for="prep-food-kim">소포장 김</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-anchovy" /><label for="prep-food-anchovy">멸치볶음</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-jangjorim" /><label for="prep-food-jangjorim">장조림 캔/팩</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-puree" /><label for="prep-food-puree">아기 퓨레</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-vit-candy" /><label for="prep-food-vit-candy">비타민 사탕</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-food-barley-tea" /><label for="prep-food-barley-tea">보리차 티백</label></li>
-          </ul></div>
-
-          <div class="pack-subsection"><h4>의류 / 위생</h4>
-          <ul class="pack-checklist" data-prep-sort-group="prep-a-cloth">
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-wind-padding" /><label for="prep-cloth-wind-padding">바람막이 및 경량 패딩(온 가족)</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-stroller-cover" /><label for="prep-cloth-stroller-cover">유모차 방풍 커버</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-sanitizer" /><label for="prep-cloth-sanitizer">휴대용 손세정제</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-cloth-wipes" /><label for="prep-cloth-wipes">대용량 물티슈 및 휴대용 물티슈</label></li>
-          </ul></div>
-
-          <div class="pack-subsection"><h4>호텔 사전 요청</h4>
-          <ul class="pack-checklist" data-prep-sort-group="prep-a-hotel">
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-stroller" /><label for="prep-hotel-stroller">유모차 대여 예약 확인</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-crib" /><label for="prep-hotel-crib">아기 침대</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-bedguard" /><label for="prep-hotel-bedguard">침대 가드</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-bathtub" /><label for="prep-hotel-bathtub">아기 욕조</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-diaper-bin" /><label for="prep-hotel-diaper-bin">기저귀 처리통</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-hotel-bottle-steril" /><label for="prep-hotel-bottle-steril">젖병 소독기(또는 구연산)</label></li>
-          </ul></div>
+          <p class="pack-muted" style="margin: 0 0 0.75rem; font-size: 0.85rem">
+            각 소제목 아래에서 항목을 추가·삭제할 수 있으며, 순서는 ≡로 바꿀 수 있습니다. 체크 상태는 브라우저에 저장됩니다.
+          </p>
+          <div id="prepGroupAMount"></div>
         </div>
 
         <div class="pack-section pack-group-b">
           <h3 class="pack-group-title">그룹 B: 현지에서 매일 챙길 것</h3>
           <div class="pack-subsection"><h4>매일 아침 필수</h4>
-          <ul class="pack-checklist" data-prep-sort-group="prep-b-daily">
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-passport" /><label for="prep-b-daily-passport">가족 전원 실물 여권(필수!)</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-battery" /><label for="prep-b-daily-battery">보조 배터리</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-clothes" /><label for="prep-b-daily-clothes">아이들 여벌 옷</label></li>
-            <li><div class="pack-row-controls" aria-hidden="true"><span class="pack-drag-handle" title="끌어서 순서 변경">≡</span><button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button><button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button></div><input type="checkbox" id="prep-b-daily-baby-kit" /><label for="prep-b-daily-baby-kit">기저귀/분유/개인 컵</label></li>
-          </ul></div>
+          <div id="prepGroupBDailyMount"></div></div>
           <p class="pack-muted" style="margin:0.5rem 0 0.85rem">아래는 일정 탭의 해당 날짜 방문지에 맞춰 표시됩니다.</p>
           <div id="prepItineraryMount"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-shopping" class="panel" role="tabpanel" aria-hidden="true">
+      <div class="pack-wrap">
+        <div class="pack-section">
+          <h3 class="pack-group-title">쇼핑 리스트</h3>
+          <p class="pack-muted" style="margin-bottom: 1rem">
+            네 가지 카테고리 카드로 정리되어 있습니다. 각 카드 안에서 항목을 추가·삭제하고, ≡ 드래그 또는 ↑↓ 버튼으로 순서를 바꿀 수 있습니다. 체크·텍스트·순서는 브라우저에 자동 저장됩니다.
+          </p>
+          <div id="shopRoot" class="shop-root" aria-live="polite"></div>
         </div>
       </div>
     </section>
@@ -3118,11 +3326,97 @@
       var PREP_ROW_HANDLE_HTML =
         '<div class="pack-row-controls" aria-hidden="true">' +
         '<span class="pack-drag-handle" title="끌어서 순서 변경">≡</span>' +
-        '<button type="button" class="pack-move-btn" data-dir="-1" aria-label="위로 이동">▲</button>' +
-        '<button type="button" class="pack-move-btn" data-dir="1" aria-label="아래로 이동">▼</button>' +
         "</div>";
 
       var PREP_ORDER_STORAGE = "dalian_prep_item_order_v1";
+      var PREP_ITEMS_STORAGE = "dalian_prep_items_v1";
+      var PREP_MANAGED_SORT_GROUPS = {
+        "prep-a-digital": true,
+        "prep-a-med": true,
+        "prep-a-food": true,
+        "prep-a-kid-swim": true,
+        "prep-a-adult-swim": true,
+        "prep-a-cloth": true,
+        "prep-a-hotel": true,
+        "prep-b-daily": true
+      };
+      var PREP_GROUP_A_SECTION_META = [
+        { key: "prep-a-digital", title: "디지털 / 결제" },
+        { key: "prep-a-med", title: "비상약" },
+        { key: "prep-a-food", title: "아이 간식 / 식량" },
+        { key: "prep-a-kid-swim", title: "아이들 의류 & 수영 (상세)" },
+        { key: "prep-a-adult-swim", title: "부부(성인) 수영 용품" },
+        { key: "prep-a-cloth", title: "의류 / 위생 (기타)" },
+        { key: "prep-a-hotel", title: "호텔 사전 요청" }
+      ];
+      var PREP_DEFAULT_ITEMS_SECTIONS = {
+        "prep-a-digital": [
+          { id: "prep-app-alipay", text: "알리페이(실명 인증 및 카드 등록 확인)" },
+          { id: "prep-app-didi", text: "디디추싱(연동 확인)" },
+          { id: "prep-app-comms", text: "VPN 포함 eSIM 또는 로밍 신청" },
+          { id: "prep-digital-esim", text: "이심(eSIM) 발급 후 스마트폰 설치·개통 확인 (중국 데이터)" },
+          { id: "prep-app-translate", text: "파파고/구글번역 오프라인 팩 다운로드" }
+        ],
+        "prep-a-med": [
+          { id: "prep-med-fever-acet", text: "해열제: 아세트아미노펜 계열" },
+          { id: "prep-med-fever-ibu", text: "해열제: 이부프로펜 계열" },
+          { id: "prep-med-digest-stop", text: "어린이 지사제" },
+          { id: "prep-med-digest-baekcho", text: "백초 시럽" },
+          { id: "prep-med-digest-probio", text: "유산균" },
+          { id: "prep-med-cold-syrup", text: "코감기 시럽" },
+          { id: "prep-med-cough-patch", text: "기침 패치" },
+          { id: "prep-med-thermo", text: "체온계" },
+          { id: "prep-med-bepanthen", text: "비판텐 연고" },
+          { id: "prep-med-lidomex", text: "리도멕스" },
+          { id: "prep-med-bandage", text: "밴드 및 소독 솜" }
+        ],
+        "prep-a-food": [
+          { id: "prep-food-rice", text: "햇반(넉넉히)" },
+          { id: "prep-food-block-soup", text: "실온 보관 블럭국(미역국, 사골국 등)" },
+          { id: "prep-food-kim", text: "소포장 김" },
+          { id: "prep-food-anchovy", text: "멸치볶음" },
+          { id: "prep-food-jangjorim", text: "장조림 캔/팩" },
+          { id: "prep-food-puree", text: "아기 퓨레" },
+          { id: "prep-food-vit-candy", text: "비타민 사탕" },
+          { id: "prep-food-barley-tea", text: "보리차 티백" }
+        ],
+        "prep-a-kid-swim": [
+          { id: "prep-kid-swim-suit-2", text: "수영복 & 래쉬가드 (인당 2세트)" },
+          { id: "prep-kid-swim-cap-goggles", text: "아이용 수영모 & 물안경" },
+          { id: "prep-kid-swim-diaper", text: "방수 기저귀 (2023년생 아이용 넉넉히)" },
+          { id: "prep-kid-spare-8", text: "여벌 옷 (인당 8세트 - 하루 1벌 + 비상용 3벌)" },
+          { id: "prep-kid-underwear-socks", text: "속옷 & 양말 (인당 7~8개)" },
+          { id: "prep-kid-magic-wrap", text: "매직랩 (턱받이 대용 및 식사 시 활용)" }
+        ],
+        "prep-a-adult-swim": [
+          { id: "prep-adult-swim-suit", text: "성인 수영복 / 래쉬가드" },
+          { id: "prep-adult-swim-cap", text: "성인 수영모 (중국 수영장 필수 지참)" },
+          { id: "prep-adult-goggles", text: "물안경 (수영 안경)" },
+          { id: "prep-adult-beach-towel", text: "비치 가운 또는 큰 타올" },
+          { id: "prep-adult-aqua-shoes", text: "아쿠아 슈즈 또는 개인 슬리퍼" }
+        ],
+        "prep-a-cloth": [
+          { id: "prep-cloth-wind-padding", text: "바람막이 및 경량 패딩(온 가족)" },
+          { id: "prep-cloth-stroller-cover", text: "유모차 방풍 커버" },
+          { id: "prep-cloth-sanitizer", text: "휴대용 손세정제" },
+          { id: "prep-cloth-wipes", text: "대용량 물티슈 및 휴대용 물티슈" }
+        ],
+        "prep-a-hotel": [
+          { id: "prep-hotel-stroller", text: "유모차 대여 예약 확인" },
+          { id: "prep-hotel-crib", text: "아기 침대" },
+          { id: "prep-hotel-bedguard", text: "침대 가드" },
+          { id: "prep-hotel-bathtub", text: "아기 욕조" },
+          { id: "prep-hotel-diaper-bin", text: "기저귀 처리통" },
+          { id: "prep-hotel-bottle-steril", text: "젖병 소독기(또는 구연산)" }
+        ],
+        "prep-b-daily": [
+          { id: "prep-b-daily-passport", text: "가족 전원 실물 여권(필수!)" },
+          { id: "prep-b-daily-battery", text: "보조 배터리" },
+          { id: "prep-b-daily-clothes", text: "아이들 여벌 옷" },
+          { id: "prep-b-daily-baby-kit", text: "기저귀/분유/개인 컵" }
+        ]
+      };
+
       var prepSortableInstances = [];
 
       function loadPrepOrderMap() {
@@ -3182,14 +3476,197 @@
         savePrepOrderMap(data);
       }
 
-      function movePrepListItem(ul, li, delta) {
-        var idx = [].indexOf.call(ul.children, li);
-        var nidx = idx + delta;
-        if (nidx < 0 || nidx >= ul.children.length) return;
-        var ref = ul.children[nidx];
-        if (delta < 0) ul.insertBefore(li, ref);
-        else ul.insertBefore(li, ref.nextSibling);
-        savePrepOrderFromUl(ul);
+      function getDefaultPrepItemsPayload() {
+        return { version: 1, sections: JSON.parse(JSON.stringify(PREP_DEFAULT_ITEMS_SECTIONS)) };
+      }
+
+      function applyLegacyPrepOrderToState(st) {
+        var orderMap = loadPrepOrderMap();
+        Object.keys(st.sections).forEach(function (key) {
+          var order = orderMap[key];
+          if (!Array.isArray(order) || !order.length) return;
+          var arr = st.sections[key];
+          if (!Array.isArray(arr)) return;
+          var byId = {};
+          arr.forEach(function (item) {
+            if (item && item.id) byId[item.id] = item;
+          });
+          var next = [];
+          order.forEach(function (id) {
+            if (byId[id]) {
+              next.push(byId[id]);
+              delete byId[id];
+            }
+          });
+          arr.forEach(function (item) {
+            if (item && item.id && byId[item.id]) next.push(item);
+          });
+          st.sections[key] = next;
+        });
+      }
+
+      function savePrepItemsState(st) {
+        try {
+          localStorage.setItem(PREP_ITEMS_STORAGE, JSON.stringify(st));
+        } catch (e) {}
+      }
+
+      function loadPrepItemsState() {
+        var defaults = getDefaultPrepItemsPayload();
+        try {
+          var raw = localStorage.getItem(PREP_ITEMS_STORAGE);
+          if (!raw) {
+            applyLegacyPrepOrderToState(defaults);
+            savePrepItemsState(defaults);
+            return defaults;
+          }
+          var parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed !== "object" || typeof parsed.sections !== "object") {
+            applyLegacyPrepOrderToState(defaults);
+            savePrepItemsState(defaults);
+            return defaults;
+          }
+          var merged = { version: 1, sections: {} };
+          Object.keys(defaults.sections).forEach(function (k) {
+            if (Array.isArray(parsed.sections[k])) {
+              merged.sections[k] = parsed.sections[k]
+                .filter(function (it) {
+                  return it && typeof it.id === "string" && typeof it.text === "string";
+                })
+                .map(function (it) {
+                  return { id: it.id, text: it.text };
+                });
+            } else {
+              merged.sections[k] = defaults.sections[k].map(function (item) {
+                return { id: item.id, text: item.text };
+              });
+            }
+          });
+          return merged;
+        } catch (e) {
+          applyLegacyPrepOrderToState(defaults);
+          savePrepItemsState(defaults);
+          return defaults;
+        }
+      }
+
+      function syncPrepItemsOrderFromUl(ul) {
+        var key = ul.getAttribute("data-prep-sort-group");
+        if (!key || !PREP_MANAGED_SORT_GROUPS[key]) return;
+        var ids = [].slice
+          .call(ul.querySelectorAll(":scope > li input[type=\"checkbox\"][id]"))
+          .map(function (inp) {
+            return inp.id;
+          });
+        var st = loadPrepItemsState();
+        if (!Array.isArray(st.sections[key])) return;
+        var byId = {};
+        st.sections[key].forEach(function (item) {
+          if (item && item.id) byId[item.id] = item;
+        });
+        var next = [];
+        ids.forEach(function (id) {
+          if (byId[id]) next.push(byId[id]);
+        });
+        st.sections[key] = next;
+        savePrepItemsState(st);
+      }
+
+      function newPrepItemId() {
+        return "prep-u-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+      }
+
+      function renderPrepManagedUlAndToolbar(groupKey, items) {
+        var lis = (items || []).map(function (item) {
+          if (!item || !item.id) return "";
+          return (
+            "<li>" +
+            PREP_ROW_HANDLE_HTML +
+            '<input type="checkbox" id="' +
+            escapeHtml(item.id) +
+            '" /><label for="' +
+            escapeHtml(item.id) +
+            '">' +
+            escapeHtml(item.text) +
+            '</label><button type="button" class="btn btn-ghost pack-item-del" data-prep-item-id="' +
+            escapeHtml(item.id) +
+            '" data-prep-section="' +
+            escapeHtml(groupKey) +
+            '" aria-label="이 항목 삭제">삭제</button></li>'
+          );
+        }).join("");
+        return (
+          '<ul class="pack-checklist" data-prep-sort-group="' +
+          escapeHtml(groupKey) +
+          '">' +
+          lis +
+          '</ul><div class="pack-prep-toolbar"><button type="button" class="btn pack-add-item-btn" data-prep-section="' +
+          escapeHtml(groupKey) +
+          '">항목 추가</button></div>'
+        );
+      }
+
+      function renderPrepManagedSubsectionHtml(title, groupKey, items) {
+        return (
+          '<div class="pack-subsection"><h4>' +
+          escapeHtml(title) +
+          "</h4>" +
+          renderPrepManagedUlAndToolbar(groupKey, items) +
+          "</div>"
+        );
+      }
+
+      function renderPrepPackLists() {
+        var st = loadPrepItemsState();
+        var aMount = document.getElementById("prepGroupAMount");
+        var bMount = document.getElementById("prepGroupBDailyMount");
+        if (aMount) {
+          var partsA = [];
+          PREP_GROUP_A_SECTION_META.forEach(function (meta) {
+            partsA.push(renderPrepManagedSubsectionHtml(meta.title, meta.key, st.sections[meta.key]));
+          });
+          aMount.innerHTML = partsA.join("");
+        }
+        if (bMount) {
+          bMount.innerHTML = renderPrepManagedUlAndToolbar("prep-b-daily", st.sections["prep-b-daily"]);
+        }
+      }
+
+      function ensurePrepPackListsRendered() {
+        var aMount = document.getElementById("prepGroupAMount");
+        if (aMount && !String(aMount.innerHTML || "").trim()) {
+          renderPrepPackLists();
+        }
+      }
+
+      function prepAddItemToSection(sectionKey) {
+        var label = window.prompt("추가할 준비물 항목을 입력하세요.", "");
+        if (label == null) return;
+        label = String(label).trim();
+        if (!label) return;
+        var st = loadPrepItemsState();
+        if (!st.sections[sectionKey]) st.sections[sectionKey] = [];
+        st.sections[sectionKey].push({ id: newPrepItemId(), text: label });
+        savePrepItemsState(st);
+        renderPrepPackLists();
+        loadChecks();
+        updatePrepProgress();
+        initPrepSortables();
+      }
+
+      function prepDeleteItem(sectionKey, itemId) {
+        if (!itemId) return;
+        if (!window.confirm("이 항목을 목록에서 삭제할까요?")) return;
+        var st = loadPrepItemsState();
+        if (!Array.isArray(st.sections[sectionKey])) return;
+        st.sections[sectionKey] = st.sections[sectionKey].filter(function (it) {
+          return it.id !== itemId;
+        });
+        savePrepItemsState(st);
+        renderPrepPackLists();
+        loadChecks();
+        updatePrepProgress();
+        initPrepSortables();
       }
 
       function destroyPrepSortables() {
@@ -3206,17 +3683,21 @@
         var panel = document.getElementById("panel-prep");
         if (!panel || typeof Sortable === "undefined") return;
         panel.querySelectorAll("ul.pack-checklist[data-prep-sort-group]").forEach(function (ul) {
-          applyPrepOrderToUl(ul);
+          var gkey = ul.getAttribute("data-prep-sort-group");
+          if (!PREP_MANAGED_SORT_GROUPS[gkey]) {
+            applyPrepOrderToUl(ul);
+          }
           var inst = Sortable.create(ul, {
             handle: ".pack-drag-handle",
             animation: 180,
             delay: 90,
             delayOnTouchOnly: true,
             touchStartThreshold: 5,
-            filter: "input,label,button,.pack-move-btn",
+            filter: "input,label,button,.pack-li-schedule-block",
             preventOnFilter: false,
             onEnd: function () {
-              savePrepOrderFromUl(ul);
+              if (PREP_MANAGED_SORT_GROUPS[gkey]) syncPrepItemsOrderFromUl(ul);
+              else savePrepOrderFromUl(ul);
             }
           });
           prepSortableInstances.push(inst);
@@ -3240,6 +3721,241 @@
         "xian-road"
       ];
 
+      var PREP_SEA_OTHER_SHOW_HINT =
+        "노후탄·성해광장 등 방문지별 공연·개장·레이저쇼 시간 현장·공식 앱에서 재확인";
+
+      function getJsWeekdayFromDayKey(dayKey) {
+        var p = (dayKey || "").split("-");
+        if (p.length < 3) return -1;
+        var dt = new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+        if (isNaN(dt.getTime())) return -1;
+        return dt.getDay();
+      }
+
+      function prepZooScheduleBoxHtml(dayKey) {
+        var wd = getJsWeekdayFromDayKey(dayKey);
+        if (wd === 1) {
+          return (
+            '<div class="pack-schedule-box" role="region" aria-label="동물원 평일 공연 시간">' +
+            '<div class="pack-schedule-title">월요일 방문 · 평일 공연 시간 (참고, 현장 변경 가능)</div>' +
+            "<ul>" +
+            '<li><span class="pack-sch-lbl">코끼리 쇼</span><span class="pack-sch-val">12:00 / 13:30 / 15:00</span></li>' +
+            '<li><span class="pack-sch-lbl">환락극장(물개·원숭이 등)</span><span class="pack-sch-val">11:00 / 13:00 / 15:00</span></li>' +
+            '<li><span class="pack-sch-lbl">판다관 관람 마감</span><span class="pack-sch-val">16:00</span></li>' +
+            "</ul></div>"
+          );
+        }
+        return (
+          '<div class="pack-schedule-box pack-schedule-box--muted" role="region">' +
+          '<div class="pack-schedule-title">공연 시간 안내</div>' +
+          '<p class="pack-schedule-note">이 날은 월요일이 아닙니다. 코끼리 쇼·환락극장 시간은 요일·시즌에 따라 달라질 수 있으니 공식 앱·현장 안내로 꼭 확인하세요.</p></div>'
+        );
+      }
+
+      function prepSeaSunasiaScheduleBoxHtml(dayKey) {
+        var wd = getJsWeekdayFromDayKey(dayKey);
+        if (wd === 2) {
+          return (
+            '<div class="pack-schedule-box" role="region" aria-label="성아 해양세계 평일 쇼 시간">' +
+            '<div class="pack-schedule-title">화요일 방문 · 평일 쇼 시간 (참고, 현장 변경 가능)</div>' +
+            "<ul>" +
+            '<li><span class="pack-sch-lbl">돌고래 쇼</span><span class="pack-sch-val">10:00 / 11:30 / 14:00 / 16:00</span></li>' +
+            '<li><span class="pack-sch-lbl">벨루가 쇼</span><span class="pack-sch-val">10:30 / 13:00 / 15:30</span></li>' +
+            '<li><span class="pack-sch-lbl">쿵푸 바다사자 쇼</span><span class="pack-sch-val">10:00 / 11:30 / 13:20 / 15:00 / 16:50</span></li>' +
+            "</ul></div>"
+          );
+        }
+        return (
+          '<div class="pack-schedule-box pack-schedule-box--muted" role="region">' +
+          '<div class="pack-schedule-title">쇼 시간 안내</div>' +
+          '<p class="pack-schedule-note">아래 표는 화요일 평일 기준입니다. 다른 요일·연휴에는 회차가 달라질 수 있으니 매표소·공식 안내로 확인하세요.</p></div>'
+        );
+      }
+
+      var PREP_ITIN_EXTRA_STORAGE = "dalian_prep_itinerary_extra_v1";
+
+      function loadPrepItinExtraState() {
+        try {
+          var raw = localStorage.getItem(PREP_ITIN_EXTRA_STORAGE);
+          if (!raw) return { version: 1, byDay: {} };
+          var o = JSON.parse(raw);
+          if (!o || typeof o !== "object" || typeof o.byDay !== "object") return { version: 1, byDay: {} };
+          o.version = 1;
+          return o;
+        } catch (e) {
+          return { version: 1, byDay: {} };
+        }
+      }
+
+      function savePrepItinExtraState(data) {
+        try {
+          localStorage.setItem(PREP_ITIN_EXTRA_STORAGE, JSON.stringify(data));
+        } catch (e) {}
+      }
+
+      function newPrepItinExtraItemId() {
+        return "prep-itx-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+      }
+
+      function getPrepItinExtraListForDay(dayKey) {
+        var st = loadPrepItinExtraState();
+        var arr = st.byDay[dayKey];
+        return Array.isArray(arr) ? arr : [];
+      }
+
+      function prepItinExtraAdd(dayKey) {
+        if (!dayKey) return;
+        var label = window.prompt("이 날짜에 추가할 준비물 항목을 입력하세요.", "");
+        if (label == null) return;
+        label = String(label).trim();
+        if (!label) return;
+        var st = loadPrepItinExtraState();
+        if (!st.byDay[dayKey]) st.byDay[dayKey] = [];
+        st.byDay[dayKey].push({ id: newPrepItinExtraItemId(), text: label });
+        savePrepItinExtraState(st);
+        renderPrepItinerarySection();
+        loadChecks();
+        updatePrepProgress();
+      }
+
+      function prepItinExtraDelete(dayKey, itemId) {
+        if (!dayKey || !itemId) return;
+        if (!window.confirm("이 항목을 삭제할까요?")) return;
+        var st = loadPrepItinExtraState();
+        if (!Array.isArray(st.byDay[dayKey])) return;
+        st.byDay[dayKey] = st.byDay[dayKey].filter(function (it) {
+          return it.id !== itemId;
+        });
+        savePrepItinExtraState(st);
+        renderPrepItinerarySection();
+        loadChecks();
+        updatePrepProgress();
+      }
+
+      function renderPrepItineraryExtraBlockHtml(dayKey) {
+        var items = getPrepItinExtraListForDay(dayKey);
+        var sortGroup = "prep-extra-" + dayKey;
+        var lis = items
+          .map(function (it) {
+            if (!it || !it.id) return "";
+            return (
+              "<li>" +
+              PREP_ROW_HANDLE_HTML +
+              '<input type="checkbox" id="' +
+              escapeHtml(it.id) +
+              '" /><label for="' +
+              escapeHtml(it.id) +
+              '">' +
+              escapeHtml(it.text) +
+              '</label><button type="button" class="btn btn-ghost pack-itin-extra-del" data-prep-item-id="' +
+              escapeHtml(it.id) +
+              '" data-day-key="' +
+              escapeHtml(dayKey) +
+              '" aria-label="삭제">삭제</button></li>'
+            );
+          })
+          .join("");
+        return (
+          '<div class="pack-subsection pack-itin-extra-wrap"><h4>이 날 직접 추가한 준비물</h4><ul class="pack-checklist" data-prep-sort-group="' +
+          escapeHtml(sortGroup) +
+          '">' +
+          lis +
+          '</ul><div class="pack-prep-toolbar"><button type="button" class="btn pack-add-itin-extra" data-day-key="' +
+          escapeHtml(dayKey) +
+          '">항목 추가</button></div></div>'
+        );
+      }
+
+      var PLAN_B_STORAGE = "dalian_plan_b_per_day_v1";
+
+      function loadPlanBState() {
+        try {
+          var raw = localStorage.getItem(PLAN_B_STORAGE);
+          if (!raw) return { version: 1, byDay: {} };
+          var o = JSON.parse(raw);
+          if (!o || typeof o !== "object" || typeof o.byDay !== "object") return { version: 1, byDay: {} };
+          o.version = 1;
+          return o;
+        } catch (e) {
+          return { version: 1, byDay: {} };
+        }
+      }
+
+      function savePlanBState(data) {
+        try {
+          localStorage.setItem(PLAN_B_STORAGE, JSON.stringify(data));
+        } catch (e) {}
+      }
+
+      function newPlanBItemId() {
+        return "planb-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+      }
+
+      function planBAddItem(dayKey) {
+        if (!dayKey) return;
+        var label = window.prompt("플랜 B에 추가할 항목을 입력하세요.", "");
+        if (label == null) return;
+        label = String(label).trim();
+        if (!label) return;
+        var st = loadPlanBState();
+        if (!st.byDay[dayKey]) st.byDay[dayKey] = [];
+        st.byDay[dayKey].push({ id: newPlanBItemId(), text: label });
+        savePlanBState(st);
+        renderPlanB();
+      }
+
+      function planBDeleteItem(dayKey, itemId) {
+        if (!dayKey || !itemId) return;
+        if (!window.confirm("이 항목을 삭제할까요?")) return;
+        var st = loadPlanBState();
+        if (!Array.isArray(st.byDay[dayKey])) return;
+        st.byDay[dayKey] = st.byDay[dayKey].filter(function (it) {
+          return it.id !== itemId;
+        });
+        savePlanBState(st);
+        renderPlanB();
+      }
+
+      function renderPlanB() {
+        var root = document.getElementById("planBRoot");
+        if (!root) return;
+        var st = loadPlanBState();
+        var parts = [];
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var nar = DAY_NARRATIVE[dk] || "";
+          var items = Array.isArray(st.byDay[dk]) ? st.byDay[dk] : [];
+          var lis = items
+            .map(function (it) {
+              if (!it || !it.id) return "";
+              return (
+                "<li><span>" +
+                escapeHtml(it.text) +
+                '</span><button type="button" class="btn btn-ghost plan-b-item-del" data-planb-day="' +
+                escapeHtml(dk) +
+                '" data-planb-id="' +
+                escapeHtml(it.id) +
+                '" aria-label="삭제">삭제</button></li>'
+              );
+            })
+            .join("");
+          parts.push(
+            '<div class="plan-b-day-card"><h4>' +
+              escapeHtml(day.label) +
+              "</h4>" +
+              (nar
+                ? '<p class="plan-b-day-nar">' + escapeHtml("메인 일정 한 줄: " + nar) + "</p>"
+                : "") +
+              '<ul class="plan-b-item-list">' +
+              lis +
+              '</ul><div class="plan-b-toolbar"><button type="button" class="btn plan-b-add" data-planb-day="' +
+              escapeHtml(dk) +
+              '">항목 추가</button></div></div>'
+          );
+        });
+        root.innerHTML = parts.join("");
+      }
+
       function renderPrepItinerarySection() {
         var mount = document.getElementById("prepItineraryMount");
         if (!mount) return;
@@ -3262,6 +3978,7 @@
           var hasSea = PREP_SEA_IDS.some(function (id) {
             return idsOnDay[id];
           });
+          var hasSunasia = !!idsOnDay.sunasia;
           var dk = day.key;
           var subs = [];
           if (hasZoo) {
@@ -3283,13 +4000,16 @@
                 '-zoo-drink" /><label for="prep-b-' +
                 dk +
                 '-zoo-drink">아이들 수분 보충 음료</label></li>' +
+                '<li class="pack-li-schedule-block"><div class="pack-schedule-wrap">' +
+                prepZooScheduleBoxHtml(dk) +
+                "</div></li>" +
                 "<li>" +
                 PREP_ROW_HANDLE_HTML +
                 '<input type="checkbox" id="prep-b-' +
                 dk +
                 '-zoo-panda" /><label for="prep-b-' +
                 dk +
-                '-zoo-panda">판다관 마감시간 확인</label></li>' +
+                '-zoo-panda">판다관 마감시간: 16:00 (이후 관람 불가)</label></li>' +
                 "</ul></div>"
             );
           }
@@ -3323,24 +4043,53 @@
             );
           }
           if (hasSea) {
+            var seaHeading = hasSunasia ? "성아 해양세계 가는 날" : "수족관·성해광장 가는 날";
+            var seaBody =
+              "<li>" +
+              PREP_ROW_HANDLE_HTML +
+              '<input type="checkbox" id="prep-b-' +
+              dk +
+              '-sea-qr" /><label for="prep-b-' +
+              dk +
+              '-sea-qr">사전 구매 QR 티켓</label></li>' +
+              "<li>" +
+              PREP_ROW_HANDLE_HTML +
+              '<input type="checkbox" id="prep-b-' +
+              dk +
+              '-sea-blanket" /><label for="prep-b-' +
+              dk +
+              '-sea-blanket">바닷바람 대비 무릎 담요</label></li>';
+            if (hasSunasia) {
+              seaBody +=
+                '<li class="pack-li-schedule-block"><div class="pack-schedule-wrap">' +
+                prepSeaSunasiaScheduleBoxHtml(dk) +
+                "</div></li>" +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-sea-plan" /><label for="prep-b-' +
+                dk +
+                '-sea-plan">위 평일 쇼 시간을 기준으로 입장·이동 순서 정리함 (계절·현장 안내 변동 시 재확인)</label></li>';
+            } else {
+              seaBody +=
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-sea-shows-other" /><label for="prep-b-' +
+                dk +
+                '-sea-shows-other">' +
+                escapeHtml(PREP_SEA_OTHER_SHOW_HINT) +
+                "</label></li>";
+            }
             subs.push(
-              '<div class="pack-subsection"><h4>수족관/성해광장 가는 날</h4><ul class="pack-checklist" data-prep-sort-group="prep-b-' +
+              '<div class="pack-subsection"><h4>' +
+                escapeHtml(seaHeading) +
+                '</h4><ul class="pack-checklist" data-prep-sort-group="prep-b-' +
                 dk +
                 '-sea">' +
-                "<li>" +
-                PREP_ROW_HANDLE_HTML +
-                '<input type="checkbox" id="prep-b-' +
-                dk +
-                '-sea-qr" /><label for="prep-b-' +
-                dk +
-                '-sea-qr">사전 구매 QR 티켓</label></li>' +
-                "<li>" +
-                PREP_ROW_HANDLE_HTML +
-                '<input type="checkbox" id="prep-b-' +
-                dk +
-                '-sea-blanket" /><label for="prep-b-' +
-                dk +
-                '-sea-blanket">바닷바람 대비 무릎 담요</label></li>' +
+                seaBody +
                 "</ul></div>"
             );
           }
@@ -3350,13 +4099,16 @@
               escapeHtml(nar) +
               "</span>"
             : "";
+          var extraHtml = renderPrepItineraryExtraBlockHtml(dk);
           if (!subs.length) {
             parts.push(
               '<div class="pack-day-block">' +
                 '<div class="pack-day-heading">' +
                 escapeHtml(day.label) +
                 headingExtra +
-                '</div><p class="pack-muted" style="margin:0">이 날 일정에는 동물원·쇼핑/시내·수족관/성해광장 연동 항목이 없습니다.</p></div>'
+                '</div><p class="pack-muted" style="margin:0">이 날 일정에는 동물원·쇼핑/시내·수족관/성해광장 연동 항목이 없습니다.</p>' +
+                extraHtml +
+                "</div>"
             );
           } else {
             parts.push(
@@ -3366,6 +4118,7 @@
                 headingExtra +
                 "</div>" +
                 subs.join("") +
+                extraHtml +
                 "</div>"
             );
           }
@@ -3625,9 +4378,11 @@
         renderDaySettingsBar();
         initMapsAllAndDay();
         renderThemeBoard();
+        ensurePrepPackListsRendered();
         renderPrepItinerarySection();
         loadChecks();
         updatePrepProgress();
+        renderPlanB();
       }
 
       function invalidateMapIfNeeded() {
@@ -3658,9 +4413,12 @@
         renderDayPills();
         renderDaySettingsBar();
         renderThemeBoard();
+        ensurePrepPackListsRendered();
         renderPrepItinerarySection();
         loadChecks();
         updatePrepProgress();
+        renderPlanB();
+        renderShoppingList();
       }
 
       var tripStart = new Date(2026, 3, 25, 11, 24, 0, 0);
@@ -3682,11 +4440,329 @@
       updateCountdown();
       setInterval(updateCountdown, 6e4);
 
+      var SHOP_STORAGE = "dalian_shopping_list_v1";
+      var SHOP_FIXED_CAT_IDS = ["shop-cat-russia", "shop-cat-snacks", "shop-cat-dalian", "shop-cat-misc"];
+      var shopSortableInstances = [];
+
+      function loadShopStateRaw() {
+        try {
+          var raw = localStorage.getItem(SHOP_STORAGE);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function defaultShopCategoriesV3() {
+        return [
+          {
+            id: "shop-cat-russia",
+            title: "러시아 테마 (러시아 거리)",
+            items: [
+              { id: "shop-r-1", text: "마트료시카 인형", checked: false },
+              { id: "shop-r-2", text: "러시아 초콜릿", checked: false },
+              { id: "shop-r-3", text: "러시아 수입 맥주", checked: false }
+            ]
+          },
+          {
+            id: "shop-cat-snacks",
+            title: "현지 간식 & 식품 (마트)",
+            items: [
+              { id: "shop-s-1", text: "중국 한정판 레이즈(Lay's) 감자칩", checked: false },
+              { id: "shop-s-2", text: "왕왕 쌀과자", checked: false },
+              { id: "shop-s-3", text: "화이트래빗(대백로) 우유사탕", checked: false },
+              { id: "shop-s-4", text: "미니 소시지", checked: false }
+            ]
+          },
+          {
+            id: "shop-cat-dalian",
+            title: "대련 특산물 & 차(Tea)",
+            items: [
+              { id: "shop-d-1", text: "진공 포장 해산물 간식", checked: false },
+              { id: "shop-d-2", text: "현지 체리", checked: false },
+              { id: "shop-d-3", text: "보이차/우롱차", checked: false }
+            ]
+          },
+          {
+            id: "shop-cat-misc",
+            title: "기념품 & 라이프스타일",
+            items: [
+              { id: "shop-m-1", text: "도시 마그넷", checked: false },
+              { id: "shop-m-2", text: "중국 한정 스타벅스 굿즈", checked: false },
+              { id: "shop-m-3", text: "현지 수공예품", checked: false }
+            ]
+          }
+        ];
+      }
+
+      function normalizeShopItem(it) {
+        return {
+          id: String(it && it.id ? it.id : uid()),
+          text: String(it && it.text != null ? it.text : ""),
+          checked: !!(it && it.checked)
+        };
+      }
+
+      function migrateRawToShopV3(raw) {
+        var fixedSet = {};
+        SHOP_FIXED_CAT_IDS.forEach(function (id) {
+          fixedSet[id] = true;
+        });
+        var defs = JSON.parse(JSON.stringify(defaultShopCategoriesV3()));
+        var out = { version: 3, categories: defs };
+        var map = {};
+        if (raw && Array.isArray(raw.categories)) {
+          raw.categories.forEach(function (c) {
+            if (c && c.id) map[c.id] = c;
+          });
+        }
+        out.categories = defs.map(function (def) {
+          var ex = map[def.id];
+          var items;
+          if (ex && Array.isArray(ex.items)) {
+            items = ex.items.map(normalizeShopItem);
+          } else {
+            items = def.items.map(normalizeShopItem);
+          }
+          return { id: def.id, title: def.title, items: items };
+        });
+        if (raw && Array.isArray(raw.categories)) {
+          raw.categories.forEach(function (c) {
+            if (!c || !c.items || !c.items.length) return;
+            if (fixedSet[c.id]) return;
+            var misc = out.categories.find(function (x) {
+              return x.id === "shop-cat-misc";
+            });
+            if (misc) {
+              c.items.forEach(function (it) {
+                misc.items.push(normalizeShopItem(it));
+              });
+            }
+          });
+        }
+        if (raw && Array.isArray(raw.items) && raw.items.length && !raw.categories) {
+          var misc2 = out.categories.find(function (x) {
+            return x.id === "shop-cat-misc";
+          });
+          raw.items.forEach(function (it) {
+            misc2.items.push(normalizeShopItem(it));
+          });
+        }
+        return out;
+      }
+
+      function saveShopState(state) {
+        try {
+          localStorage.setItem(SHOP_STORAGE, JSON.stringify(state));
+        } catch (e) {}
+      }
+
+      function ensureShopSeeded() {
+        var raw = loadShopStateRaw();
+        if (!raw || raw.version !== 3 || !Array.isArray(raw.categories) || raw.categories.length !== 4) {
+          var st = migrateRawToShopV3(raw || {});
+          saveShopState(st);
+          return st;
+        }
+        return migrateRawToShopV3(raw);
+      }
+
+      function findShopCategory(st, catId) {
+        return st.categories.find(function (c) {
+          return c.id === catId;
+        });
+      }
+
+      function destroyAllShopSortables() {
+        shopSortableInstances.forEach(function (s) {
+          try {
+            s.destroy();
+          } catch (e) {}
+        });
+        shopSortableInstances = [];
+      }
+
+      function shopOrderIdsFromUl(ul) {
+        var ids = [];
+        ul.querySelectorAll(":scope > li[data-shop-id]").forEach(function (li) {
+          ids.push(li.getAttribute("data-shop-id"));
+        });
+        return ids;
+      }
+
+      function reorderShopItemsByIds(items, orderedIds) {
+        var map = {};
+        items.forEach(function (it) {
+          map[it.id] = it;
+        });
+        var out = [];
+        orderedIds.forEach(function (id) {
+          if (map[id]) out.push(map[id]);
+        });
+        items.forEach(function (it) {
+          if (out.indexOf(it) < 0) out.push(it);
+        });
+        return out;
+      }
+
+      function renderShoppingList() {
+        var root = document.getElementById("shopRoot");
+        if (!root) return;
+        destroyAllShopSortables();
+        var st = ensureShopSeeded();
+        root.innerHTML = "";
+        var catList = SHOP_FIXED_CAT_IDS.map(function (fid) {
+          return findShopCategory(st, fid);
+        }).filter(Boolean);
+        catList.forEach(function (cat) {
+          var catId = cat.id;
+          var card = document.createElement("div");
+          card.className = "shop-cat-card";
+          card.setAttribute("data-shop-cat-id", catId);
+          card.innerHTML =
+            '<div class="shop-cat-head">' +
+            "<h4 class=\"shop-cat-title\">" +
+            escapeHtml(cat.title) +
+            '</h4><div class="shop-cat-actions">' +
+            '<button type="button" class="btn shop-add-item-in-cat" data-shop-cat-id="' +
+            escapeHtml(catId) +
+            '">항목 추가</button>' +
+            "</div></div>" +
+            '<ul class="pack-checklist shop-checklist shop-cat-items" data-shop-cat-id="' +
+            escapeHtml(catId) +
+            '"></ul>';
+          var ul = card.querySelector("ul");
+          (cat.items || []).forEach(function (it) {
+            var chkId = "shop-chk-" + String(it.id).replace(/[^a-zA-Z0-9_-]/g, "_");
+            var li = document.createElement("li");
+            li.setAttribute("data-shop-id", it.id);
+            li.innerHTML =
+              '<div class="pack-row-controls shop-drag-wrap" aria-hidden="true">' +
+              '<span class="pack-drag-handle shop-drag-handle" title="끌어서 순서 변경">≡</span>' +
+              "</div>" +
+              '<input type="checkbox" id="' +
+              escapeHtml(chkId) +
+              '" data-shop-cat-id="' +
+              escapeHtml(catId) +
+              '" data-shop-id="' +
+              escapeHtml(it.id) +
+              '"' +
+              (it.checked ? " checked" : "") +
+              ' />' +
+              '<input type="text" class="shop-text-inp" data-shop-cat-id="' +
+              escapeHtml(catId) +
+              '" data-shop-id="' +
+              escapeHtml(it.id) +
+              '" value="' +
+              escapeHtml(it.text) +
+              '" />' +
+              '<button type="button" class="btn shop-del-btn" data-shop-cat-id="' +
+              escapeHtml(catId) +
+              '" data-shop-id="' +
+              escapeHtml(it.id) +
+              '">삭제</button>';
+            ul.appendChild(li);
+          });
+          root.appendChild(card);
+          if (typeof Sortable !== "undefined") {
+            var itemSort = Sortable.create(ul, {
+              handle: ".shop-drag-handle",
+              animation: 180,
+              delay: 90,
+              delayOnTouchOnly: true,
+              touchStartThreshold: 5,
+              filter: "input,textarea,button,.shop-text-inp",
+              preventOnFilter: false,
+              onEnd: function () {
+                var st2 = ensureShopSeeded();
+                var c = findShopCategory(st2, catId);
+                if (!c) return;
+                c.items = reorderShopItemsByIds(c.items || [], shopOrderIdsFromUl(ul));
+                saveShopState(st2);
+              }
+            });
+            shopSortableInstances.push(itemSort);
+          }
+        });
+      }
+
+      var shopPanelEl = document.getElementById("panel-shopping");
+      if (shopPanelEl) {
+        shopPanelEl.addEventListener("change", function (ev) {
+          var t = ev.target;
+          if (t && t.type === "checkbox" && t.getAttribute("data-shop-id")) {
+            var catId = t.getAttribute("data-shop-cat-id");
+            var itemId = t.getAttribute("data-shop-id");
+            var st = ensureShopSeeded();
+            var cat = findShopCategory(st, catId);
+            if (!cat) return;
+            var row = (cat.items || []).find(function (x) {
+              return x.id === itemId;
+            });
+            if (row) {
+              row.checked = !!t.checked;
+              saveShopState(st);
+            }
+          }
+        });
+        shopPanelEl.addEventListener("input", function (ev) {
+          var t = ev.target;
+          if (t && t.classList.contains("shop-text-inp")) {
+            var catId = t.getAttribute("data-shop-cat-id");
+            var itemId = t.getAttribute("data-shop-id");
+            var st = ensureShopSeeded();
+            var cat = findShopCategory(st, catId);
+            if (!cat) return;
+            var row = (cat.items || []).find(function (x) {
+              return x.id === itemId;
+            });
+            if (row) {
+              row.text = t.value;
+              saveShopState(st);
+            }
+            return;
+          }
+        });
+        shopPanelEl.addEventListener("click", function (ev) {
+          var del = ev.target && ev.target.closest ? ev.target.closest(".shop-del-btn") : null;
+          if (del) {
+            var catId = del.getAttribute("data-shop-cat-id");
+            var itemId = del.getAttribute("data-shop-id");
+            if (!itemId || !confirm("이 항목을 삭제할까요?")) return;
+            var st = ensureShopSeeded();
+            var cat = findShopCategory(st, catId);
+            if (!cat) return;
+            cat.items = (cat.items || []).filter(function (x) {
+              return x.id !== itemId;
+            });
+            saveShopState(st);
+            renderShoppingList();
+            return;
+          }
+          var addItem = ev.target && ev.target.closest ? ev.target.closest(".shop-add-item-in-cat") : null;
+          if (addItem) {
+            var ac = addItem.getAttribute("data-shop-cat-id");
+            var label = window.prompt("추가할 쇼핑 항목 이름을 입력하세요.", "");
+            if (label == null) return;
+            label = String(label).trim();
+            if (!label) label = "새 항목";
+            var st3 = ensureShopSeeded();
+            var cx = findShopCategory(st3, ac);
+            if (!cx) return;
+            cx.items = cx.items || [];
+            cx.items.push({ id: uid(), text: label, checked: false });
+            saveShopState(st3);
+            renderShoppingList();
+          }
+        });
+      }
+
       var tabs = document.querySelectorAll("nav.tabs button");
       var panels = {
         schedule: document.getElementById("panel-schedule"),
         ledger: document.getElementById("panel-ledger"),
-        prep: document.getElementById("panel-prep")
+        prep: document.getElementById("panel-prep"),
+        shopping: document.getElementById("panel-shopping")
       };
 
       tabs.forEach(function (btn) {
@@ -3702,7 +4778,10 @@
             p.classList.toggle("active", on);
             p.setAttribute("aria-hidden", on ? "false" : "true");
           });
-          if (id === "schedule") invalidateMapIfNeeded();
+          if (id === "schedule") {
+            invalidateMapIfNeeded();
+            renderPlanB();
+          }
           if (id === "ledger") {
             renderBudget();
             setTimeout(function () {
@@ -3710,9 +4789,13 @@
             }, 150);
           }
           if (id === "prep") {
+            ensurePrepPackListsRendered();
             renderPrepItinerarySection();
             loadChecks();
             updatePrepProgress();
+          }
+          if (id === "shopping") {
+            renderShoppingList();
           }
         });
       });
@@ -3761,15 +4844,43 @@
           }
         });
         prepPanelEl.addEventListener("click", function (ev) {
-          var btn = ev.target && ev.target.closest ? ev.target.closest(".pack-move-btn") : null;
-          if (!btn) return;
-          ev.preventDefault();
-          var ul = btn.closest("ul.pack-checklist");
-          var li = btn.closest("li");
-          if (!ul || !li || !ul.contains(li)) return;
-          var dir = parseInt(btn.getAttribute("data-dir"), 10) || 0;
-          if (!dir) return;
-          movePrepListItem(ul, li, dir);
+          var addBtn = ev.target && ev.target.closest ? ev.target.closest(".pack-add-item-btn") : null;
+          if (addBtn) {
+            var sk = addBtn.getAttribute("data-prep-section");
+            if (sk) prepAddItemToSection(sk);
+            return;
+          }
+          var delBtn = ev.target && ev.target.closest ? ev.target.closest(".pack-item-del") : null;
+          if (delBtn) {
+            var sec = delBtn.getAttribute("data-prep-section");
+            var iid = delBtn.getAttribute("data-prep-item-id");
+            if (sec && iid) prepDeleteItem(sec, iid);
+            return;
+          }
+          var itinAdd = ev.target && ev.target.closest ? ev.target.closest(".pack-add-itin-extra") : null;
+          if (itinAdd) {
+            prepItinExtraAdd(itinAdd.getAttribute("data-day-key"));
+            return;
+          }
+          var itinDel = ev.target && ev.target.closest ? ev.target.closest(".pack-itin-extra-del") : null;
+          if (itinDel) {
+            prepItinExtraDelete(itinDel.getAttribute("data-day-key"), itinDel.getAttribute("data-prep-item-id"));
+          }
+        });
+      }
+
+      var schedulePanelEl = document.getElementById("panel-schedule");
+      if (schedulePanelEl) {
+        schedulePanelEl.addEventListener("click", function (ev) {
+          var addB = ev.target && ev.target.closest ? ev.target.closest(".plan-b-add") : null;
+          if (addB) {
+            planBAddItem(addB.getAttribute("data-planb-day"));
+            return;
+          }
+          var delB = ev.target && ev.target.closest ? ev.target.closest(".plan-b-item-del") : null;
+          if (delB) {
+            planBDeleteItem(delB.getAttribute("data-planb-day"), delB.getAttribute("data-planb-id"));
+          }
         });
       }
 
@@ -4714,9 +5825,12 @@
         if (fxInp && st.fx) fxInp.value = String(st.fx);
       })();
 
+      ensurePrepPackListsRendered();
       renderPrepItinerarySection();
       loadChecks();
       updatePrepProgress();
+      renderPlanB();
+      renderShoppingList();
       renderBudget();
     })();
   </script>
