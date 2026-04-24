@@ -2148,6 +2148,18 @@
       <p class="hero-dates">2026.4.25(토) ~ 4.29(수) · 4박 5일</p>
     </header>
 
+    <div class="info-card data-backup-card" style="margin-bottom: 1.15rem">
+      <h3>PC 저장 데이터 백업</h3>
+      <p class="pack-muted" style="margin: 0 0 0.75rem; font-size: 0.85rem">
+        일정·가계부·준비물·쇼핑·체크리스트 등은 이 브라우저 저장소에만 있습니다. 아래에서 전체를 JSON으로 보낸 뒤, 파일을 이 프로젝트 폴더에 두고 Git으로 커밋·푸시하면 GitHub에도 남길 수 있습니다. 데이터가 비어 있으면 예시 일정으로 채워질 수 있으니, 수정 후 꼭 한 번 보내 두세요.
+      </p>
+      <div class="ledger-actions" style="margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem">
+        <button type="button" class="btn" id="fullBackupExportBtn">전체 JSON보내기</button>
+        <button type="button" class="btn btn-ghost" id="fullBackupImportBtn">JSON 가져오기</button>
+      </div>
+      <input type="file" id="fullBackupFileInput" accept="application/json,.json" hidden="" aria-hidden="true" />
+    </div>
+
     <section id="panel-schedule" class="panel active" role="tabpanel" aria-hidden="false">
       <div class="schedule-top">
         <div class="hero-meta">
@@ -2290,6 +2302,118 @@
         { key: "2026-04-28", label: "4/28(화) Day4" },
         { key: "2026-04-29", label: "4/29(수) Day5" }
       ];
+
+      /** localStorage 키(일정 앱).보내기·가져오기 및 dalian_* 자동 스캔에 사용 */
+      var DALIAN_EXPORT_STORAGE_KEYS = [
+        "dalian_poi_nicknames_v1",
+        "dalian_map_tile",
+        "dalian_planner_v10",
+        "dalian_planner_v9",
+        "dalian_planner_v8",
+        "dalian_planner_v7",
+        "dalian_planner_v6",
+        "dalian_planner_v4",
+        "dalian_prep_item_order_v1",
+        "dalian_prep_items_v1",
+        "dalian_prep_itinerary_extra_v1",
+        "dalian_plan_b_per_day_v1",
+        "dalian_shopping_list_v1",
+        "dalian_family_checklist_v4",
+        "dalian_budget_itinerary_v3",
+        "dalian_budget_itinerary_v2"
+      ];
+
+      function collectDalianStorageForExport() {
+        var map = {};
+        var seen = {};
+        function take(k) {
+          if (!k || seen[k]) return;
+          seen[k] = true;
+          try {
+            var v = localStorage.getItem(k);
+            if (v !== null) map[k] = v;
+          } catch (e) {}
+        }
+        DALIAN_EXPORT_STORAGE_KEYS.forEach(take);
+        try {
+          for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            if (key && key.indexOf("dalian_") === 0) take(key);
+          }
+        } catch (e2) {}
+        return map;
+      }
+
+      function pad2(n) {
+        return n < 10 ? "0" + n : String(n);
+      }
+
+      function exportFullTripBackupDownload() {
+        var payload = {
+          app: "dalian-family-trip",
+          formatVersion: 1,
+          exportedAt: new Date().toISOString(),
+          localStorage: collectDalianStorageForExport()
+        };
+        var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+        var a = document.createElement("a");
+        var d = new Date();
+        a.href = URL.createObjectURL(blob);
+        a.download =
+          "dalian-trip-backup-" +
+          d.getFullYear() +
+          "-" +
+          pad2(d.getMonth() + 1) +
+          "-" +
+          pad2(d.getDate()) +
+          ".json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      function pickLocalStorageMapFromBackupJson(obj) {
+        if (!obj || typeof obj !== "object") return null;
+        if (obj.localStorage && typeof obj.localStorage === "object") return obj.localStorage;
+        var keys = Object.keys(obj);
+        if (keys.length === 0) return null;
+        var allDalian = true;
+        for (var ki = 0; ki < keys.length; ki++) {
+          if (keys[ki].indexOf("dalian_") !== 0) {
+            allDalian = false;
+            break;
+          }
+        }
+        if (allDalian) return obj;
+        return null;
+      }
+
+      function applyFullTripBackupFromParsed(obj) {
+        var src = pickLocalStorageMapFromBackupJson(obj);
+        if (!src) {
+          alert("인식할 수 없는 JSON입니다. 이 페이지에서 보낸 백업 파일인지 확인해 주세요.");
+          return false;
+        }
+        var n = 0;
+        for (var key in src) {
+          if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
+          if (key.indexOf("dalian_") !== 0) continue;
+          var val = src[key];
+          try {
+            if (val === null || val === undefined) {
+              localStorage.removeItem(key);
+              n++;
+            } else if (typeof val === "string") {
+              localStorage.setItem(key, val);
+              n++;
+            }
+          } catch (e) {}
+        }
+        if (n === 0) {
+          alert("적용할 dalian_* 항목이 없습니다.");
+          return false;
+        }
+        return true;
+      }
 
       /** 날짜별 한 줄 컨셉 ([N일차 (M/D, 요일): …] 에 표시) */
       var DAY_NARRATIVE = {
@@ -6006,6 +6130,39 @@
           a.click();
           URL.revokeObjectURL(a.href);
         });
+
+      (function wireFullBackupButtons() {
+        var ex = document.getElementById("fullBackupExportBtn");
+        if (ex) ex.addEventListener("click", exportFullTripBackupDownload);
+        var im = document.getElementById("fullBackupImportBtn");
+        var fin = document.getElementById("fullBackupFileInput");
+        if (!im || !fin) return;
+        im.addEventListener("click", function () {
+          fin.value = "";
+          fin.click();
+        });
+        fin.addEventListener("change", function () {
+          var file = fin.files && fin.files[0];
+          if (!file) return;
+          var reader = new FileReader();
+          reader.onload = function () {
+            var parsed;
+            try {
+              parsed = JSON.parse(String(reader.result || ""));
+            } catch (err) {
+              alert("JSON을 읽지 못했습니다.");
+              return;
+            }
+            if (!pickLocalStorageMapFromBackupJson(parsed)) {
+              alert("인식할 수 없는 JSON입니다. 이 페이지에서 보낸 백업 파일인지 확인해 주세요.");
+              return;
+            }
+            if (!confirm("선택한 백업으로 이 브라우저에 저장된 여행 데이터(dalian_* 항목)를 덮어씁니다. 계속할까요?")) return;
+            if (applyFullTripBackupFromParsed(parsed)) location.reload();
+          };
+          reader.readAsText(file, "UTF-8");
+        });
+      })();
 
       (function initBudgetFxFromStorage() {
         var st = ensureBudgetSeeded();
