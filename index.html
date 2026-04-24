@@ -157,7 +157,8 @@
     nav.tabs.site-tabs {
       position: sticky;
       top: 0;
-      z-index: 80;
+      /* Leaflet 타일·팝업 레이어(수백~1000대)보다 위에 두어 탭 클릭이 막히지 않게 함 */
+      z-index: 12000;
       margin: 0 -0.15rem 1rem;
       padding-left: max(0.4rem, env(safe-area-inset-left, 0px));
       padding-right: max(0.4rem, env(safe-area-inset-right, 0px));
@@ -300,6 +301,27 @@
       .two-col { grid-template-columns: 1fr; }
       .timeline li { grid-template-columns: 1fr; gap: 0.25rem; }
       .time { font-weight: 600; color: var(--accent); }
+
+      #panel-ledger .ledger-info-card {
+        padding: 0.85rem 0.45rem;
+        margin-left: -0.55rem;
+        margin-right: -0.55rem;
+        margin-bottom: 0.75rem;
+      }
+
+      #panel-ledger .budget-day-block {
+        padding: 0.72rem 0.45rem;
+      }
+
+      .budget-summary-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .budget-summary-bar .budget-summary-day {
+        min-width: 0;
+        width: 100%;
+      }
     }
 
     .info-card {
@@ -788,16 +810,6 @@
       white-space: nowrap;
     }
 
-    tr.budget-row-over .budget-act {
-      color: #f87171;
-      border-color: rgba(248, 113, 113, 0.45);
-    }
-
-    tr.budget-row-over .budget-act:focus {
-      border-color: #f87171;
-      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
-    }
-
     .budget-compare-warn {
       color: #f87171 !important;
       font-weight: 700;
@@ -880,6 +892,159 @@
 
     .budget-summary-bar .budget-summary-day .est-line { color: #94a3b8; }
     .budget-summary-bar .budget-summary-day .act-line { color: #4ade80; font-weight: 600; }
+
+    .budget-meta-drawer {
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--surface2);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.55);
+      overflow: hidden;
+    }
+
+    .budget-meta-drawer-summary {
+      cursor: pointer;
+      list-style: none;
+      font-weight: 600;
+      font-size: 0.86rem;
+      color: var(--accent);
+      padding: 0.65rem 0.85rem;
+      user-select: none;
+    }
+
+    .budget-meta-drawer-summary::-webkit-details-marker { display: none; }
+
+    .budget-meta-drawer-body {
+      padding: 0 0.65rem 0.85rem;
+      border-top: 1px solid var(--surface2);
+    }
+
+    @media (min-width: 721px) {
+      .budget-list-hint { display: none; }
+
+      .budget-meta-drawer-summary {
+        display: none;
+      }
+
+      .budget-meta-drawer-body {
+        border-top: none;
+        padding-top: 0.35rem;
+      }
+    }
+
+    .budget-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .budget-row-card {
+      border: 1px solid var(--surface2);
+      border-radius: 11px;
+      padding: 0.55rem 0.5rem 0.65rem;
+      background: #0f172a;
+    }
+
+    .budget-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .budget-card-title {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .budget-row-card .budget-route-label {
+      display: block;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .budget-card-row { margin-top: 0.35rem; }
+
+    .budget-card-cat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .budget-card-lbl {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .budget-card-money {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-top: 0.5rem;
+      padding-top: 0.45rem;
+      border-top: 1px solid rgba(51, 65, 85, 0.85);
+    }
+
+    .budget-card-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .budget-row-card .budget-memo {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      min-height: 44px;
+      font-size: 16px;
+    }
+
+    .budget-row-card .budget-cat-select {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      min-height: 44px;
+      font-size: 16px;
+    }
+
+    .budget-row-card .budget-inp.budget-est,
+    .budget-row-card .budget-act {
+      width: 100%;
+      max-width: none;
+      min-height: 44px;
+      font-size: 16px;
+    }
+
+    .budget-row-card .budget-krw-cell {
+      display: block;
+      font-size: 0.88rem;
+      padding: 0.35rem 0.4rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface2);
+      background: rgba(15, 23, 42, 0.85);
+      font-variant-numeric: tabular-nums;
+      color: #94a3b8;
+    }
+
+    .budget-row-card .budget-row-del {
+      flex: 0 0 auto;
+      font-size: 0.72rem;
+      padding: 0.32rem 0.5rem;
+      line-height: 1.2;
+      align-self: flex-start;
+    }
+
+    .budget-row-card.budget-row-over .budget-act {
+      color: #f87171;
+      border-color: rgba(248, 113, 113, 0.45);
+    }
+
+    .budget-row-card.budget-row-over .budget-act:focus {
+      border-color: #f87171;
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
+    }
 
     table.budget-table td.budget-route-cell {
       font-weight: 500;
@@ -1256,6 +1421,212 @@
       }
 
       .shop-add-item-in-cat {
+        width: 100%;
+      }
+    }
+
+    .shop-global-add {
+      background: var(--surface);
+      border: 1px solid var(--surface2);
+      border-radius: var(--radius);
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.05rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: flex-end;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .shop-global-add .shop-add-label span {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-bottom: 0.28rem;
+      font-weight: 500;
+    }
+
+    .shop-add-place-select,
+    .shop-add-text-inp {
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 0.45rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid var(--surface2);
+      background: #0f172a;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .shop-add-place-select {
+      min-width: min(100%, 200px);
+      flex: 1 1 160px;
+    }
+
+    .shop-add-text-inp {
+      flex: 2 1 180px;
+    }
+
+    .shop-place-details {
+      margin-bottom: 1rem;
+    }
+
+    .shop-place-details > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0.55rem 0.65rem;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(51, 65, 85, 0.75);
+    }
+
+    .shop-place-details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .shop-place-summary-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem 0.75rem;
+      justify-content: space-between;
+    }
+
+    .shop-place-summary-inner .shop-cat-title {
+      border: none;
+      padding: 0;
+      margin: 0;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .shop-place-badge {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .shop-place-details[open] > summary {
+      border-color: rgba(56, 189, 248, 0.45);
+      margin-bottom: 0.55rem;
+    }
+
+    .shop-place-body {
+      padding: 0.15rem 0.35rem 0.5rem;
+    }
+
+    .shop-toolbar--compact {
+      margin-bottom: 0.2rem;
+    }
+
+    .shop-section-head {
+      margin: 0.45rem 0 0.55rem;
+    }
+
+    .shop-section-title {
+      margin: 0 0 0.2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--warn);
+      letter-spacing: -0.02em;
+    }
+
+    .shop-section-sub {
+      margin: 0;
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .shop-place-card {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 0.65rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+    }
+
+    .shop-place-card.shop-card--today {
+      border-left: 3px solid var(--accent);
+    }
+
+    .shop-place-card > summary {
+      padding: 0.62rem 0.78rem;
+    }
+
+    .shop-cat-actions--card {
+      margin-bottom: 0.42rem;
+    }
+
+    .shop-cat-actions--card .shop-add-item-in-cat {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .shop-rest-bucket {
+      margin-top: 0.25rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .shop-rest-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 0.68rem 0.82rem;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.88);
+      border: 1px solid rgba(71, 85, 105, 0.7);
+      font-weight: 600;
+      font-size: 0.88rem;
+      touch-action: manipulation;
+    }
+
+    .shop-rest-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .shop-rest-summary-title {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .shop-rest-summary-count {
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .shop-rest-inner {
+      padding: 0.55rem 0 0.1rem;
+    }
+
+    .shop-rest-inner .shop-place-card {
+      margin-bottom: 0.52rem;
+    }
+
+    @media (max-width: 640px) {
+      .shop-place-card .shop-cat-title {
+        font-size: 0.92rem;
+      }
+
+      .shop-rest-summary {
+        padding: 0.78rem 0.88rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .shop-global-add {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .shop-global-add .btn {
         width: 100%;
       }
     }
@@ -2050,28 +2421,6 @@
         font-size: 0.78rem;
       }
 
-      .budget-day-block {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-x: contain;
-      }
-
-      table.budget-table {
-        min-width: 860px;
-        font-size: 0.8rem;
-      }
-
-      table.budget-table .budget-memo {
-        min-height: 40px;
-        font-size: 16px;
-      }
-
-      table.budget-table .budget-act {
-        min-height: 40px;
-        width: 5rem;
-        font-size: 16px;
-      }
-
       .budget-toolbar {
         flex-direction: column;
         align-items: stretch;
@@ -2113,7 +2462,9 @@
       .dur-wrap input,
       .poi-nick-inp,
       .buffer-field input,
-      #panel-shopping .shop-text-inp {
+      #panel-shopping .shop-text-inp,
+      #panel-shopping .shop-add-place-select,
+      #panel-shopping .shop-add-text-inp {
         font-size: 16px;
       }
     }
@@ -2151,7 +2502,7 @@
     <div class="info-card data-backup-card" style="margin-bottom: 1.15rem">
       <h3>PC 저장 데이터 백업</h3>
       <p class="pack-muted" style="margin: 0 0 0.75rem; font-size: 0.85rem">
-        일정·가계부·준비물·쇼핑·체크리스트 등은 이 브라우저 저장소에만 있습니다. 아래에서 전체를 JSON으로 보낸 뒤, 파일을 이 프로젝트 폴더에 두고 Git으로 커밋·푸시하면 GitHub에도 남길 수 있습니다. 데이터가 비어 있으면 예시 일정으로 채워질 수 있으니, 수정 후 꼭 한 번 보내 두세요.
+        일정·가계부·준비물·쇼핑·체크리스트 등은 <strong>이 기기·이 브라우저의 localStorage</strong>에만 쌓입니다. 일반 탭에서 쓰면 창을 닫았다 다시 열어도 같은 주소(같은 사이트)에서는 그대로 이어집니다. 시크릿 모드·「사이트 데이터 삭제」·다른 브라우저에서는 보이지 않을 수 있으니, 중요할 때는 아래「전체 JSON보내기」로 백업해 두세요. 배포 폴더에 최신 <code>dalian-trip-backup-2026-04-24.json</code>이 있으면, 아직 저장 데이터가 없는 기기에서만 그 내용이 기본으로 한 번 채워집니다.
       </p>
       <div class="ledger-actions" style="margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem">
         <button type="button" class="btn" id="fullBackupExportBtn">전체 JSON보내기</button>
@@ -2214,31 +2565,39 @@
     </section>
 
     <section id="panel-ledger" class="panel" role="tabpanel" aria-hidden="true">
-      <div class="info-card">
+      <div class="info-card ledger-info-card">
         <h3>가계부</h3>
-        <div class="budget-legend">
-          <span class="est">예상(¥) 직접 수정 · ₩ 자동</span>
-          <span class="act">실제 지출(¥ / ₩)</span>
-          <span class="muted" style="font-weight:500;">분류 선택 · 일정 연동 재생성 가능</span>
-        </div>
-        <div class="budget-toolbar">
-          <div class="field">
-            <label for="budgetFx">환율 (1위안 = ?원)</label>
-            <input type="number" id="budgetFx" min="1" step="1" value="192" />
+        <details class="budget-meta-drawer" id="budgetToolsDetails" open>
+          <summary class="budget-meta-drawer-summary">환율·차트·날짜별 합계</summary>
+          <div class="budget-meta-drawer-body">
+            <div class="budget-legend">
+              <span class="est">예상(¥) 직접 수정 · ₩ 자동</span>
+              <span class="act">실제 지출(¥ / ₩)</span>
+              <span class="muted" style="font-weight:500;">분류 선택 · 일정 연동 재생성 가능</span>
+            </div>
+            <div class="budget-toolbar">
+              <div class="field">
+                <label for="budgetFx">환율 (1위안 = ?원)</label>
+                <input type="number" id="budgetFx" min="1" step="1" value="192" />
+              </div>
+              <div class="ledger-actions" style="margin:0;">
+                <button type="button" class="btn" id="budgetRegenBtn">일정 기준 예상 재생성</button>
+                <button type="button" class="btn" id="budgetExportBtn">JSON보내기</button>
+              </div>
+            </div>
+            <div id="budgetFxSummary" class="budget-fx-summary" aria-live="polite"></div>
+            <div class="budget-chart-wrap">
+              <p class="budget-chart-title">일자별 예상 vs 실제 (위안 · 막대 그래프)</p>
+              <div class="budget-chart-inner">
+                <canvas id="budgetChartCanvas" aria-label="일자별 예상과 실제 지출 막대 그래프"></canvas>
+              </div>
+            </div>
+            <div id="budgetSummaryBar" class="budget-summary-bar" aria-live="polite"></div>
           </div>
-          <div class="ledger-actions" style="margin:0;">
-            <button type="button" class="btn" id="budgetRegenBtn">일정 기준 예상 재생성</button>
-            <button type="button" class="btn" id="budgetExportBtn">JSON보내기</button>
-          </div>
-        </div>
-        <div id="budgetFxSummary" class="budget-fx-summary" aria-live="polite"></div>
-        <div class="budget-chart-wrap">
-          <p class="budget-chart-title">일자별 예상 vs 실제 (위안 · 막대 그래프)</p>
-          <div class="budget-chart-inner">
-            <canvas id="budgetChartCanvas" aria-label="일자별 예상과 실제 지출 막대 그래프"></canvas>
-          </div>
-        </div>
-        <div id="budgetSummaryBar" class="budget-summary-bar" aria-live="polite"></div>
+        </details>
+        <p class="budget-list-hint pack-muted" style="margin: 0 0 0.55rem; font-size: 0.8rem">
+          아래는 날짜별 지출 카드입니다. 세로로만 스크롤하면 됩니다.
+        </p>
         <div id="budgetRoot"></div>
         <div class="budget-grand" id="budgetGrand"></div>
       </div>
@@ -2282,7 +2641,7 @@
         <div class="pack-section">
           <h3 class="pack-group-title">쇼핑 리스트</h3>
           <p class="pack-muted" style="margin-bottom: 1rem">
-            네 가지 카테고리 카드로 정리되어 있습니다. 각 카드 안에서 항목을 추가·삭제하고, ≡ 드래그 또는 ↑↓ 버튼으로 순서를 바꿀 수 있습니다. 체크·텍스트·순서는 브라우저에 자동 저장됩니다.
+            아래 목록은 장소별로 고정된 쇼핑 체크리스트입니다. 일정의 숙소·식당·드라이브 등은 여기에 포함되지 않습니다. 체크·추가 항목·순서는 이 브라우저에 저장됩니다.
           </p>
           <div id="shopRoot" class="shop-root" aria-live="polite"></div>
         </div>
@@ -2302,6 +2661,12 @@
         { key: "2026-04-28", label: "4/28(화) Day4" },
         { key: "2026-04-29", label: "4/29(수) Day5" }
       ];
+
+      /**
+       * 프로젝트 루트에 두면, 아직 dalian_* 저장소가 없는 브라우저에서만 동기 XHR로 한 번 로드합니다.
+       * 전체 백업(일정·가계부·쇼핑·준비물 등)과 동일한 형식(app + localStorage 맵).
+       */
+      var DALIAN_BUNDLED_BACKUP_JSON = "dalian-trip-backup-2026-04-24.json";
 
       /** localStorage 키(일정 앱).보내기·가져오기 및 dalian_* 자동 스캔에 사용 */
       var DALIAN_EXPORT_STORAGE_KEYS = [
@@ -2330,7 +2695,7 @@
           if (!k || seen[k]) return;
           seen[k] = true;
           try {
-            var v = localStorage.getItem(k);
+            var v = dalianSafeGetItem(k);
             if (v !== null) map[k] = v;
           } catch (e) {}
         }
@@ -2387,12 +2752,8 @@
         return null;
       }
 
-      function applyFullTripBackupFromParsed(obj) {
-        var src = pickLocalStorageMapFromBackupJson(obj);
-        if (!src) {
-          alert("인식할 수 없는 JSON입니다. 이 페이지에서 보낸 백업 파일인지 확인해 주세요.");
-          return false;
-        }
+      function applyDalianLocalStorageKeyMap(src) {
+        if (!src || typeof src !== "object") return 0;
         var n = 0;
         for (var key in src) {
           if (!Object.prototype.hasOwnProperty.call(src, key)) continue;
@@ -2400,20 +2761,61 @@
           var val = src[key];
           try {
             if (val === null || val === undefined) {
-              localStorage.removeItem(key);
+              dalianSafeRemoveItem(key);
               n++;
             } else if (typeof val === "string") {
-              localStorage.setItem(key, val);
+              dalianSafeSetItem(key, val);
               n++;
             }
           } catch (e) {}
         }
+        return n;
+      }
+
+      function applyFullTripBackupFromParsed(obj) {
+        var src = pickLocalStorageMapFromBackupJson(obj);
+        if (!src) {
+          alert("인식할 수 없는 JSON입니다. 이 페이지에서 보낸 백업 파일인지 확인해 주세요.");
+          return false;
+        }
+        var n = applyDalianLocalStorageKeyMap(src);
         if (n === 0) {
           alert("적용할 dalian_* 항목이 없습니다.");
           return false;
         }
         return true;
       }
+
+      /** 이미 이 사이트용 데이터가 있으면 번들 초기값을 적용하지 않음 */
+      function hasAnyDalianStorage() {
+        try {
+          for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i);
+            if (k && k.indexOf("dalian_") === 0) return true;
+          }
+        } catch (e) {}
+        return false;
+      }
+
+      /**
+       * `DALIAN_BUNDLED_BACKUP_JSON`(전체 백업과 동일 형식)을 한 번 읽어 비어 있는 브라우저에만 채움.
+       * 동기 XHR로 첫 렌더 전에 적용(GitHub Pages·동일 폴더 배포).
+       */
+      function tryApplyBundledTripBackupSync() {
+        if (hasAnyDalianStorage()) return;
+        try {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", DALIAN_BUNDLED_BACKUP_JSON, false);
+          xhr.send(null);
+          if (xhr.status !== 200 && xhr.status !== 0) return;
+          var obj = JSON.parse(xhr.responseText);
+          var src = pickLocalStorageMapFromBackupJson(obj);
+          if (!src) return;
+          if (applyDalianLocalStorageKeyMap(src) < 1) return;
+        } catch (e) {}
+      }
+
+      tryApplyBundledTripBackupSync();
 
       /** 날짜별 한 줄 컨셉 ([N일차 (M/D, 요일): …] 에 표시) */
       var DAY_NARRATIVE = {
@@ -2449,6 +2851,62 @@
       var THEME_MARK = { base: "집", tourism: "관", food: "식", shopping: "몰" };
       var THEME_COLOR = { base: "#e879f9", tourism: "#38bdf8", food: "#fb923c", shopping: "#4ade80" };
       var POI_NICKNAMES_KEY = "dalian_poi_nicknames_v1";
+
+      /**
+       * 여행 앱 전역 localStorage 안전 접근.
+       * 같은 기기·같은 브라우저·일반 탭이면 창을 닫아도 데이터는 유지됩니다(시크릿/프라이빗·사이트 데이터 삭제 시 제외).
+       * 접근 거부·JSON 손상·용량 초과에서도 throw로 화면이 멈추지 않게 합니다.
+       */
+      function dalianSafeGetItem(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function dalianSafeSetItem(key, value) {
+        try {
+          localStorage.setItem(key, value);
+          return true;
+        } catch (e) {
+          try {
+            if (typeof console !== "undefined" && console.warn) console.warn("localStorage set failed", key, e && e.name);
+          } catch (e2) {}
+          if (e && (e.name === "QuotaExceededError" || e.code === 22)) {
+            try {
+              if (!window.__dalianQuotaWarned) {
+                window.__dalianQuotaWarned = true;
+                setTimeout(function () {
+                  alert(
+                    "브라우저 저장 공간이 부족합니다. 상단「전체 JSON보내기」로 백업한 뒤, 기기 저장 공간을 비우거나 다른 앱 데이터를 정리해 주세요."
+                  );
+                }, 200);
+              }
+            } catch (e3) {}
+          }
+          return false;
+        }
+      }
+
+      function dalianSafeRemoveItem(key) {
+        try {
+          localStorage.removeItem(key);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function dalianSafeParseJson(raw, fallback) {
+        if (raw == null || raw === "") return fallback;
+        try {
+          return JSON.parse(raw);
+        } catch (e) {
+          return fallback;
+        }
+      }
+
       var MAP_TILE_PREF_KEY = "dalian_map_tile";
       var MAP_TILES = {
         gaode: {
@@ -2692,20 +3150,20 @@
       }
 
       function loadPoiNicknames() {
-        try {
-          var raw = localStorage.getItem(POI_NICKNAMES_KEY);
-          if (!raw) return {};
-          var o = JSON.parse(raw);
-          return o && typeof o === "object" ? o : {};
-        } catch (e) {
-          return {};
-        }
+        var raw = dalianSafeGetItem(POI_NICKNAMES_KEY);
+        if (!raw) return {};
+        var o = dalianSafeParseJson(raw, null);
+        return o && typeof o === "object" ? o : {};
       }
 
       function savePoiNicknames(obj) {
+        var json;
         try {
-          localStorage.setItem(POI_NICKNAMES_KEY, JSON.stringify(obj));
-        } catch (e) {}
+          json = JSON.stringify(obj);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(POI_NICKNAMES_KEY, json);
       }
 
       function poiDisplayName(p) {
@@ -2880,7 +3338,7 @@
 
       function loadPlanner() {
         try {
-          var raw = localStorage.getItem(PLANNER_KEY);
+          var raw = dalianSafeGetItem(PLANNER_KEY);
           var all = null;
           if (!raw) {
             var prevKeys = [
@@ -2891,41 +3349,52 @@
               "dalian_planner_v4"
             ];
             for (var pi = 0; pi < prevKeys.length; pi++) {
-              raw = localStorage.getItem(prevKeys[pi]);
-              if (raw) break;
+              raw = dalianSafeGetItem(prevKeys[pi]);
+              if (!raw) continue;
+              all = dalianSafeParseJson(raw, null);
+              if (all && typeof all === "object") break;
+              raw = null;
+              all = null;
             }
-            if (raw) {
-              all = JSON.parse(raw);
+            if (raw && all) {
               Object.keys(all).forEach(function (k) {
                 all[k] = migrateOldState(all[k]);
               });
-              localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
+              var jsonM = JSON.stringify(all);
+              if (jsonM) dalianSafeSetItem(PLANNER_KEY, jsonM);
             } else {
               all = buildRecommendedPlanner();
-              try {
-                localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
-              } catch (e2) {}
+              var jsonNew = JSON.stringify(all);
+              if (jsonNew) dalianSafeSetItem(PLANNER_KEY, jsonNew);
               return all;
             }
           } else {
-            all = JSON.parse(raw);
+            all = dalianSafeParseJson(raw, null);
+            if (!all || typeof all !== "object") {
+              return buildRecommendedPlanner();
+            }
           }
           if (fillEmptyDaysFromRecommendations(all)) {
-            try {
-              localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
-            } catch (e3) {}
+            var jsonFill = JSON.stringify(all);
+            if (jsonFill) dalianSafeSetItem(PLANNER_KEY, jsonFill);
           }
           return all;
         } catch (e) {
-          /* JSON 손상 등: 저장소를 샘플 일정으로 덮어쓰지 않음(사용자 데이터 보존). 이번 세션만 시드로 표시 */
           return buildRecommendedPlanner();
         }
       }
 
       function savePlanner(data) {
+        var json;
         try {
-          localStorage.setItem(PLANNER_KEY, JSON.stringify(data));
-        } catch (e) {}
+          json = JSON.stringify(data);
+        } catch (e) {
+          try {
+            if (typeof console !== "undefined" && console.warn) console.warn("savePlanner stringify failed", e);
+          } catch (e2) {}
+          return;
+        }
+        if (json) dalianSafeSetItem(PLANNER_KEY, json);
       }
 
       function getDayState() {
@@ -3218,7 +3687,7 @@
 
       function applyBaseMapLayer(map) {
         if (!map || typeof L === "undefined") return;
-        var pref = localStorage.getItem(MAP_TILE_PREF_KEY) || "gaode";
+        var pref = dalianSafeGetItem(MAP_TILE_PREF_KEY) || "gaode";
         var def = MAP_TILES[pref] || MAP_TILES.gaode;
         map.eachLayer(function (layer) {
           if (layer instanceof L.TileLayer) {
@@ -3233,7 +3702,7 @@
       function initMapTileSelect() {
         var sel = document.getElementById("mapTileSelect");
         if (!sel) return;
-        var cur = localStorage.getItem(MAP_TILE_PREF_KEY) || "gaode";
+        var cur = dalianSafeGetItem(MAP_TILE_PREF_KEY) || "gaode";
         sel.innerHTML = Object.keys(MAP_TILES)
           .map(function (k) {
             var t = MAP_TILES[k];
@@ -3241,7 +3710,7 @@
           })
           .join("");
         sel.onchange = function () {
-          localStorage.setItem(MAP_TILE_PREF_KEY, sel.value);
+          dalianSafeSetItem(MAP_TILE_PREF_KEY, sel.value);
           initMapsAllAndDay();
           invalidateMapIfNeeded();
         };
@@ -3527,8 +3996,7 @@
         "prep-a-digital": [
           { id: "prep-app-alipay", text: "알리페이(실명 인증 및 카드 등록 확인)" },
           { id: "prep-app-didi", text: "디디추싱(연동 확인)" },
-          { id: "prep-app-comms", text: "VPN 포함 eSIM 또는 로밍 신청" },
-          { id: "prep-digital-esim", text: "이심(eSIM) 발급 후 스마트폰 설치·개통 확인 (중국 데이터)" },
+          { id: "prep-digital-esim", text: "이동 데이터(eSIM·로밍) 개통 및 VPN(현지 앱·결제용) 확인" },
           { id: "prep-app-translate", text: "파파고/구글번역 오프라인 팩 다운로드" }
         ],
         "prep-a-med": [
@@ -3594,20 +4062,20 @@
       var prepSortableInstances = [];
 
       function loadPrepOrderMap() {
-        try {
-          var raw = localStorage.getItem(PREP_ORDER_STORAGE);
-          if (!raw) return {};
-          var o = JSON.parse(raw);
-          return o && typeof o === "object" ? o : {};
-        } catch (e) {
-          return {};
-        }
+        var raw = dalianSafeGetItem(PREP_ORDER_STORAGE);
+        if (!raw) return {};
+        var o = dalianSafeParseJson(raw, null);
+        return o && typeof o === "object" ? o : {};
       }
 
       function savePrepOrderMap(data) {
+        var json;
         try {
-          localStorage.setItem(PREP_ORDER_STORAGE, JSON.stringify(data));
-        } catch (e) {}
+          json = JSON.stringify(data);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(PREP_ORDER_STORAGE, json);
       }
 
       function applyPrepOrderToUl(ul) {
@@ -3680,21 +4148,25 @@
       }
 
       function savePrepItemsState(st) {
+        var json;
         try {
-          localStorage.setItem(PREP_ITEMS_STORAGE, JSON.stringify(st));
-        } catch (e) {}
+          json = JSON.stringify(st);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(PREP_ITEMS_STORAGE, json);
       }
 
       function loadPrepItemsState() {
         var defaults = getDefaultPrepItemsPayload();
         try {
-          var raw = localStorage.getItem(PREP_ITEMS_STORAGE);
+          var raw = dalianSafeGetItem(PREP_ITEMS_STORAGE);
           if (!raw) {
             applyLegacyPrepOrderToState(defaults);
             savePrepItemsState(defaults);
             return defaults;
           }
-          var parsed = JSON.parse(raw);
+          var parsed = dalianSafeParseJson(raw, null);
           if (!parsed || typeof parsed !== "object" || typeof parsed.sections !== "object") {
             applyLegacyPrepOrderToState(defaults);
             savePrepItemsState(defaults);
@@ -3702,8 +4174,9 @@
           }
           var merged = { version: 1, sections: {} };
           Object.keys(defaults.sections).forEach(function (k) {
+            var arr;
             if (Array.isArray(parsed.sections[k])) {
-              merged.sections[k] = parsed.sections[k]
+              arr = parsed.sections[k]
                 .filter(function (it) {
                   return it && typeof it.id === "string" && typeof it.text === "string";
                 })
@@ -3711,10 +4184,16 @@
                   return { id: it.id, text: it.text };
                 });
             } else {
-              merged.sections[k] = defaults.sections[k].map(function (item) {
+              arr = defaults.sections[k].map(function (item) {
                 return { id: item.id, text: item.text };
               });
             }
+            var seenId = {};
+            merged.sections[k] = arr.filter(function (it) {
+              if (seenId[it.id]) return false;
+              seenId[it.id] = true;
+              return true;
+            });
           });
           return merged;
         } catch (e) {
@@ -3879,6 +4358,8 @@
       }
 
       var PREP_ZOO_IDS = ["forest-zoo"];
+      /** 박물관·실내 전시 (일정에 포함된 경우에만 준비물 블록 표시) */
+      var PREP_MUSEUM_IDS = ["dalian-museum"];
       var PREP_SEA_IDS = ["sunasia", "laohutan", "xinghai-sq", "xinghai-beach"];
       var PREP_SHOPPING_IDS = [
         "pavilion",
@@ -3949,22 +4430,22 @@
       var PREP_ITIN_EXTRA_STORAGE = "dalian_prep_itinerary_extra_v1";
 
       function loadPrepItinExtraState() {
-        try {
-          var raw = localStorage.getItem(PREP_ITIN_EXTRA_STORAGE);
-          if (!raw) return { version: 1, byDay: {} };
-          var o = JSON.parse(raw);
-          if (!o || typeof o !== "object" || typeof o.byDay !== "object") return { version: 1, byDay: {} };
-          o.version = 1;
-          return o;
-        } catch (e) {
-          return { version: 1, byDay: {} };
-        }
+        var raw = dalianSafeGetItem(PREP_ITIN_EXTRA_STORAGE);
+        if (!raw) return { version: 1, byDay: {} };
+        var o = dalianSafeParseJson(raw, null);
+        if (!o || typeof o !== "object" || typeof o.byDay !== "object") return { version: 1, byDay: {} };
+        o.version = 1;
+        return o;
       }
 
       function savePrepItinExtraState(data) {
+        var json;
         try {
-          localStorage.setItem(PREP_ITIN_EXTRA_STORAGE, JSON.stringify(data));
-        } catch (e) {}
+          json = JSON.stringify(data);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(PREP_ITIN_EXTRA_STORAGE, json);
       }
 
       function newPrepItinExtraItemId() {
@@ -3988,6 +4469,7 @@
         st.byDay[dayKey].push({ id: newPrepItinExtraItemId(), text: label });
         savePrepItinExtraState(st);
         renderPrepItinerarySection();
+        pruneChecklistStorageToDom();
         loadChecks();
         updatePrepProgress();
       }
@@ -4002,6 +4484,7 @@
         });
         savePrepItinExtraState(st);
         renderPrepItinerarySection();
+        pruneChecklistStorageToDom();
         loadChecks();
         updatePrepProgress();
       }
@@ -4065,22 +4548,22 @@
       };
 
       function loadPlanBState() {
-        try {
-          var raw = localStorage.getItem(PLAN_B_STORAGE);
-          if (!raw) return { version: 1, byDay: {} };
-          var o = JSON.parse(raw);
-          if (!o || typeof o !== "object" || typeof o.byDay !== "object") return { version: 1, byDay: {} };
-          o.version = 1;
-          return o;
-        } catch (e) {
-          return { version: 1, byDay: {} };
-        }
+        var raw = dalianSafeGetItem(PLAN_B_STORAGE);
+        if (!raw) return { version: 1, byDay: {} };
+        var o = dalianSafeParseJson(raw, null);
+        if (!o || typeof o !== "object" || typeof o.byDay !== "object") return { version: 1, byDay: {} };
+        o.version = 1;
+        return o;
       }
 
       function savePlanBState(data) {
+        var json;
         try {
-          localStorage.setItem(PLAN_B_STORAGE, JSON.stringify(data));
-        } catch (e) {}
+          json = JSON.stringify(data);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(PLAN_B_STORAGE, json);
       }
 
       function newPlanBItemId() {
@@ -4188,6 +4671,9 @@
             return idsOnDay[id];
           });
           var hasSunasia = !!idsOnDay.sunasia;
+          var hasMuseum = PREP_MUSEUM_IDS.some(function (id) {
+            return idsOnDay[id];
+          });
           var dk = day.key;
           var subs = [];
           if (hasZoo) {
@@ -4219,6 +4705,35 @@
                 '-zoo-panda" /><label for="prep-b-' +
                 dk +
                 '-zoo-panda">판다관 마감시간: 16:00 (이후 관람 불가)</label></li>' +
+                "</ul></div>"
+            );
+          }
+          if (hasMuseum) {
+            subs.push(
+              '<div class="pack-subsection"><h4>박물관·실내 전시 가는 날</h4><ul class="pack-checklist" data-prep-sort-group="prep-b-' +
+                dk +
+                '-museum">' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-museum-quiet" /><label for="prep-b-' +
+                dk +
+                '-museum-quiet">실내용 조용한 신발(아이 포함)</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-museum-jacket" /><label for="prep-b-' +
+                dk +
+                '-museum-jacket">냉방 대비 겉옷</label></li>' +
+                "<li>" +
+                PREP_ROW_HANDLE_HTML +
+                '<input type="checkbox" id="prep-b-' +
+                dk +
+                '-museum-id" /><label for="prep-b-' +
+                dk +
+                '-museum-id">여권·티켓 예약 문자 스크린샷</label></li>' +
                 "</ul></div>"
             );
           }
@@ -4315,7 +4830,7 @@
                 '<div class="pack-day-heading">' +
                 escapeHtml(day.label) +
                 headingExtra +
-                '</div><p class="pack-muted" style="margin:0">이 날 일정에는 동물원·쇼핑/시내·수족관/성해광장 연동 항목이 없습니다.</p>' +
+                '</div><p class="pack-muted" style="margin:0">이 날 일정에는 동물원·박물관·쇼핑/시내·수족관/성해광장 연동 항목이 없습니다.</p>' +
                 extraHtml +
                 "</div>"
             );
@@ -4589,9 +5104,11 @@
         renderThemeBoard();
         ensurePrepPackListsRendered();
         renderPrepItinerarySection();
+        pruneChecklistStorageToDom();
         loadChecks();
         updatePrepProgress();
         renderPlanB();
+        renderShoppingList();
       }
 
       function invalidateMapIfNeeded() {
@@ -4613,7 +5130,11 @@
       initMapTileSelect();
 
       if (typeof L !== "undefined") {
-        refreshPlannerUI();
+        try {
+          refreshPlannerUI();
+        } catch (errRefresh) {
+          if (typeof console !== "undefined" && console.error) console.error(errRefresh);
+        }
         window.addEventListener("load", function () {
           invalidateMapIfNeeded();
         });
@@ -4624,6 +5145,7 @@
         renderThemeBoard();
         ensurePrepPackListsRendered();
         renderPrepItinerarySection();
+        pruneChecklistStorageToDom();
         loadChecks();
         updatePrepProgress();
         renderPlanB();
@@ -4650,58 +5172,22 @@
       setInterval(updateCountdown, 6e4);
 
       var SHOP_STORAGE = "dalian_shopping_list_v1";
-      var SHOP_FIXED_CAT_IDS = ["shop-cat-russia", "shop-cat-snacks", "shop-cat-dalian", "shop-cat-misc"];
       var shopSortableInstances = [];
 
-      function loadShopStateRaw() {
-        try {
-          var raw = localStorage.getItem(SHOP_STORAGE);
-          return raw ? JSON.parse(raw) : null;
-        } catch (e) {
-          return null;
-        }
+      function loadShoppingStateRaw() {
+        var raw = dalianSafeGetItem(SHOP_STORAGE);
+        if (!raw) return null;
+        return dalianSafeParseJson(raw, null);
       }
 
-      function defaultShopCategoriesV3() {
-        return [
-          {
-            id: "shop-cat-russia",
-            title: "러시아 테마 (러시아 거리)",
-            items: [
-              { id: "shop-r-1", text: "마트료시카 인형", checked: false },
-              { id: "shop-r-2", text: "러시아 초콜릿", checked: false },
-              { id: "shop-r-3", text: "러시아 수입 맥주", checked: false }
-            ]
-          },
-          {
-            id: "shop-cat-snacks",
-            title: "현지 간식 & 식품 (마트)",
-            items: [
-              { id: "shop-s-1", text: "중국 한정판 레이즈(Lay's) 감자칩", checked: false },
-              { id: "shop-s-2", text: "왕왕 쌀과자", checked: false },
-              { id: "shop-s-3", text: "화이트래빗(대백로) 우유사탕", checked: false },
-              { id: "shop-s-4", text: "미니 소시지", checked: false }
-            ]
-          },
-          {
-            id: "shop-cat-dalian",
-            title: "대련 특산물 & 차(Tea)",
-            items: [
-              { id: "shop-d-1", text: "진공 포장 해산물 간식", checked: false },
-              { id: "shop-d-2", text: "현지 체리", checked: false },
-              { id: "shop-d-3", text: "보이차/우롱차", checked: false }
-            ]
-          },
-          {
-            id: "shop-cat-misc",
-            title: "기념품 & 라이프스타일",
-            items: [
-              { id: "shop-m-1", text: "도시 마그넷", checked: false },
-              { id: "shop-m-2", text: "중국 한정 스타벅스 굿즈", checked: false },
-              { id: "shop-m-3", text: "현지 수공예품", checked: false }
-            ]
-          }
-        ];
+      function saveShoppingState(state) {
+        var json;
+        try {
+          json = JSON.stringify(state);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(SHOP_STORAGE, json);
       }
 
       function normalizeShopItem(it) {
@@ -4712,74 +5198,208 @@
         };
       }
 
-      function migrateRawToShopV3(raw) {
-        var fixedSet = {};
-        SHOP_FIXED_CAT_IDS.forEach(function (id) {
-          fixedSet[id] = true;
-        });
-        var defs = JSON.parse(JSON.stringify(defaultShopCategoriesV3()));
-        var out = { version: 3, categories: defs };
-        var map = {};
-        if (raw && Array.isArray(raw.categories)) {
-          raw.categories.forEach(function (c) {
-            if (c && c.id) map[c.id] = c;
-          });
-        }
-        out.categories = defs.map(function (def) {
-          var ex = map[def.id];
-          var items;
-          if (ex && Array.isArray(ex.items)) {
-            items = ex.items.map(normalizeShopItem);
-          } else {
-            items = def.items.map(normalizeShopItem);
-          }
-          return { id: def.id, title: def.title, items: items };
-        });
-        if (raw && Array.isArray(raw.categories)) {
-          raw.categories.forEach(function (c) {
-            if (!c || !c.items || !c.items.length) return;
-            if (fixedSet[c.id]) return;
-            var misc = out.categories.find(function (x) {
-              return x.id === "shop-cat-misc";
-            });
-            if (misc) {
-              c.items.forEach(function (it) {
-                misc.items.push(normalizeShopItem(it));
-              });
+      /** 장소별 쇼핑 정답 데이터(Source of Truth). 기타·분류 불가 항목은 대형 마트(sec-mart)로 흡수. */
+      function defaultShoppingV5() {
+        return {
+          version: 5,
+          sections: [
+            {
+              id: "sec-forest-zoo",
+              title: "대련 삼림동물원",
+              collapsed: false,
+              items: [
+                { id: "fz-1", text: "🧲 판다/동물 마그넷", checked: false },
+                { id: "fz-2", text: "🐼 판다 굿즈", checked: false },
+                { id: "fz-3", text: "🎒 동물 캐릭터 배낭", checked: false },
+                { id: "fz-4", text: "🥤 현장 간식/생수", checked: false }
+              ]
+            },
+            {
+              id: "sec-sunasia",
+              title: "성아해양세계",
+              collapsed: false,
+              items: [
+                { id: "sa-1", text: "🧲 벨루가/고래 마그넷", checked: false },
+                { id: "sa-2", text: "🐬 벨루가/펭귄 인형", checked: false },
+                { id: "sa-3", text: "🧸 해양 생물 장난감/야광봉", checked: false }
+              ]
+            },
+            {
+              id: "sec-pavilion",
+              title: "파빌리온 쇼핑몰",
+              collapsed: false,
+              items: [
+                { id: "pv-1", text: "☕ 스타벅스 시티 머그/텀블러", checked: false },
+                { id: "pv-2", text: "🍶 백주(모태주, 오량액, 수정방, 강소백)", checked: false },
+                { id: "pv-3", text: "🎁 팝마트/미니소 굿즈", checked: false }
+              ]
+            },
+            {
+              id: "sec-venice-russian",
+              title: "베니스 수변도시 & 러시아 거리",
+              collapsed: false,
+              items: [
+                { id: "vr-1", text: "☕ 스타벅스 기념 컵", checked: false },
+                { id: "vr-2", text: "🧲 유럽풍 풍경 마그넷", checked: false }
+              ]
+            },
+            {
+              id: "sec-mart",
+              title: "대형 마트",
+              collapsed: false,
+              items: [
+                { id: "mt-1", text: "🐿️ 삼지송서 간식", checked: false },
+                { id: "mt-2", text: "🥨 왕왕 쌀과자", checked: false },
+                { id: "mt-3", text: "🥔 레이즈(오이/복숭아맛)", checked: false },
+                { id: "mt-4", text: "🍑 납작복숭아/체리", checked: false },
+                { id: "mt-5", text: "👶 2020/2023년생용 기저귀/이유식", checked: false }
+              ]
+            },
+            {
+              id: "sec-airport",
+              title: "대련 공항",
+              collapsed: false,
+              items: [
+                { id: "ap-1", text: "🍺 청도맥주 에디션", checked: false },
+                { id: "ap-2", text: "🎨 경태람 스타일 기념품", checked: false }
+              ]
             }
+          ]
+        };
+      }
+
+      function cloneShoppingV5(src) {
+        return JSON.parse(JSON.stringify(src || defaultShoppingV5()));
+      }
+
+      function findShoppingSection(st, sectionId) {
+        return (st.sections || []).find(function (s) {
+          return s.id === sectionId;
+        });
+      }
+
+      function collectLegacyShoppingItems(raw, sink) {
+        if (!raw || typeof raw !== "object") return;
+        if (raw.version === 5 && Array.isArray(raw.sections)) {
+          raw.sections.forEach(function (sec) {
+            (sec.items || []).forEach(function (it) {
+              sink.push(normalizeShopItem(it));
+            });
           });
+          return;
         }
-        if (raw && Array.isArray(raw.items) && raw.items.length && !raw.categories) {
-          var misc2 = out.categories.find(function (x) {
-            return x.id === "shop-cat-misc";
+        if (raw.version === 4 && Array.isArray(raw.groups)) {
+          raw.groups.forEach(function (g) {
+            (g.items || []).forEach(function (it) {
+              sink.push(normalizeShopItem(it));
+            });
           });
+          return;
+        }
+        if (raw.version === 3 && Array.isArray(raw.categories)) {
+          raw.categories.forEach(function (c) {
+            (c.items || []).forEach(function (it) {
+              sink.push(normalizeShopItem(it));
+            });
+          });
+          return;
+        }
+        if (Array.isArray(raw.items)) {
           raw.items.forEach(function (it) {
-            misc2.items.push(normalizeShopItem(it));
+            sink.push(normalizeShopItem(it));
           });
         }
+      }
+
+      function defaultItemIdSet() {
+        var def = defaultShoppingV5();
+        var set = {};
+        def.sections.forEach(function (sec) {
+          (sec.items || []).forEach(function (it) {
+            set[it.id] = true;
+          });
+        });
+        return set;
+      }
+
+      /** 저장본과 정답 목록을 병합(동일 id는 체크·텍스트 유지, 사용자 추가 행 유지). */
+      function mergeShoppingDefaultsIntoSaved(saved) {
+        var template = defaultShoppingV5();
+        var out = { version: 5, sections: [] };
+        template.sections.forEach(function (tSec) {
+          var sSec = (saved.sections || []).find(function (s) {
+            return s && s.id === tSec.id;
+          });
+          var defIds = {};
+          tSec.items.forEach(function (it) {
+            defIds[it.id] = true;
+          });
+          var merged = tSec.items.map(function (dIt) {
+            var ex = sSec && (sSec.items || []).find(function (x) {
+              return x.id === dIt.id;
+            });
+            if (ex) return normalizeShopItem({ id: dIt.id, text: ex.text != null && String(ex.text) !== "" ? ex.text : dIt.text, checked: ex.checked });
+            return normalizeShopItem(dIt);
+          });
+          if (sSec) {
+            (sSec.items || []).forEach(function (it) {
+              if (!defIds[it.id]) merged.push(normalizeShopItem(it));
+            });
+          }
+          out.sections.push({
+            id: tSec.id,
+            title: tSec.title,
+            collapsed: !!(sSec && sSec.collapsed),
+            items: merged
+          });
+        });
         return out;
       }
 
-      function saveShopState(state) {
-        try {
-          localStorage.setItem(SHOP_STORAGE, JSON.stringify(state));
-        } catch (e) {}
-      }
-
-      function ensureShopSeeded() {
-        var raw = loadShopStateRaw();
-        if (!raw || raw.version !== 3 || !Array.isArray(raw.categories) || raw.categories.length !== 4) {
-          var st = migrateRawToShopV3(raw || {});
-          saveShopState(st);
-          return st;
-        }
-        return migrateRawToShopV3(raw);
-      }
-
-      function findShopCategory(st, catId) {
-        return st.categories.find(function (c) {
-          return c.id === catId;
+      /** v4 이하 → v5 고정 섹션 + 기존 항목은 전부 대형 마트로 이관(기타 섹션 없음). */
+      function migrateLegacyShoppingToV5(raw) {
+        var base = cloneShoppingV5(defaultShoppingV5());
+        var mart = findShoppingSection(base, "sec-mart");
+        var orphans = [];
+        collectLegacyShoppingItems(raw, orphans);
+        var keep = defaultItemIdSet();
+        orphans.forEach(function (it) {
+          if (keep[it.id]) return;
+          var dup = mart.items.some(function (x) {
+            return x.text === it.text;
+          });
+          if (dup) return;
+          mart.items.push(normalizeShopItem(it));
         });
+        return base;
+      }
+
+      function parseShoppingV5(raw) {
+        if (!raw || raw.version !== 5 || !Array.isArray(raw.sections)) return migrateLegacyShoppingToV5(raw || {});
+        return mergeShoppingDefaultsIntoSaved(raw);
+      }
+
+      function ensureShoppingV5() {
+        var raw = loadShoppingStateRaw();
+        var prev = raw ? JSON.stringify(raw) : "";
+        var st = parseShoppingV5(raw);
+        var next = JSON.stringify(st);
+        if (next !== prev) saveShoppingState(st);
+        return st;
+      }
+
+      function loadShoppingV5Working() {
+        return parseShoppingV5(loadShoppingStateRaw());
+      }
+
+      function shoppingSectionBadge(items) {
+        var arr = items || [];
+        var n = arr.length;
+        var c = 0;
+        for (var i = 0; i < n; i++) {
+          if (arr[i] && arr[i].checked) c++;
+        }
+        return c + " / " + n;
       }
 
       function destroyAllShopSortables() {
@@ -4818,30 +5438,65 @@
         var root = document.getElementById("shopRoot");
         if (!root) return;
         destroyAllShopSortables();
-        var st = ensureShopSeeded();
+        var st = ensureShoppingV5();
         root.innerHTML = "";
-        var catList = SHOP_FIXED_CAT_IDS.map(function (fid) {
-          return findShopCategory(st, fid);
-        }).filter(Boolean);
-        catList.forEach(function (cat) {
-          var catId = cat.id;
-          var card = document.createElement("div");
-          card.className = "shop-cat-card";
-          card.setAttribute("data-shop-cat-id", catId);
-          card.innerHTML =
-            '<div class="shop-cat-head">' +
-            "<h4 class=\"shop-cat-title\">" +
-            escapeHtml(cat.title) +
-            '</h4><div class="shop-cat-actions">' +
-            '<button type="button" class="btn shop-add-item-in-cat" data-shop-cat-id="' +
-            escapeHtml(catId) +
-            '">항목 추가</button>' +
-            "</div></div>" +
-            '<ul class="pack-checklist shop-checklist shop-cat-items" data-shop-cat-id="' +
-            escapeHtml(catId) +
-            '"></ul>';
-          var ul = card.querySelector("ul");
-          (cat.items || []).forEach(function (it) {
+
+        var toolbar = document.createElement("div");
+        toolbar.className = "shop-toolbar shop-global-add shop-toolbar--compact";
+        var selHtml =
+          '<label class="shop-add-label"><span>추가할 장소</span><select id="shopGlobalPlaceSelect" class="shop-add-place-select" aria-label="쇼핑 장소 선택">';
+        st.sections.forEach(function (sec) {
+          selHtml +=
+            '<option value="' +
+            escapeHtml(sec.id) +
+            '">' +
+            escapeHtml(sec.title) +
+            "</option>";
+        });
+        selHtml +=
+          '</select></label><label class="shop-add-label"><span>살 것</span>' +
+          '<input type="text" id="shopGlobalTextInp" class="shop-add-text-inp" placeholder="예: 기념품" /></label>' +
+          '<button type="button" class="btn shop-add-global-btn">선택 장소에 추가</button>';
+        toolbar.innerHTML = selHtml;
+        root.appendChild(toolbar);
+
+        var hint = document.createElement("p");
+        hint.className = "shop-focus-hint pack-muted";
+        hint.style.cssText = "margin:0.55rem 0 0.75rem;font-size:0.84rem;line-height:1.55;";
+        hint.textContent =
+          "숙소·식당·드라이브 코스 등은 이 목록에 포함되지 않습니다. 기존에 기타로 쌓여 있던 항목은 「대형 마트」로 옮겼습니다.";
+        root.appendChild(hint);
+
+        function appendSectionCard(sec) {
+          var sid = sec.id;
+          var badge = shoppingSectionBadge(sec.items);
+          var det = document.createElement("details");
+          det.className = "shop-cat-card shop-place-details shop-place-card";
+          det.setAttribute("data-shop-group-id", sid);
+          if (!sec.collapsed) det.setAttribute("open", "open");
+          det.innerHTML =
+            "<summary>" +
+            '<div class="shop-place-summary-inner">' +
+            '<h4 class="shop-cat-title">' +
+            escapeHtml(sec.title) +
+            '</h4><span class="shop-place-badge">' +
+            escapeHtml(badge) +
+            ' 체크</span></div></summary>' +
+            '<div class="shop-place-body">' +
+            '<div class="shop-cat-actions shop-cat-actions--card">' +
+            '<button type="button" class="btn shop-add-item-in-cat" data-shop-group-id="' +
+            escapeHtml(sid) +
+            '">이 장소에 항목 추가</button>' +
+            "</div>" +
+            '<ul class="pack-checklist shop-checklist shop-cat-items" data-shop-group-id="' +
+            escapeHtml(sid) +
+            '"></ul></div>';
+          var ul = det.querySelector("ul");
+          if (!ul) {
+            root.appendChild(det);
+            return;
+          }
+          (sec.items || []).forEach(function (it) {
             var chkId = "shop-chk-" + String(it.id).replace(/[^a-zA-Z0-9_-]/g, "_");
             var li = document.createElement("li");
             li.setAttribute("data-shop-id", it.id);
@@ -4851,28 +5506,28 @@
               "</div>" +
               '<input type="checkbox" id="' +
               escapeHtml(chkId) +
-              '" data-shop-cat-id="' +
-              escapeHtml(catId) +
+              '" data-shop-group-id="' +
+              escapeHtml(sid) +
               '" data-shop-id="' +
               escapeHtml(it.id) +
               '"' +
               (it.checked ? " checked" : "") +
               ' />' +
-              '<input type="text" class="shop-text-inp" data-shop-cat-id="' +
-              escapeHtml(catId) +
+              '<input type="text" class="shop-text-inp" data-shop-group-id="' +
+              escapeHtml(sid) +
               '" data-shop-id="' +
               escapeHtml(it.id) +
               '" value="' +
               escapeHtml(it.text) +
               '" />' +
-              '<button type="button" class="btn shop-del-btn" data-shop-cat-id="' +
-              escapeHtml(catId) +
+              '<button type="button" class="btn shop-del-btn" data-shop-group-id="' +
+              escapeHtml(sid) +
               '" data-shop-id="' +
               escapeHtml(it.id) +
               '">삭제</button>';
             ul.appendChild(li);
           });
-          root.appendChild(card);
+          root.appendChild(det);
           if (typeof Sortable !== "undefined") {
             var itemSort = Sortable.create(ul, {
               handle: ".shop-drag-handle",
@@ -4883,84 +5538,115 @@
               filter: "input,textarea,button,.shop-text-inp",
               preventOnFilter: false,
               onEnd: function () {
-                var st2 = ensureShopSeeded();
-                var c = findShopCategory(st2, catId);
+                var st2 = loadShoppingV5Working();
+                var c = findShoppingSection(st2, sid);
                 if (!c) return;
                 c.items = reorderShopItemsByIds(c.items || [], shopOrderIdsFromUl(ul));
-                saveShopState(st2);
+                saveShoppingState(st2);
               }
             });
             shopSortableInstances.push(itemSort);
           }
-        });
+        }
+
+        st.sections.forEach(appendSectionCard);
       }
 
       var shopPanelEl = document.getElementById("panel-shopping");
       if (shopPanelEl) {
+        shopPanelEl.addEventListener("toggle", function (ev) {
+          var det = ev.target;
+          if (!det || !det.classList || !det.classList.contains("shop-place-details")) return;
+          var sid = det.getAttribute("data-shop-group-id");
+          if (!sid) return;
+          var st = loadShoppingV5Working();
+          if (!st || st.version !== 5 || !Array.isArray(st.sections)) return;
+          var g = findShoppingSection(st, sid);
+          if (!g) return;
+          g.collapsed = !det.open;
+          saveShoppingState(st);
+        });
         shopPanelEl.addEventListener("change", function (ev) {
           var t = ev.target;
           if (t && t.type === "checkbox" && t.getAttribute("data-shop-id")) {
-            var catId = t.getAttribute("data-shop-cat-id");
+            var sectionId = t.getAttribute("data-shop-group-id");
             var itemId = t.getAttribute("data-shop-id");
-            var st = ensureShopSeeded();
-            var cat = findShopCategory(st, catId);
-            if (!cat) return;
-            var row = (cat.items || []).find(function (x) {
+            var st = loadShoppingV5Working();
+            var sec = findShoppingSection(st, sectionId);
+            if (!sec) return;
+            var row = (sec.items || []).find(function (x) {
               return x.id === itemId;
             });
             if (row) {
               row.checked = !!t.checked;
-              saveShopState(st);
+              saveShoppingState(st);
             }
           }
         });
         shopPanelEl.addEventListener("input", function (ev) {
           var t = ev.target;
           if (t && t.classList.contains("shop-text-inp")) {
-            var catId = t.getAttribute("data-shop-cat-id");
+            var sectionId = t.getAttribute("data-shop-group-id");
             var itemId = t.getAttribute("data-shop-id");
-            var st = ensureShopSeeded();
-            var cat = findShopCategory(st, catId);
-            if (!cat) return;
-            var row = (cat.items || []).find(function (x) {
+            var st = loadShoppingV5Working();
+            var sec = findShoppingSection(st, sectionId);
+            if (!sec) return;
+            var row = (sec.items || []).find(function (x) {
               return x.id === itemId;
             });
             if (row) {
               row.text = t.value;
-              saveShopState(st);
+              saveShoppingState(st);
             }
-            return;
           }
         });
         shopPanelEl.addEventListener("click", function (ev) {
           var del = ev.target && ev.target.closest ? ev.target.closest(".shop-del-btn") : null;
           if (del) {
-            var catId = del.getAttribute("data-shop-cat-id");
+            var sectionId = del.getAttribute("data-shop-group-id");
             var itemId = del.getAttribute("data-shop-id");
             if (!itemId || !confirm("이 항목을 삭제할까요?")) return;
-            var st = ensureShopSeeded();
-            var cat = findShopCategory(st, catId);
-            if (!cat) return;
-            cat.items = (cat.items || []).filter(function (x) {
+            var st = loadShoppingV5Working();
+            var sec = findShoppingSection(st, sectionId);
+            if (!sec) return;
+            sec.items = (sec.items || []).filter(function (x) {
               return x.id !== itemId;
             });
-            saveShopState(st);
+            saveShoppingState(st);
             renderShoppingList();
             return;
           }
           var addItem = ev.target && ev.target.closest ? ev.target.closest(".shop-add-item-in-cat") : null;
           if (addItem) {
-            var ac = addItem.getAttribute("data-shop-cat-id");
+            var sid = addItem.getAttribute("data-shop-group-id");
             var label = window.prompt("추가할 쇼핑 항목 이름을 입력하세요.", "");
             if (label == null) return;
             label = String(label).trim();
             if (!label) label = "새 항목";
-            var st3 = ensureShopSeeded();
-            var cx = findShopCategory(st3, ac);
+            var st3 = loadShoppingV5Working();
+            var cx = findShoppingSection(st3, sid);
             if (!cx) return;
             cx.items = cx.items || [];
             cx.items.push({ id: uid(), text: label, checked: false });
-            saveShopState(st3);
+            saveShoppingState(st3);
+            renderShoppingList();
+            return;
+          }
+          var addGlobal = ev.target && ev.target.closest ? ev.target.closest(".shop-add-global-btn") : null;
+          if (addGlobal) {
+            var selEl = document.getElementById("shopGlobalPlaceSelect");
+            var inpEl = document.getElementById("shopGlobalTextInp");
+            if (!selEl || !inpEl) return;
+            var gSel = selEl.value;
+            var txt = String(inpEl.value || "").trim();
+            if (!txt) txt = "새 항목";
+            var st4 = loadShoppingV5Working();
+            var gx = findShoppingSection(st4, gSel);
+            if (!gx) return;
+            gx.items = gx.items || [];
+            gx.items.push({ id: uid(), text: txt, checked: false });
+            saveShoppingState(st4);
+            inpEl.value = "";
             renderShoppingList();
           }
         });
@@ -4983,6 +5669,7 @@
           });
           Object.keys(panels).forEach(function (key) {
             var p = panels[key];
+            if (!p) return;
             var on = key === id;
             p.classList.toggle("active", on);
             p.setAttribute("aria-hidden", on ? "false" : "true");
@@ -5000,6 +5687,7 @@
           if (id === "prep") {
             ensurePrepPackListsRendered();
             renderPrepItinerarySection();
+            pruneChecklistStorageToDom();
             loadChecks();
             updatePrepProgress();
           }
@@ -5010,11 +5698,37 @@
       });
 
       var CHECK_STORAGE = "dalian_family_checklist_v4";
+
+      /** DOM에 없는 체크 id는 저장소에서 제거(일정 변경 후 orphan 방지) */
+      function pruneChecklistStorageToDom() {
+        try {
+          var raw = dalianSafeGetItem(CHECK_STORAGE);
+          if (!raw) return;
+          var data = dalianSafeParseJson(raw, null);
+          if (!data || typeof data !== "object") return;
+          var valid = {};
+          document.querySelectorAll("#panel-prep input[type=\"checkbox\"][id]").forEach(function (inp) {
+            valid[inp.id] = true;
+          });
+          var out = {};
+          Object.keys(data).forEach(function (k) {
+            if (valid[k]) out[k] = data[k];
+          });
+          var jout;
+          try {
+            jout = JSON.stringify(out);
+          } catch (e2) {
+            return;
+          }
+          if (jout) dalianSafeSetItem(CHECK_STORAGE, jout);
+        } catch (e) {}
+      }
+
       function loadChecks() {
         try {
-          var raw = localStorage.getItem(CHECK_STORAGE);
+          var raw = dalianSafeGetItem(CHECK_STORAGE);
           if (!raw) return;
-          var data = JSON.parse(raw);
+          var data = dalianSafeParseJson(raw, null);
           if (!data || typeof data !== "object") return;
           document.querySelectorAll("#panel-prep input[type=\"checkbox\"]").forEach(function (inp) {
             inp.checked = !!data[inp.id];
@@ -5026,9 +5740,13 @@
         document.querySelectorAll("#panel-prep input[type=\"checkbox\"]").forEach(function (inp) {
           if (inp.checked) data[inp.id] = true;
         });
+        var json;
         try {
-          localStorage.setItem(CHECK_STORAGE, JSON.stringify(data));
-        } catch (e) {}
+          json = JSON.stringify(data);
+        } catch (e) {
+          return;
+        }
+        if (json) dalianSafeSetItem(CHECK_STORAGE, json);
       }
       function updatePrepProgress() {
         var all = document.querySelectorAll("#panel-prep .pack-group-a input[type=\"checkbox\"]");
@@ -5062,9 +5780,9 @@
         savePrepItinExtraState(prepExtra);
 
         try {
-          var rawOrder = localStorage.getItem(PREP_ORDER_STORAGE);
+          var rawOrder = dalianSafeGetItem(PREP_ORDER_STORAGE);
           if (rawOrder) {
-            var om = JSON.parse(rawOrder);
+            var om = dalianSafeParseJson(rawOrder, null);
             if (om && typeof om === "object") {
               var nMap = {};
               Object.keys(om).forEach(function (k) {
@@ -5082,15 +5800,15 @@
         } catch (e) {}
 
         try {
-          var rawChecks = localStorage.getItem(CHECK_STORAGE);
+          var rawChecks = dalianSafeGetItem(CHECK_STORAGE);
           if (rawChecks) {
-            var ck = JSON.parse(rawChecks);
+            var ck = dalianSafeParseJson(rawChecks, null);
             if (ck && typeof ck === "object") {
               var outCk = {};
               Object.keys(ck).forEach(function (k) {
                 outCk[swapStringByDayKeys(k, day2, day4)] = !!ck[k];
               });
-              localStorage.setItem(CHECK_STORAGE, JSON.stringify(outCk));
+              dalianSafeSetItem(CHECK_STORAGE, JSON.stringify(outCk));
             }
           }
         } catch (e2) {}
@@ -5118,8 +5836,6 @@
         else if (selectedDayKey === day4) selectedDayKey = day2;
 
         refreshPlannerUI();
-        renderPrepItinerarySection();
-        loadChecks();
         updatePrepProgress();
         renderPlanB();
         renderBudget();
@@ -5333,22 +6049,25 @@
       }
 
       function loadBudgetState() {
-        try {
-          var raw = localStorage.getItem(BUDGET_KEY);
-          if (!raw) raw = localStorage.getItem(BUDGET_KEY_LEGACY);
-          if (!raw) return null;
-          var o = JSON.parse(raw);
-          if (!o || typeof o !== "object" || !Array.isArray(o.rows)) return null;
-          return o;
-        } catch (e) {
-          return null;
-        }
+        var raw = dalianSafeGetItem(BUDGET_KEY);
+        if (!raw) raw = dalianSafeGetItem(BUDGET_KEY_LEGACY);
+        if (!raw) return null;
+        var o = dalianSafeParseJson(raw, null);
+        if (!o || typeof o !== "object" || !Array.isArray(o.rows)) return null;
+        return o;
       }
 
       function saveBudgetState(o) {
+        var json;
         try {
-          localStorage.setItem(BUDGET_KEY, JSON.stringify(o));
-        } catch (e) {}
+          json = JSON.stringify(o);
+        } catch (e) {
+          try {
+            if (typeof console !== "undefined" && console.warn) console.warn("saveBudgetState stringify failed", e);
+          } catch (e2) {}
+          return;
+        }
+        if (json) dalianSafeSetItem(BUDGET_KEY, json);
       }
 
       var budgetSortableInstances = [];
@@ -5445,6 +6164,14 @@
         return st;
       }
 
+      /** 가계부 행 키에서 순번(|iN)만 제거해 일정 변경 후에도 실제 금액을 이어붙일 때 사용 */
+      function normBudgetRowKey(r) {
+        if (!r) return "";
+        if (r.legKey && typeof r.legKey === "string") return r.legKey.replace(/\|i\d+$/, "");
+        if (r.actKey && typeof r.actKey === "string") return r.actKey.replace(/\|i\d+$/, "");
+        return "";
+      }
+
       /** 일정에만 있고 가계부에 없는 행(예: 신규 명소)을 날짜·순서에 맞게 끼워 넣음. 사용자가 삭제한 행은 suppressedKeys로 재등장하지 않음. */
       function insertMissingPlannerRows(st) {
         if (!st || !Array.isArray(st.rows)) return;
@@ -5491,6 +6218,150 @@
           });
         });
         st.rows = result;
+        ensureBudgetDayOrderKeys(st);
+        st.rows = rowsSortedByBudgetDayOrder(st);
+        saveBudgetState(st);
+      }
+
+      /**
+       * 일정에서 생성되는 행과 정규화 키가 맞지 않는 가계부 행(고아·옛 동선 분기)을 제거합니다.
+       * 직접 추가(custom)는 해당 날 일정에 placeId가 있을 때만 둡니다.
+       */
+      function pruneOrphanBudgetRowsNotInPlanner(st) {
+        if (!st || !Array.isArray(st.rows)) return;
+        rebuildPoiIndex();
+        var plan = loadPlanner();
+        function dayHasPlace(dk, pid) {
+          if (!pid) return false;
+          var s = plan[dk];
+          if (!s || !Array.isArray(s.ordered)) return false;
+          return s.ordered.some(function (row) {
+            return row.placeId === pid;
+          });
+        }
+        var plannedNorm = {};
+        buildBudgetRowsFromPlanner().forEach(function (r) {
+          var nk = normBudgetRowKey(r);
+          if (nk) plannedNorm[nk] = true;
+        });
+        st.rows = st.rows.filter(function (r) {
+          if (r.custom === true) {
+            if (r.placeId && !dayHasPlace(r.dayKey, r.placeId)) return false;
+            return true;
+          }
+          var nk = normBudgetRowKey(r);
+          return nk && plannedNorm[nk];
+        });
+        var normFresh = {};
+        buildBudgetRowsFromPlanner().forEach(function (fr) {
+          var nk = normBudgetRowKey(fr);
+          if (nk) normFresh[nk] = true;
+        });
+        st.suppressedKeys = (st.suppressedKeys || []).filter(function (sk) {
+          var nsk = typeof sk === "string" ? sk.replace(/\|i\d+$/, "") : "";
+          return nsk && normFresh[nsk];
+        });
+        ensureBudgetDayOrderKeys(st);
+        st.rows = rowsSortedByBudgetDayOrder(st);
+        saveBudgetState(st);
+      }
+
+      /** 같은 날·같은 정규화 키(연속 중복 방문 등)의 비커스텀 행을 하나로 합치고 실제 금액을 병합 */
+      function dedupeBudgetRowsSameNormPerDay(st) {
+        if (!st || !Array.isArray(st.rows)) return;
+        var seen = {};
+        var drop = {};
+        TRIP_DAYS.forEach(function (day) {
+          var dk = day.key;
+          var chunk = st.rows.filter(function (r) {
+            return r.dayKey === dk;
+          });
+          var order = (st.budgetDayOrder && st.budgetDayOrder[dk]) || [];
+          orderDayRowsSorted(chunk, order).forEach(function (r) {
+            if (r.custom === true) return;
+            var nk = normBudgetRowKey(r);
+            if (!nk) return;
+            var key = dk + "||" + nk;
+            if (seen[key]) {
+              var ke = seen[key];
+              if (r.actCny != null) ke.actCny = r.actCny;
+              if (r.actKrw != null) ke.actKrw = r.actKrw;
+              if (r.estCny != null) ke.estCny = r.estCny;
+              if (r.cat && BUDGET_CATS.indexOf(r.cat) >= 0) ke.cat = r.cat;
+              drop[r.id] = true;
+            } else {
+              seen[key] = r;
+            }
+          });
+        });
+        if (Object.keys(drop).length) {
+          st.rows = st.rows.filter(function (r) {
+            return !drop[r.id];
+          });
+          ensureBudgetDayOrderKeys(st);
+          st.rows = rowsSortedByBudgetDayOrder(st);
+          saveBudgetState(st);
+        }
+      }
+
+      /**
+       * 현재 일정(loadPlanner)만을 기준으로 가계부 행을 다시 만듭니다.
+       * 일정에 없는 동선·활동 행은 제거하고, 동일 구간·명소는 키 정규화로 하나의 실제/예상 값만 승계합니다.
+       * 직접 추가(custom) 행은 해당 날 일정에 placeId가 있을 때만 유지합니다.
+       */
+      function syncBudgetRowsToPlanner(st) {
+        if (!st || !Array.isArray(st.rows)) return;
+        rebuildPoiIndex();
+        var plan = loadPlanner();
+        function dayHasPlace(dk, pid) {
+          if (!pid) return false;
+          var s = plan[dk];
+          if (!s || !Array.isArray(s.ordered)) return false;
+          return s.ordered.some(function (row) {
+            return row.placeId === pid;
+          });
+        }
+        var oldRows = st.rows;
+        var fresh = buildBudgetRowsFromPlanner();
+        var pool = {};
+        oldRows.forEach(function (or) {
+          if (or.custom === true) return;
+          var k = normBudgetRowKey(or);
+          if (!k) return;
+          if (!pool[k]) pool[k] = [];
+          pool[k].push(or);
+        });
+        fresh.forEach(function (nr) {
+          var k = normBudgetRowKey(nr);
+          if (!k || !pool[k] || !pool[k].length) return;
+          var or = pool[k].shift();
+          if (or.actCny !== undefined) nr.actCny = or.actCny;
+          if (or.actKrw !== undefined) nr.actKrw = or.actKrw;
+          if (or.estCny !== undefined) nr.estCny = or.estCny;
+          if (or.cat && BUDGET_CATS.indexOf(or.cat) >= 0) nr.cat = or.cat;
+        });
+        var customs = oldRows.filter(function (r) {
+          return r.custom === true;
+        });
+        var customsKept = [];
+        var seenCustom = {};
+        customs.forEach(function (c) {
+          if (c.placeId && !dayHasPlace(c.dayKey, c.placeId)) return;
+          var ck = (c.dayKey || "") + "\t" + String(c.memo != null ? c.memo : "").trim() + "\t" + String(c.cat || "");
+          if (seenCustom[ck]) return;
+          seenCustom[ck] = true;
+          customsKept.push(c);
+        });
+        st.rows = fresh.concat(customsKept);
+        var normFresh = {};
+        fresh.forEach(function (fr) {
+          var nk = normBudgetRowKey(fr);
+          if (nk) normFresh[nk] = true;
+        });
+        st.suppressedKeys = (st.suppressedKeys || []).filter(function (sk) {
+          var nsk = typeof sk === "string" ? sk.replace(/\|i\d+$/, "") : "";
+          return nsk && normFresh[nsk];
+        });
         ensureBudgetDayOrderKeys(st);
         st.rows = rowsSortedByBudgetDayOrder(st);
         saveBudgetState(st);
@@ -5762,12 +6633,12 @@
         var st = loadBudgetState();
         if (!st) return;
         st.rows.forEach(function (r) {
-          var tr = document.querySelector('tr[data-budget-row="' + r.id + '"]');
-          if (!tr) return;
+          var card = document.querySelector('.budget-row-card[data-budget-row="' + r.id + '"]');
+          if (!card) return;
           var est = r.estCny;
           var act = r.actCny;
           var over = act != null && act === act && est != null && est === est && act > est;
-          tr.classList.toggle("budget-row-over", over);
+          card.classList.toggle("budget-row-over", over);
         });
       }
 
@@ -5793,6 +6664,8 @@
         rebuildPoiIndex();
         var st = ensureBudgetSeeded();
         insertMissingPlannerRows(st);
+        pruneOrphanBudgetRowsNotInPlanner(st);
+        dedupeBudgetRowsSameNormPerDay(st);
         var fx = parseFloat(String(fxInp.value).trim());
         if (!(fx > 0)) fx = st.fx || BUDGET_DEFAULT_FX;
         fxInp.value = String(Math.round(fx));
@@ -5824,24 +6697,10 @@
           h.textContent = day.label + " · " + (DAY_NARRATIVE[dk] || "");
           block.appendChild(h);
 
-          var scroll = document.createElement("div");
-          scroll.className = "budget-table-scroll";
-
-          var table = document.createElement("table");
-          table.className = "budget-table";
-          table.setAttribute("aria-label", day.label + " 예산");
-          table.innerHTML =
-            "<thead><tr>" +
-            '<th class="budget-col-drag" scope="col"><span class="budget-th-sr">순서</span></th>' +
-            "<th>동선·활동</th>" +
-            "<th>분류</th>" +
-            '<th class="num">예상 ¥</th>' +
-            '<th class="num">예상 ₩</th>' +
-            '<th class="num">실제 ¥</th>' +
-            '<th class="num">실제 ₩</th>' +
-            '<th class="budget-col-actions">관리</th>' +
-            "</tr></thead><tbody></tbody>";
-          var tb = table.querySelector("tbody");
+          var list = document.createElement("div");
+          list.className = "budget-card-list";
+          list.setAttribute("role", "list");
+          list.setAttribute("aria-label", day.label + " 지출 목록");
 
           dayRows.forEach(function (r) {
             var estCny = r.estCny;
@@ -5867,41 +6726,55 @@
               estCny != null &&
               estCny === estCny &&
               r.actCny > estCny;
-            var tr = document.createElement("tr");
-            tr.setAttribute("data-budget-row", r.id);
-            if (rowOver) tr.classList.add("budget-row-over");
-            tr.innerHTML =
-              '<td class="budget-col-drag"><span class="budget-drag-handle" title="끌어서 순서 변경" aria-label="줄 순서 변경">≡</span></td>' +
-              '<td class="budget-route-cell">' +
+            var card = document.createElement("div");
+            card.className = "budget-row-card";
+            card.setAttribute("data-budget-row", r.id);
+            card.setAttribute("role", "listitem");
+            if (rowOver) card.classList.add("budget-row-over");
+            card.innerHTML =
+              '<div class="budget-card-head">' +
+              '<span class="budget-drag-handle" title="끌어서 순서 변경" aria-label="줄 순서 변경">≡</span>' +
+              '<div class="budget-card-title">' +
               labelCell +
-              '</td><td><select class="budget-cat budget-cat-select" data-id="' +
+              '</div><button type="button" class="btn budget-row-del" data-id="' +
+              escapeHtml(r.id) +
+              '">삭제</button></div>' +
+              '<div class="budget-card-row budget-card-cat-row">' +
+              '<span class="budget-card-lbl">분류</span>' +
+              '<select class="budget-inp budget-cat budget-cat-select" data-id="' +
               escapeHtml(r.id) +
               '">' +
               buildCatSelectHtml(r.cat) +
-              '</select></td><td class="num"><input type="number" class="budget-inp budget-est" data-id="' +
+              "</select></div>" +
+              '<div class="budget-card-row budget-card-money">' +
+              '<div class="budget-card-field"><span class="budget-card-lbl">예상 ¥</span>' +
+              '<input type="number" class="budget-inp budget-est" data-id="' +
               escapeHtml(r.id) +
               '" step="1" min="0" placeholder="—" value="' +
               (r.estCny != null && r.estCny === r.estCny ? r.estCny : "") +
-              '" /></td><td class="num"><span class="budget-krw-cell" data-budget-id="' +
+              '" /></div>' +
+              '<div class="budget-card-field"><span class="budget-card-lbl">예상 ₩</span>' +
+              '<span class="budget-krw-cell" data-budget-id="' +
               escapeHtml(r.id) +
               '">' +
               (estKrw == null ? "—" : formatBudgetNum(estKrw)) +
-              '</span></td><td class="num"><input type="number" class="budget-inp budget-act" data-field="actCny" data-id="' +
+              '</span></div>' +
+              '<div class="budget-card-field"><span class="budget-card-lbl">실제 ¥</span>' +
+              '<input type="number" class="budget-inp budget-act" data-field="actCny" data-id="' +
               escapeHtml(r.id) +
               '" step="1" min="0" placeholder="—" value="' +
               (r.actCny != null && r.actCny === r.actCny ? r.actCny : "") +
-              '" /></td><td class="num"><input type="number" class="budget-inp budget-act" data-field="actKrw" data-id="' +
+              '" /></div>' +
+              '<div class="budget-card-field"><span class="budget-card-lbl">실제 ₩</span>' +
+              '<input type="number" class="budget-inp budget-act" data-field="actKrw" data-id="' +
               escapeHtml(r.id) +
               '" step="100" min="0" placeholder="—" value="' +
               (r.actKrw != null && r.actKrw === r.actKrw ? r.actKrw : "") +
-              '" /></td><td class="budget-col-actions"><button type="button" class="btn budget-row-del" data-id="' +
-              escapeHtml(r.id) +
-              '">삭제</button></td>';
-            tb.appendChild(tr);
+              '" /></div></div>';
+            list.appendChild(card);
           });
 
-          scroll.appendChild(table);
-          block.appendChild(scroll);
+          block.appendChild(list);
           var addRowBtn = document.createElement("button");
           addRowBtn.type = "button";
           addRowBtn.className = "btn budget-add-row";
@@ -5928,8 +6801,8 @@
           root.appendChild(block);
 
           if (typeof Sortable !== "undefined") {
-            (function (sortTb, sortDayKey) {
-              var inst = Sortable.create(sortTb, {
+            (function (sortList, sortDayKey) {
+              var inst = Sortable.create(sortList, {
                 handle: ".budget-drag-handle",
                 animation: 180,
                 delay: 75,
@@ -5940,9 +6813,11 @@
                 onEnd: function () {
                   var st2 = loadBudgetState();
                   if (!st2) return;
-                  var ids = [].slice.call(sortTb.querySelectorAll("tr[data-budget-row]")).map(function (tr) {
-                    return tr.getAttribute("data-budget-row");
-                  });
+                  var ids = [].slice
+                    .call(sortList.querySelectorAll(".budget-row-card[data-budget-row]"))
+                    .map(function (node) {
+                      return node.getAttribute("data-budget-row");
+                    });
                   st2.budgetDayOrder = st2.budgetDayOrder && typeof st2.budgetDayOrder === "object" ? st2.budgetDayOrder : {};
                   st2.budgetDayOrder[sortDayKey] = ids;
                   st2.rows = rowsSortedByBudgetDayOrder(st2);
@@ -5950,7 +6825,7 @@
                 }
               });
               budgetSortableInstances.push(inst);
-            })(tb, dk);
+            })(list, dk);
           }
         });
 
@@ -6082,25 +6957,23 @@
 
       document.getElementById("budgetRegenBtn") &&
         document.getElementById("budgetRegenBtn").addEventListener("click", function () {
-          if (!confirm("일정 탭에 저장된 동선을 읽어 가계부 행(교통·식비·관광·쇼핑)을 다시 만듭니다. 실제 지출은 같은 이동 구간(legKey)·같은 방문지 순서(actKey)에 맞춰 옮깁니다. 직접 추가한 항목은 유지됩니다. 계속할까요?")) return;
-          var old = loadBudgetState() || { fx: BUDGET_DEFAULT_FX, rows: [] };
-          var fresh = buildBudgetRowsFromPlanner();
-          mergeActsOntoNewRows(old.rows, fresh);
-          var customs = (old.rows || []).filter(function (r) {
-            return r.custom === true;
-          });
+          if (
+            !confirm(
+              "일정 탭의 현재 동선만 반영해 가계부를 다시 구성합니다. 일정에 없는 행·중복 구간은 제거되고, 같은 명소·택시 구간의 실제(¥/₩)·예상 금액은 가능한 한 이어 붙입니다. 일정에 없는 장소의 직접 추가 행은 삭제됩니다. 계속할까요?"
+            )
+          )
+            return;
+          var old = loadBudgetState() || { version: 3, fx: BUDGET_DEFAULT_FX, rows: [], suppressedKeys: [], budgetDayOrder: {} };
           var stRegen = {
             version: 3,
             fx: old.fx || BUDGET_DEFAULT_FX,
-            rows: fresh.concat(customs),
-            suppressedKeys: [],
-            budgetDayOrder: {}
+            rows: old.rows || [],
+            suppressedKeys: old.suppressedKeys || [],
+            budgetDayOrder: old.budgetDayOrder || {}
           };
-          ensureBudgetDayOrderKeys(stRegen);
-          stRegen.rows = rowsSortedByBudgetDayOrder(stRegen);
-          saveBudgetState(stRegen);
+          syncBudgetRowsToPlanner(stRegen);
           var fxInp = document.getElementById("budgetFx");
-          if (fxInp) fxInp.value = String(old.fx || BUDGET_DEFAULT_FX);
+          if (fxInp) fxInp.value = String(stRegen.fx || BUDGET_DEFAULT_FX);
           renderBudget();
         });
 
@@ -6110,7 +6983,7 @@
           var blob = new Blob([JSON.stringify(st, null, 2)], { type: "application/json;charset=utf-8" });
           var a = document.createElement("a");
           a.href = URL.createObjectURL(blob);
-          a.download = "dalian-budget.json";
+          a.download = "dalian-trip-ledger-only.json";
           a.click();
           URL.revokeObjectURL(a.href);
         });
@@ -6154,8 +7027,31 @@
         if (fxInp && st.fx) fxInp.value = String(st.fx);
       })();
 
+      (function initLedgerToolsDrawer() {
+        var d = document.getElementById("budgetToolsDetails");
+        if (!d) return;
+        var resizeT = null;
+        function apply() {
+          try {
+            if (window.matchMedia("(max-width: 720px)").matches) d.removeAttribute("open");
+            else d.setAttribute("open", "");
+          } catch (e) {}
+        }
+        apply();
+        if (window.matchMedia) {
+          var mq = window.matchMedia("(max-width: 720px)");
+          if (mq.addEventListener) mq.addEventListener("change", apply);
+          else if (mq.addListener) mq.addListener(apply);
+        }
+        window.addEventListener("resize", function () {
+          clearTimeout(resizeT);
+          resizeT = setTimeout(apply, 120);
+        });
+      })();
+
       ensurePrepPackListsRendered();
       renderPrepItinerarySection();
+      pruneChecklistStorageToDom();
       loadChecks();
       updatePrepProgress();
       renderPlanB();
