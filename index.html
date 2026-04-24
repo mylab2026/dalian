@@ -2800,6 +2800,10 @@
         };
       }
 
+      /**
+       * 첫 방문 등 저장소에 일정이 없을 때만 쓰는 시드 데이터입니다.
+       * 이미 `dalian_planner_v10` 등에 저장된 내용은 이 객체로 덮어쓰지 않습니다(빈 날만 보조 채움).
+       */
       function buildRecommendedPlanner() {
         function R(placeId, durationMin) {
           return { rowId: uid(), placeId: placeId, durationMin: durationMin };
@@ -2874,18 +2878,6 @@
         return changed;
       }
 
-      /** 2일차(2026-04-26)에 하이디라오가 없으면 일정 끝에 추가 (기존 저장 일정 마이그레이션) */
-      function ensureDay2Haidilao(all) {
-        var k = "2026-04-26";
-        if (!all || !all[k] || !Array.isArray(all[k].ordered)) return false;
-        var ord = all[k].ordered;
-        for (var i = 0; i < ord.length; i++) {
-          if (ord[i].placeId === "haidilao-zs") return false;
-        }
-        ord.push({ rowId: uid(), placeId: "haidilao-zs", durationMin: 100 });
-        return true;
-      }
-
       function loadPlanner() {
         try {
           var raw = localStorage.getItem(PLANNER_KEY);
@@ -2923,18 +2915,10 @@
               localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
             } catch (e3) {}
           }
-          if (ensureDay2Haidilao(all)) {
-            try {
-              localStorage.setItem(PLANNER_KEY, JSON.stringify(all));
-            } catch (eH) {}
-          }
           return all;
         } catch (e) {
-          var fallback = buildRecommendedPlanner();
-          try {
-            localStorage.setItem(PLANNER_KEY, JSON.stringify(fallback));
-          } catch (e4) {}
-          return fallback;
+          /* JSON 손상 등: 저장소를 샘플 일정으로 덮어쓰지 않음(사용자 데이터 보존). 이번 세션만 시드로 표시 */
+          return buildRecommendedPlanner();
         }
       }
 
@@ -5033,7 +5017,7 @@
           var data = JSON.parse(raw);
           if (!data || typeof data !== "object") return;
           document.querySelectorAll("#panel-prep input[type=\"checkbox\"]").forEach(function (inp) {
-            if (data[inp.id]) inp.checked = true;
+            inp.checked = !!data[inp.id];
           });
         } catch (e) {}
       }
